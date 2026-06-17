@@ -23,6 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         :root {
@@ -192,6 +193,13 @@
         body.dark-mode .login-box h2 {
             color: #C5A880;
         }
+        body.dark-mode .chart-box {
+            background: #0F172A;
+            border-color: #334155;
+        }
+        body.dark-mode .stat-card {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        }
 
         /* ===== شاشة تسجيل الدخول ===== */
         #login-screen {
@@ -350,6 +358,15 @@
         }
         #btn-edit-app:hover {
             background-color: #0369A1;
+            color: white;
+        }
+        #btn-analytics {
+            display: none;
+            background-color: #8B5CF6;
+            border-color: #8B5CF6;
+        }
+        #btn-analytics:hover {
+            background-color: #7C3AED;
             color: white;
         }
         .admin-active-badge {
@@ -921,6 +938,47 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* ===== لوحة الإحصائيات (Analytics) ===== */
+        .stats-grid {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-bottom: 4px solid #C5A880;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+        }
+        .stat-card span {
+            display: block;
+            font-size: 32px;
+            font-weight: 900;
+            color: #C5A880;
+            margin-top: 10px;
+        }
+        .charts-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .chart-box {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
         /* ===== توافق الشاشات الصغيرة ===== */
         @media (max-width: 768px) {
             .header {
@@ -965,6 +1023,22 @@
                 text-align: center;
                 padding: 6px 10px;
                 font-size: 10px;
+            }
+            .stats-grid {
+                flex-direction: column;
+            }
+            .stat-card {
+                min-width: 100%;
+            }
+            .charts-container {
+                flex-direction: column;
+            }
+            .chart-box {
+                min-width: 100%;
+            }
+            .modal-content {
+                max-width: 100%;
+                padding: 15px;
             }
         }
         @media (max-width: 480px) {
@@ -1071,6 +1145,12 @@
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                 </svg>
                 إعدادات
+            </button>
+            <button class="btn-header" id="btn-analytics" onclick="openAnalyticsModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                إحصائيات
             </button>
             <span id="push-notification">🔄 تم تحديث البيانات!</span>
         </div>
@@ -1236,6 +1316,33 @@
         </div>
     </div>
 
+    <!-- ===== نافذة لوحة الإحصائيات (Analytics) ===== -->
+    <div class="modal-overlay" id="analytics-modal">
+        <div class="modal-content" style="max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto;">
+            <h3 style="display: flex; align-items: center; gap: 10px; color: var(--primary-color);">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C5A880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                لوحة البيانات والإحصائيات (Analytics)
+            </h3>
+            
+            <div class="stats-grid">
+                <div class="stat-card">إجمالي الجهات<span id="stat-total">0</span></div>
+                <div class="stat-card">المحافظات المغطاة<span id="stat-govs">0</span></div>
+                <div class="stat-card">التخصصات المتاحة<span id="stat-specs">0</span></div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-box"><canvas id="govChart"></canvas></div>
+                <div class="chart-box"><canvas id="specChart"></canvas></div>
+            </div>
+
+            <div class="modal-buttons" style="margin-top: 25px;">
+                <button class="btn-cancel" onclick="closeAnalyticsModal()" style="width: 100%;">إغلاق اللوحة</button>
+            </div>
+        </div>
+    </div>
+
     <!-- حاوية الـ PDF المخفية -->
     <div id="pdf-container" style="display: none;"></div>
 
@@ -1263,6 +1370,8 @@
         };
 
         let pusherChannel = null;
+        let govChartInstance = null;
+        let specChartInstance = null;
 
         function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
@@ -1433,6 +1542,7 @@
             const btn = document.getElementById('btn-admin-toggle');
             const exportBtn = document.getElementById('btn-export');
             const editAppBtn = document.getElementById('btn-edit-app');
+            const analyticsBtn = document.getElementById('btn-analytics');
             const container = document.querySelector('.main-container');
             
             const adminIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
@@ -1444,12 +1554,14 @@
                 btn.innerHTML = `${activeIcon} الإدارة مفعلة`;
                 exportBtn.style.display = 'inline-flex';
                 editAppBtn.style.display = 'inline-flex';
+                analyticsBtn.style.display = 'inline-flex';
                 container.classList.add('admin-mode-on');
             } else {
                 btn.classList.remove('admin-active-badge');
                 btn.innerHTML = `${adminIcon} الإدارة`;
                 exportBtn.style.display = 'none';
                 editAppBtn.style.display = 'none';
+                analyticsBtn.style.display = 'none';
                 container.classList.remove('admin-mode-on');
             }
             applyFilters();
@@ -1907,6 +2019,101 @@
         }
 
         // ========================================================================
+        //  دوال لوحة الإحصائيات (Analytics)
+        // ========================================================================
+        function openAnalyticsModal() {
+            document.getElementById('analytics-modal').style.display = 'flex';
+            generateAnalytics();
+        }
+
+        function closeAnalyticsModal() {
+            document.getElementById('analytics-modal').style.display = 'none';
+        }
+
+        function generateAnalytics() {
+            // 1. حساب الأرقام
+            const activeData = allMedicalData.filter(item => item['الحالة'] !== 'معطل');
+            const govs = {};
+            const specs = {};
+
+            activeData.forEach(item => {
+                const gov = item['المحافظة'] || 'غير محدد';
+                const spec = item['التخصص'] || 'غير محدد';
+                govs[gov] = (govs[gov] || 0) + 1;
+                specs[spec] = (specs[spec] || 0) + 1;
+            });
+
+            document.getElementById('stat-total').innerText = activeData.length;
+            document.getElementById('stat-govs').innerText = Object.keys(govs).length;
+            document.getElementById('stat-specs').innerText = Object.keys(specs).length;
+
+            // 2. تجهيز بيانات الرسوم البيانية
+            const govLabels = Object.keys(govs).sort((a, b) => govs[b] - govs[a]);
+            const govData = govLabels.map(l => govs[l]);
+
+            const specLabels = Object.keys(specs).sort((a, b) => specs[b] - specs[a]).slice(0, 10);
+            const specData = specLabels.map(l => specs[l]);
+
+            // تحديد ألوان الخطوط بناءً على الوضع الليلي/النهاري
+            const isDark = document.body.classList.contains('dark-mode');
+            const textColor = isDark ? '#E2E8F0' : '#334155';
+            const gridColor = isDark ? '#334155' : '#E2E8F0';
+
+            // ألوان المخطط الدائري
+            const colors = ['#C5A880', '#0F172A', '#0284C7', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F43F5E', '#F97316', '#84CC16', '#06B6D4', '#6366F1', '#D946EF'];
+
+            // 3. رسم خريطة المحافظات (Doughnut Chart)
+            if(govChartInstance) govChartInstance.destroy();
+            const ctxGov = document.getElementById('govChart').getContext('2d');
+            govChartInstance = new Chart(ctxGov, {
+                type: 'doughnut',
+                data: {
+                    labels: govLabels,
+                    datasets: [{
+                        data: govData,
+                        backgroundColor: colors.slice(0, govLabels.length),
+                        borderWidth: isDark ? 2 : 0,
+                        borderColor: isDark ? '#0F172A' : '#fff'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    plugins: { 
+                        legend: { position: 'right', labels: { color: textColor, font: { family: 'Cairo' } } }, 
+                        title: { display: true, text: 'التوزيع الجغرافي (حسب المحافظة)', color: textColor, font: { family: 'Cairo', size: 16 } } 
+                    } 
+                }
+            });
+
+            // 4. رسم خريطة التخصصات (Bar Chart)
+            if(specChartInstance) specChartInstance.destroy();
+            const ctxSpec = document.getElementById('specChart').getContext('2d');
+            specChartInstance = new Chart(ctxSpec, {
+                type: 'bar',
+                data: {
+                    labels: specLabels,
+                    datasets: [{
+                        label: 'عدد الجهات',
+                        data: specData,
+                        backgroundColor: '#C5A880',
+                        borderRadius: 6
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    scales: { 
+                        y: { ticks: { color: textColor }, grid: { color: gridColor } }, 
+                        x: { ticks: { color: textColor, font: { family: 'Cairo' } }, grid: { display: false } } 
+                    }, 
+                    plugins: { 
+                        legend: { display: false }, 
+                        title: { display: true, text: 'أكثر 10 تخصصات تعاقداً', color: textColor, font: { family: 'Cairo', size: 16 } } 
+                    } 
+                }
+            });
+        }
+
+        // ========================================================================
         //  تصدير PDF – تصميم فاخر
         // ========================================================================
         function exportToPDF() {
@@ -2068,6 +2275,30 @@
                 document.getElementById('loading').style.display = 'none';
             });
         }
+
+        // ========================================================================
+        //  مراقبة تغييرات الوضع الليلي لإعادة رسم الإحصائيات
+        // ========================================================================
+        // مراقبة تغييرات الوضع الليلي عبر MutationObserver لإعادة رسم الرسوم البيانية
+        const observer = new MutationObserver(() => {
+            if (document.getElementById('analytics-modal').style.display === 'flex') {
+                generateAnalytics();
+            }
+        });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+        // ========================================================================
+        //  إعادة رسم الإحصائيات عند تغيير حجم الشاشة (Responsive)
+        // ========================================================================
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (document.getElementById('analytics-modal').style.display === 'flex') {
+                    generateAnalytics();
+                }
+            }, 300);
+        });
     </script>
 </body>
 </html>
