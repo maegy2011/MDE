@@ -2,10 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>الدليل الطبي للموظفين</title>
-    <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- ===== خطوط جوجل العربية الفاخرة ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- ===== أيقونات التطبيق (Favicon & App Icons) ===== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="mask-icon" href="./safari-pinned-tab.svg" color="#0f172a">
+    <meta name="msapplication-TileColor" content="#0f172a">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- ===== المكتبات الخارجية ===== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
@@ -24,9 +38,8 @@
         }
         * { box-sizing: border-box; }
         
-        /* ===== إعدادات الجسم ===== */
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             background-color: #F1F5F9;
             color: var(--text-color);
             margin: 0;
@@ -71,7 +84,7 @@
             font-size: 16px;
             text-align: center;
             letter-spacing: 2px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .login-box button {
             width: 100%;
@@ -83,7 +96,7 @@
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             transition: all 0.3s;
         }
         .login-box button:hover {
@@ -122,6 +135,8 @@
             align-items: center;
             gap: 8px;
             color: #FFFFFF;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            font-weight: 800;
         }
         .header-text h2 svg {
             color: var(--accent-color);
@@ -130,6 +145,7 @@
             margin: 2px 0 0 0;
             font-size: 11px;
             color: #94A3B8;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .header-buttons {
             display: none;
@@ -144,7 +160,7 @@
             padding: 5px 12px;
             border-radius: 6px;
             cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             font-size: 12px;
             transition: all 0.3s;
             display: inline-flex;
@@ -215,7 +231,7 @@
             padding: 10px;
             border: 1px solid var(--border-color);
             border-radius: 5px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             font-size: 14px;
         }
         .custom-select {
@@ -233,6 +249,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .dropdown-menu {
             display: none;
@@ -255,7 +272,7 @@
             padding: 8px;
             border: none;
             border-bottom: 1px solid var(--border-color);
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             outline: none;
         }
         .options-list {
@@ -268,6 +285,7 @@
             padding: 5px;
             cursor: pointer;
             font-size: 14px;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .options-list label:hover { background-color: #f0f2f5; }
         .options-list input { margin-left: 8px; }
@@ -313,7 +331,7 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
@@ -360,6 +378,7 @@
             color: var(--primary-color);
             font-weight: 800;
             font-size: 18px;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
         }
         .card.disabled-card h3 {
             color: #666;
@@ -376,6 +395,7 @@
             border-radius: 15px;
             font-size: 12px;
             font-weight: 600;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .badge.specialty {
             background: #E2E8F0;
@@ -392,6 +412,7 @@
         .info-row {
             margin-bottom: 6px;
             font-size: 14px;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         
         /* ===== أزرار الاتصال والخريطة ===== */
@@ -414,6 +435,7 @@
             font-size: 14px;
             transition: all 0.3s;
             border: none;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .call-btn {
             background-color: var(--success-color);
@@ -448,7 +470,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             font-size: 13px;
             font-weight: bold;
             color: white;
@@ -487,6 +509,7 @@
         .modal-content h3 {
             margin-top: 0;
             color: var(--primary-color);
+            font-family: 'Tajawal', 'Cairo', sans-serif;
         }
         .form-group {
             margin-bottom: 15px;
@@ -496,13 +519,14 @@
             margin-bottom: 5px;
             font-size: 14px;
             font-weight: bold;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .form-group input {
             width: 100%;
             padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 5px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .form-group input[type="file"] {
             padding: 5px;
@@ -518,7 +542,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             font-weight: bold;
         }
         .btn-save { background-color: var(--success-color); color: white; }
@@ -539,7 +563,7 @@
         }
         .rows-selector select {
             padding: 5px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             border: 1px solid var(--border-color);
             border-radius: 5px;
         }
@@ -554,7 +578,7 @@
             background: white;
             cursor: pointer;
             border-radius: 5px;
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .page-btn.active {
             background: var(--primary-color);
@@ -571,11 +595,13 @@
             margin: 20px 0;
             font-weight: bold;
             color: var(--primary-color);
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .sheet-item {
             padding: 5px 0;
             border-bottom: 1px solid #eee;
             display: block;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .sheet-item input { margin-left: 10px; }
         
@@ -593,6 +619,7 @@
             justify-content: space-between;
             align-items: center;
             min-height: 40px;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         .footer svg {
             color: var(--accent-color);
@@ -613,6 +640,7 @@
             font-weight: 700;
             animation: fadeInUp 0.5s ease;
             margin: 0;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(-10px); }
@@ -690,11 +718,11 @@
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-            <h2 style="margin: 15px 0 5px 0; font-size: 22px;">وثيقة داخلية</h2>
-            <p style="color: #64748B; font-size: 13px; margin: 0;">الرجاء إدخال كود المرور للوصول للدليل</p>
+            <h2 style="margin: 15px 0 5px 0; font-size: 22px; font-family: 'Tajawal', 'Cairo', sans-serif;">وثيقة داخلية</h2>
+            <p style="color: #64748B; font-size: 13px; margin: 0; font-family: 'Cairo', 'Tajawal', sans-serif;">الرجاء إدخال كود المرور للوصول للدليل</p>
             <input type="password" id="passcode-input" placeholder="كود المرور..." autofocus>
             <button onclick="checkPasscode()">دخول</button>
-            <p id="login-error" style="color: #EF4444; font-size: 12px; margin-top: 10px; display: none;">كود المرور غير صحيح!</p>
+            <p id="login-error" style="color: #EF4444; font-size: 12px; margin-top: 10px; display: none; font-family: 'Cairo', 'Tajawal', sans-serif;">كود المرور غير صحيح!</p>
         </div>
     </div>
 
@@ -793,16 +821,16 @@
     <!-- ============================================================ -->
     <div class="main-container">
         <div class="upload-section" id="upload-section">
-            <h3 style="color: #0284C7; margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <h3 style="color: #0284C7; margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Tajawal', 'Cairo', sans-serif;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
                 </svg>
                 جلب البيانات من جوجل شيت
             </h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 15px;">تأكد أن إعدادات مشاركة الشيت هي: <strong>"أي شخص لديه الرابط"</strong></p>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 15px; font-family: 'Cairo', 'Tajawal', sans-serif;">تأكد أن إعدادات مشاركة الشيت هي: <strong>"أي شخص لديه الرابط"</strong></p>
             
             <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-                <input type="text" id="gsheet-url" placeholder="انسخ رابط جوجل شيت هنا..." style="flex: 1; min-width: 250px; max-width: 500px; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-family: 'Cairo', sans-serif;">
+                <input type="text" id="gsheet-url" placeholder="انسخ رابط جوجل شيت هنا..." style="flex: 1; min-width: 250px; max-width: 500px; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-family: 'Cairo', 'Tajawal', sans-serif;">
                 <button class="btn-primary btn-google" onclick="fetchFromGoogleSheet()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -815,7 +843,7 @@
             
             <hr>
             
-            <h3 style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <h3 style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Tajawal', 'Cairo', sans-serif;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                     <polyline points="14 2 14 8 20 8"/>
@@ -830,7 +858,7 @@
         <div id="loading">جاري قراءة الملف... ⏳</div>
 
         <div class="sheet-selection" id="sheet-selection">
-            <h3>حدد الشيتات التي تريد إدراجها:</h3>
+            <h3 style="font-family: 'Tajawal', 'Cairo', sans-serif;">حدد الشيتات التي تريد إدراجها:</h3>
             <div class="sheet-list" id="checkbox-container"></div>
             <button class="btn-primary" onclick="processSelectedSheets()">اعتماد وحفظ البيانات</button>
         </div>
@@ -839,17 +867,17 @@
 
         <div class="pagination-container" id="pagination-container">
             <div class="rows-selector">
-                <label>عرض:</label>
+                <label style="font-family: 'Cairo', 'Tajawal', sans-serif;">عرض:</label>
                 <select id="rows-per-page" onchange="changeRowsPerPage()">
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
                 </select>
-                <label>صفوف</label>
+                <label style="font-family: 'Cairo', 'Tajawal', sans-serif;">صفوف</label>
             </div>
             <div class="page-buttons" id="page-buttons"></div>
-            <div style="font-size: 14px; color: #666;" id="page-info"></div>
+            <div style="font-size: 14px; color: #666; font-family: 'Cairo', 'Tajawal', sans-serif;" id="page-info"></div>
         </div>
     </div>
 
@@ -888,7 +916,7 @@
         </div>
     </div>
 
-    <!-- نافذة إعدادات التطبيق المتقدمة -->
+    <!-- نافذة إعدادات التطبيق المتقدمة (مع حقل رابط جوجل شيت) -->
     <div class="modal-overlay" id="app-info-modal">
         <div class="modal-content">
             <h3>📝 إعدادات التطبيق المتقدمة</h3>
@@ -907,6 +935,10 @@
             <div class="form-group">
                 <label>وصف التطبيق</label>
                 <input type="text" id="edit-app-desc">
+            </div>
+            <div class="form-group">
+                <label>رابط جوجل شيت (للمزامنة اللحظية)</label>
+                <input type="text" id="edit-app-gsheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="direction: ltr; text-align: left;">
             </div>
             <div class="form-group">
                 <label>كود مرور الموظفين (للحماية)</label>
@@ -1359,7 +1391,7 @@
             const container = document.getElementById('results');
             container.innerHTML = '';
             if (!data.length) {
-                container.innerHTML = '<p style="text-align:center; width:100%; margin-top:20px; color:#94A3B8;">لا توجد نتائج مطابقة للبحث.</p>';
+                container.innerHTML = '<p style="text-align:center; width:100%; margin-top:20px; color:#94A3B8; font-family: \'Cairo\', \'Tajawal\', sans-serif;">لا توجد نتائج مطابقة للبحث.</p>';
                 return;
             }
             data.forEach(item => {
@@ -1479,7 +1511,7 @@
         });
 
         // ========================================================================
-        //  إعدادات التطبيق المتقدمة
+        //  إعدادات التطبيق المتقدمة (مع حقل رابط جوجل شيت)
         // ========================================================================
         function applyAppSettings() {
             document.getElementById('app-title').innerHTML = appSettings.title || 'الدليل الطبي';
@@ -1510,6 +1542,7 @@
             document.getElementById('edit-app-title').value = appSettings.title;
             document.getElementById('edit-app-desc').value = appSettings.desc;
             document.getElementById('edit-app-passcode').value = appSettings.passcode;
+            document.getElementById('edit-app-gsheet-url').value = appSettings.gsheetUrl || '';
             document.getElementById('edit-app-logo-url').value = '';
             document.getElementById('edit-app-logo').value = '';
             document.getElementById('app-info-modal').style.display = 'flex';
@@ -1522,32 +1555,39 @@
         function saveAppInfo() {
             appSettings.title = document.getElementById('edit-app-title').value || "الدليل الطبي";
             appSettings.desc = document.getElementById('edit-app-desc').value || "";
-            appSettings.passcode = document.getElementById('edit-app-passcode').value || "";
-
-            const logoUrlInput = document.getElementById('edit-app-logo-url').value.trim();
-            if (logoUrlInput && logoUrlInput.includes('drive.google.com')) {
-                const match = logoUrlInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
-                if (match) {
-                    appSettings.logo = `https://drive.google.com/uc?id=${match[1]}`;
-                }
+            appSettings.passcode = document.getElementById('edit-app-passcode').value;
+            
+            // حفظ رابط جوجل شيت الجديد
+            const oldUrl = appSettings.gsheetUrl;
+            appSettings.gsheetUrl = document.getElementById('edit-app-gsheet-url').value.trim();
+            
+            const logoUrl = document.getElementById('edit-app-logo-url').value;
+            const logoFile = document.getElementById('edit-app-logo').files[0];
+            
+            if (logoUrl && logoUrl.includes('drive.google.com')) {
+                const match = logoUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                if (match) appSettings.logo = `https://drive.google.com/uc?id=${match[1]}`;
             }
 
-            const logoFile = document.getElementById('edit-app-logo').files[0];
+            const finalizeSave = () => {
+                saveAppSettings(); 
+                applyAppSettings(); 
+                closeAppInfoModal();
+                // إذا تم تغيير الرابط، قم بجلب البيانات فوراً
+                if(appSettings.gsheetUrl && appSettings.gsheetUrl !== oldUrl) {
+                    silentSync();
+                }
+            };
+
             if (logoFile) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     appSettings.logo = e.target.result;
-                    saveAppSettings();
-                    applyAppSettings();
-                    closeAppInfoModal();
-                    location.reload();
+                    finalizeSave();
                 };
                 reader.readAsDataURL(logoFile);
             } else {
-                saveAppSettings();
-                applyAppSettings();
-                closeAppInfoModal();
-                location.reload();
+                finalizeSave();
             }
         }
 
@@ -1579,7 +1619,7 @@
                 `<svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="1.5"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M6 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M9 21h6"/></svg>`;
 
             let htmlContent = `
-                <div style="font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; background-color: ${creamBg}; color: ${darkSlate};">
+                <div style="font-family: 'Cairo', 'Tajawal', sans-serif; direction: rtl; text-align: right; background-color: ${creamBg}; color: ${darkSlate};">
                     
                     <!-- Cover Page -->
                     <div style="height: 210mm; width: 297mm; background-color: ${creamBg}; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; page-break-after: always; border: 10px solid ${goldColor}; box-sizing: border-box;">
@@ -1590,22 +1630,22 @@
                         </div>
                         <div style="z-index: 10; padding: 40px; background: rgba(253, 251, 247, 0.8); border-radius: 20px; backdrop-filter: blur(5px);">
                             <div style="margin-bottom: 30px;">${logoHtml}</div>
-                            <h1 style="color: ${goldColor}; font-size: 55px; font-weight: 900; margin: 0 0 15px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.05);">${appSettings.title}</h1>
+                            <h1 style="color: ${goldColor}; font-size: 55px; font-weight: 900; margin: 0 0 15px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.05); font-family: 'Tajawal', 'Cairo', sans-serif;">${appSettings.title}</h1>
                             <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin: 0 auto 25px auto;">
                                 <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
                                 <div style="width: 8px; height: 8px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
                                 <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
                             </div>
-                            <p style="color: ${darkSlate}; font-size: 22px; font-weight: 600; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6;">${appSettings.desc}</p>
+                            <p style="color: ${darkSlate}; font-size: 22px; font-weight: 600; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6; font-family: 'Cairo', 'Tajawal', sans-serif;">${appSettings.desc}</p>
                             <div style="display: inline-flex; gap: 40px; align-items: center; border-top: 1px solid rgba(197, 168, 128, 0.3); border-bottom: 1px solid rgba(197, 168, 128, 0.3); padding: 15px 40px;">
                                 <div>
-                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase;">تاريخ الإصدار</p>
-                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800;">${new Date().toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}</p>
+                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase; font-family: 'Cairo', 'Tajawal', sans-serif;">تاريخ الإصدار</p>
+                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800; font-family: 'Tajawal', 'Cairo', sans-serif;">${new Date().toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}</p>
                                 </div>
                                 <div style="width: 1px; height: 40px; background-color: ${goldColor};"></div>
                                 <div>
-                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase;">إجمالي الجهات</p>
-                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800;">${filteredData.length} جهة معتمدة</p>
+                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase; font-family: 'Cairo', 'Tajawal', sans-serif;">إجمالي الجهات</p>
+                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800; font-family: 'Tajawal', 'Cairo', sans-serif;">${filteredData.length} جهة معتمدة</p>
                                 </div>
                             </div>
                         </div>
@@ -1618,18 +1658,18 @@
                                 <td colspan="6" style="padding: 0; border: none;">
                                     <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 30px 15px 30px; border-bottom: 2px solid ${goldColor}; margin-bottom: 20px; background-color: ${creamBg};">
                                         <div>
-                                            <h2 style="color: ${goldColor}; margin: 0 0 5px 0; font-size: 22px; font-weight: 900;">${appSettings.title}</h2>
-                                            <p style="color: #64748B; margin: 0; font-size: 13px;">${appSettings.desc}</p>
+                                            <h2 style="color: ${goldColor}; margin: 0 0 5px 0; font-size: 22px; font-weight: 900; font-family: 'Tajawal', 'Cairo', sans-serif;">${appSettings.title}</h2>
+                                            <p style="color: #64748B; margin: 0; font-size: 13px; font-family: 'Cairo', 'Tajawal', sans-serif;">${appSettings.desc}</p>
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 15px;">
                                             <div style="text-align: left;">
-                                                <p style="color: #8C6239; margin: 0 0 3px 0; font-size: 14px; font-weight: 800; font-style: italic;">وثيقة داخلية</p>
-                                                <p style="color: #94A3B8; margin: 0; font-size: 11px;">${new Date().toLocaleDateString('ar-EG')}</p>
+                                                <p style="color: #8C6239; margin: 0 0 3px 0; font-size: 14px; font-weight: 800; font-style: italic; font-family: 'Cairo', 'Tajawal', sans-serif;">وثيقة داخلية</p>
+                                                <p style="color: #94A3B8; margin: 0; font-size: 11px; font-family: 'Cairo', 'Tajawal', sans-serif;">${new Date().toLocaleDateString('ar-EG')}</p>
                                             </div>
                                             ${smallLogoHtml}
                                         </div>
                                     </div>
-                                    <div style="display: flex; background-color: ${darkSlate}; color: ${goldColor}; font-weight: 800; font-size: 13px; padding: 14px 30px; border-radius: 8px 8px 0 0; margin: 0 20px;">
+                                    <div style="display: flex; background-color: ${darkSlate}; color: ${goldColor}; font-weight: 800; font-size: 13px; padding: 14px 30px; border-radius: 8px 8px 0 0; margin: 0 20px; font-family: 'Cairo', 'Tajawal', sans-serif;">
                                         <div style="width: 4%; text-align: center;">#</div>
                                         <div style="width: 22%; text-align: right; padding-right: 10px;">اسم الجهة الطبية</div>
                                         <div style="width: 14%; text-align: right; padding-right: 10px;">التخصص</div>
@@ -1643,7 +1683,7 @@
                         <tfoot style="display: table-footer-group;">
                             <tr>
                                 <td colspan="6" style="padding: 0; border: none;">
-                                    <div style="padding: 15px 30px; border-top: 1px solid rgba(197, 168, 128, 0.4); margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748B; background-color: ${creamBg};">
+                                    <div style="padding: 15px 30px; border-top: 1px solid rgba(197, 168, 128, 0.4); margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748B; background-color: ${creamBg}; font-family: 'Cairo', 'Tajawal', sans-serif;">
                                         <div style="display: flex; align-items: center; gap: 10px;">
                                             <div style="width: 5px; height: 5px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
                                             <span>تم إنشاء هذا الدليل آلياً - ${appSettings.title}</span>
@@ -1664,20 +1704,20 @@
                             <tr style="page-break-inside: avoid;">
                                 <td colspan="6" style="padding: 0 20px; border: none;">
                                     <div style="display: flex; border-bottom: 1px solid rgba(197, 168, 128, 0.2); padding: 16px 10px; align-items: center;">
-                                        <div style="width: 4%; text-align: center; font-weight: 700; color: ${goldColor}; font-size: 12px;">${String(index + 1).padStart(2, '0')}</div>
-                                        <div style="width: 22%; text-align: right; padding-right: 10px; font-weight: 800; color: ${darkSlate}; font-size: 13px;">${item['اسم الجهة الطبية'] || '-'}</div>
+                                        <div style="width: 4%; text-align: center; font-weight: 700; color: ${goldColor}; font-size: 12px; font-family: 'Cairo', 'Tajawal', sans-serif;">${String(index + 1).padStart(2, '0')}</div>
+                                        <div style="width: 22%; text-align: right; padding-right: 10px; font-weight: 800; color: ${darkSlate}; font-size: 13px; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['اسم الجهة الطبية'] || '-'}</div>
                                         <div style="width: 14%; text-align: right; padding-right: 10px;">
-                                            <span style="color: ${darkSlate}; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                            <span style="color: ${darkSlate}; font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: 'Cairo', 'Tajawal', sans-serif;">
                                                 <span style="width: 4px; height: 4px; background-color: ${goldColor}; border-radius: 50%; display: inline-block;"></span>
                                                 ${item['التخصص'] || '-'}
                                             </span>
                                         </div>
                                         <div style="width: 18%; text-align: right; padding-right: 10px;">
-                                            <div style="color: ${darkSlate}; font-weight: 800;">${item['المحافظة'] || ''}</div>
-                                            <div style="color: #64748B; font-size: 11px; margin-top: 3px;">${item['الفروع'] || ''}</div>
+                                            <div style="color: ${darkSlate}; font-weight: 800; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['المحافظة'] || ''}</div>
+                                            <div style="color: #64748B; font-size: 11px; margin-top: 3px; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['الفروع'] || ''}</div>
                                         </div>
-                                        <div style="width: 28%; text-align: right; padding-right: 10px; color: #475569; line-height: 1.6; font-weight: 600;">${item['العنوان'] || '-'}</div>
-                                        <div style="width: 14%; text-align: center; direction: ltr; font-weight: 800; color: ${darkSlate}; font-size: 13px; letter-spacing: 0.5px;">${phone || '-'}</div>
+                                        <div style="width: 28%; text-align: right; padding-right: 10px; color: #475569; line-height: 1.6; font-weight: 600; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['العنوان'] || '-'}</div>
+                                        <div style="width: 14%; text-align: center; direction: ltr; font-weight: 800; color: ${darkSlate}; font-size: 13px; letter-spacing: 0.5px; font-family: 'Cairo', 'Tajawal', sans-serif;">${phone || '-'}</div>
                                     </div>
                                 </td>
                             </tr>
