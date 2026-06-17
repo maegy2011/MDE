@@ -24,11 +24,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
       
-      - name: Inject Pusher Secrets into HTML
+      # ============================================================
+      #  حقن المفاتيح السرية في ملف index.html
+      # ============================================================
+      
+      - name: Inject Pusher Secrets
         run: |
           sed -i 's/{{PUSHER_KEY}}/${{ secrets.PUSHER_KEY }}/g' index.html
           sed -i 's/{{PUSHER_CLUSTER}}/${{ secrets.PUSHER_CLUSTER }}/g' index.html
-          
+      
+      - name: Inject Google Analytics Measurement ID
+        run: |
+          sed -i 's/{{GA_MEASUREMENT_ID}}/${{ secrets.GA_MEASUREMENT_ID }}/g' index.html
+      
+      # ============================================================
+      #  إعداد ونشر الموقع على GitHub Pages
+      # ============================================================
+      
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
         
