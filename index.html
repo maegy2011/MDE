@@ -35,6 +35,7 @@
             --danger-color: #EF4444;
             --warning-color: #F59E0B;
             --success-color: #10B981;
+            --wa-color: #25D366;
         }
         * { box-sizing: border-box; }
         
@@ -47,8 +48,151 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
         
+        /* ===== الوضع الليلي الفاخر (Dark Mode) ===== */
+        body.dark-mode {
+            background-color: #0B1120;
+            color: #E2E8F0;
+            --text-color: #E2E8F0;
+            --border-color: #334155;
+        }
+        body.dark-mode .card {
+            background-color: #1E293B;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-color: #334155;
+        }
+        body.dark-mode .card h3 {
+            color: #C5A880;
+        }
+        body.dark-mode .card .info-row {
+            color: #94A3B8;
+        }
+        body.dark-mode .modal-content,
+        body.dark-mode .login-box {
+            background-color: #1E293B;
+            color: #E2E8F0;
+            border-color: #C5A880;
+        }
+        body.dark-mode .modal-content input,
+        body.dark-mode .login-box input {
+            background-color: #0F172A;
+            color: white;
+            border-color: #334155;
+        }
+        body.dark-mode .modal-content h3 {
+            color: #C5A880;
+        }
+        body.dark-mode .upload-section {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+        body.dark-mode .upload-section h3 {
+            color: #C5A880 !important;
+        }
+        body.dark-mode .filters {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+        body.dark-mode .filters .search-main,
+        body.dark-mode .filters .select-btn {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+        body.dark-mode .pagination-container {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+        body.dark-mode .page-btn {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+        body.dark-mode .page-btn.active {
+            background-color: #C5A880;
+            color: #0F172A;
+        }
+        body.dark-mode .dropdown-menu {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+        body.dark-mode .dropdown-menu label {
+            color: #E2E8F0;
+        }
+        body.dark-mode .dropdown-menu label:hover {
+            background-color: #0F172A;
+        }
+        body.dark-mode .dropdown-search {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+        body.dark-mode .modal-overlay .modal-content .form-group input {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+        body.dark-mode .modal-overlay .modal-content .form-group label {
+            color: #C5A880;
+        }
+        body.dark-mode .sheet-selection {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+        body.dark-mode .sheet-selection h3 {
+            color: #C5A880;
+        }
+        body.dark-mode .sheet-list {
+            background-color: #0F172A;
+            border-color: #334155;
+        }
+        body.dark-mode .sheet-list label {
+            color: #E2E8F0;
+        }
+        body.dark-mode .badge.specialty {
+            background-color: #334155;
+            color: #C5A880;
+        }
+        body.dark-mode .badge.branch {
+            background-color: #334155;
+            color: #94A3B8;
+        }
+        body.dark-mode .call-btn {
+            background-color: #059669;
+        }
+        body.dark-mode .call-btn:hover {
+            background-color: #047857;
+        }
+        body.dark-mode .map-btn {
+            background-color: #0369A1;
+        }
+        body.dark-mode .map-btn:hover {
+            background-color: #0284C7;
+        }
+        body.dark-mode .wa-btn {
+            background-color: #1DA851;
+        }
+        body.dark-mode .wa-btn:hover {
+            background-color: #188C42;
+        }
+        body.dark-mode .admin-controls .btn-edit {
+            background-color: #1E40AF;
+        }
+        body.dark-mode .admin-controls .btn-toggle {
+            background-color: #475569;
+        }
+        body.dark-mode .admin-controls .btn-delete {
+            background-color: #B91C1C;
+        }
+        body.dark-mode .login-box svg {
+            stroke: #C5A880;
+        }
+        body.dark-mode .login-box h2 {
+            color: #C5A880;
+        }
+
         /* ===== شاشة تسجيل الدخول ===== */
         #login-screen {
             position: fixed;
@@ -74,6 +218,7 @@
             max-width: 350px;
             width: 90%;
             border-top: 5px solid #C5A880;
+            transition: background-color 0.3s, color 0.3s;
         }
         .login-box input {
             width: 100%;
@@ -85,6 +230,7 @@
             text-align: center;
             letter-spacing: 2px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .login-box button {
             width: 100%;
@@ -117,6 +263,10 @@
             align-items: center;
             box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
             min-height: 60px;
+            transition: background-color 0.3s;
+        }
+        body.dark-mode .header {
+            background-color: #0B1120;
         }
         .header-content {
             display: flex;
@@ -172,6 +322,10 @@
             background-color: var(--accent-color);
             color: var(--primary-color);
         }
+        body.dark-mode .btn-header:hover {
+            background-color: var(--accent-color);
+            color: #0F172A;
+        }
         .btn-header.btn-pdf {
             background-color: #DC3545;
             border-color: #DC3545;
@@ -204,6 +358,23 @@
             border-color: var(--warning-color);
             font-weight: bold;
         }
+        #theme-toggle {
+            background-color: transparent;
+            border: 1px solid #C5A880;
+            color: #C5A880;
+        }
+        #theme-toggle:hover {
+            background-color: #C5A880;
+            color: #0F172A;
+        }
+        body.dark-mode #theme-toggle {
+            border-color: #C5A880;
+            color: #C5A880;
+        }
+        body.dark-mode #theme-toggle:hover {
+            background-color: #C5A880;
+            color: #0F172A;
+        }
         
         /* ===== حاوية المحتوى ===== */
         .main-container {
@@ -225,6 +396,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             gap: 10px;
             flex-wrap: wrap;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         .search-main {
             flex: 1 1 100%;
@@ -233,6 +405,7 @@
             border-radius: 5px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
             font-size: 14px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .custom-select {
             position: relative;
@@ -250,6 +423,7 @@
             justify-content: space-between;
             align-items: center;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .dropdown-menu {
             display: none;
@@ -265,6 +439,7 @@
             margin-top: 5px;
             max-height: 250px;
             flex-direction: column;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         .dropdown-menu.hidden { display: none !important; }
         .dropdown-menu:not(.hidden) { display: flex; }
@@ -274,6 +449,7 @@
             border-bottom: 1px solid var(--border-color);
             font-family: 'Cairo', 'Tajawal', sans-serif;
             outline: none;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .options-list {
             overflow-y: auto;
@@ -286,8 +462,10 @@
             cursor: pointer;
             font-size: 14px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: color 0.3s;
         }
         .options-list label:hover { background-color: #f0f2f5; }
+        body.dark-mode .options-list label:hover { background-color: #0F172A; }
         .options-list input { margin-left: 8px; }
         
         /* ===== رفع الملفات ===== */
@@ -298,6 +476,7 @@
             text-align: center;
             margin-bottom: 20px;
             border: 2px dashed var(--accent-color);
+            transition: background-color 0.3s, border-color 0.3s;
         }
         .upload-section {
             border-color: #0284C7;
@@ -306,6 +485,10 @@
             border: 0;
             border-top: 1px dashed #CBD5E1;
             margin: 20px 0;
+            transition: border-color 0.3s;
+        }
+        body.dark-mode .upload-section hr {
+            border-color: #334155;
         }
         .sheet-selection {
             display: none;
@@ -322,6 +505,11 @@
             padding: 10px;
             background: #f9f9f9;
             border: 1px solid #eee;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode .sheet-list {
+            background-color: #0F172A;
+            border-color: #334155;
         }
         .btn-primary {
             background-color: var(--primary-color);
@@ -362,16 +550,23 @@
             border: 1px solid var(--border-color);
             border-right: 4px solid var(--accent-color);
             position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
         }
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.06);
         }
+        body.dark-mode .card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
         .card.disabled-card {
             opacity: 0.6;
             border-right-color: #999;
             background-color: #f8f9fa;
+        }
+        body.dark-mode .card.disabled-card {
+            background-color: #0F172A;
+            border-right-color: #64748B;
         }
         .card h3 {
             margin: 0 0 10px 0;
@@ -379,10 +574,14 @@
             font-weight: 800;
             font-size: 18px;
             font-family: 'Tajawal', 'Cairo', sans-serif;
+            transition: color 0.3s;
         }
         .card.disabled-card h3 {
             color: #666;
             text-decoration: line-through;
+        }
+        body.dark-mode .card.disabled-card h3 {
+            color: #64748B;
         }
         .badges {
             display: flex;
@@ -396,6 +595,7 @@
             font-size: 12px;
             font-weight: 600;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
         .badge.specialty {
             background: #E2E8F0;
@@ -413,18 +613,21 @@
             margin-bottom: 6px;
             font-size: 14px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: color 0.3s;
         }
         
-        /* ===== أزرار الاتصال والخريطة ===== */
+        /* ===== أزرار الاتصال والخريطة والواتساب ===== */
         .action-buttons {
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
-        .call-btn, .map-btn {
+        .call-btn, .map-btn, .wa-btn {
             flex: 1;
+            min-width: 80px;
             text-align: center;
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
@@ -432,7 +635,7 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s;
             border: none;
             font-family: 'Cairo', 'Tajawal', sans-serif;
@@ -451,6 +654,31 @@
         .map-btn:hover {
             background-color: #0369A1;
         }
+        .wa-btn {
+            background-color: #25D366;
+            color: white;
+        }
+        .wa-btn:hover {
+            background-color: #1DA851;
+        }
+        body.dark-mode .call-btn {
+            background-color: #059669;
+        }
+        body.dark-mode .call-btn:hover {
+            background-color: #047857;
+        }
+        body.dark-mode .map-btn {
+            background-color: #0369A1;
+        }
+        body.dark-mode .map-btn:hover {
+            background-color: #0284C7;
+        }
+        body.dark-mode .wa-btn {
+            background-color: #1DA851;
+        }
+        body.dark-mode .wa-btn:hover {
+            background-color: #188C42;
+        }
         
         /* ===== أزرار الإدارة ===== */
         .admin-controls {
@@ -459,6 +687,7 @@
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid var(--border-color);
+            transition: border-color 0.3s;
         }
         .admin-mode-on .admin-controls {
             display: flex;
@@ -479,10 +708,14 @@
             align-items: center;
             justify-content: center;
             gap: 5px;
+            transition: background-color 0.3s;
         }
         .btn-edit { background-color: var(--primary-color); }
         .btn-toggle { background-color: #64748B; }
         .btn-delete { background-color: var(--danger-color); }
+        body.dark-mode .btn-edit { background-color: #1E40AF; }
+        body.dark-mode .btn-toggle { background-color: #475569; }
+        body.dark-mode .btn-delete { background-color: #B91C1C; }
         
         /* ===== النوافذ المنبثقة ===== */
         .modal-overlay {
@@ -505,11 +738,13 @@
             width: 100%;
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .modal-content h3 {
             margin-top: 0;
             color: var(--primary-color);
             font-family: 'Tajawal', 'Cairo', sans-serif;
+            transition: color 0.3s;
         }
         .form-group {
             margin-bottom: 15px;
@@ -520,6 +755,7 @@
             font-size: 14px;
             font-weight: bold;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: color 0.3s;
         }
         .form-group input {
             width: 100%;
@@ -527,6 +763,7 @@
             border: 1px solid var(--border-color);
             border-radius: 5px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         .form-group input[type="file"] {
             padding: 5px;
@@ -547,6 +784,7 @@
         }
         .btn-save { background-color: var(--success-color); color: white; }
         .btn-cancel { background-color: #e9ecef; color: #333; }
+        body.dark-mode .btn-cancel { background-color: #334155; color: #E2E8F0; }
         
         /* ===== الترقيم ===== */
         .pagination-container {
@@ -560,12 +798,19 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             flex-wrap: wrap;
             gap: 15px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
         .rows-selector select {
             padding: 5px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
             border: 1px solid var(--border-color);
             border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode .rows-selector select {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
         }
         .page-buttons {
             display: flex;
@@ -579,6 +824,7 @@
             cursor: pointer;
             border-radius: 5px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: all 0.3s;
         }
         .page-btn.active {
             background: var(--primary-color);
@@ -589,6 +835,20 @@
             background: #eee;
             cursor: not-allowed;
         }
+        body.dark-mode .page-btn {
+            background-color: #0F172A;
+            color: #E2E8F0;
+            border-color: #334155;
+        }
+        body.dark-mode .page-btn.active {
+            background-color: #C5A880;
+            color: #0F172A;
+            border-color: #C5A880;
+        }
+        body.dark-mode .page-btn:disabled {
+            background-color: #1E293B;
+            color: #64748B;
+        }
         #loading {
             display: none;
             text-align: center;
@@ -596,12 +856,21 @@
             font-weight: bold;
             color: var(--primary-color);
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: color 0.3s;
+        }
+        body.dark-mode #loading {
+            color: #C5A880;
         }
         .sheet-item {
             padding: 5px 0;
             border-bottom: 1px solid #eee;
             display: block;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode .sheet-item {
+            border-color: #334155;
+            color: #E2E8F0;
         }
         .sheet-item input { margin-left: 10px; }
         
@@ -620,6 +889,11 @@
             align-items: center;
             min-height: 40px;
             font-family: 'Cairo', 'Tajawal', sans-serif;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode .footer {
+            background-color: #0B1120;
+            border-top-color: #C5A880;
         }
         .footer svg {
             color: var(--accent-color);
@@ -678,6 +952,9 @@
             }
             .action-buttons {
                 flex-direction: column;
+            }
+            .call-btn, .map-btn, .wa-btn {
+                min-width: 100%;
             }
             .login-box {
                 padding: 25px;
@@ -746,6 +1023,14 @@
         </div>
         
         <div class="header-buttons" id="header-buttons">
+            <!-- زر الوضع الليلي -->
+            <button class="btn-header" id="theme-toggle" onclick="toggleTheme()">
+                <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <span id="theme-text">ليلي</span>
+            </button>
+            
             <button class="btn-header" onclick="clearData()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 2v6h-6"/>
@@ -916,7 +1201,7 @@
         </div>
     </div>
 
-    <!-- نافذة إعدادات التطبيق المتقدمة (مع حقل رابط جوجل شيت) -->
+    <!-- نافذة إعدادات التطبيق المتقدمة -->
     <div class="modal-overlay" id="app-info-modal">
         <div class="modal-content">
             <h3>📝 إعدادات التطبيق المتقدمة</h3>
@@ -982,6 +1267,29 @@
         function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
         // ========================================================================
+        //  دوال الوضع الليلي (Dark Mode)
+        // ========================================================================
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('medicalDarkMode', isDark);
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (isDark) {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+                text.innerText = 'نهاري';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+                text.innerText = 'ليلي';
+            }
+        }
+
+        // ========================================================================
         //  دوال التحقق من كود المرور
         // ========================================================================
         function checkPasscode() {
@@ -1004,6 +1312,13 @@
         //  التحميل الابتدائي
         // ========================================================================
         window.onload = function() {
+            // استرجاع الوضع الليلي
+            const savedTheme = localStorage.getItem('medicalDarkMode');
+            if (savedTheme === 'true') {
+                document.body.classList.add('dark-mode');
+                updateThemeIcon(true);
+            }
+
             const savedSettings = localStorage.getItem('medicalAppSettings');
             if (savedSettings) {
                 try { appSettings = JSON.parse(savedSettings); } catch(e) {}
@@ -1385,7 +1700,7 @@
         }
 
         // ========================================================================
-        //  عرض البطاقات
+        //  عرض البطاقات مع زر واتساب الذكي
         // ========================================================================
         function renderCards(data) {
             const container = document.getElementById('results');
@@ -1407,23 +1722,25 @@
                 
                 let phone = String(item['التليفون'] || '').trim();
                 if (phone) phone = phone.replace(/(^|\D)(1[0125]\d{8})(?=\D|$)/g, '$10$2');
+
+                // استخراج الأرقام فقط لفحصها
+                let digitsOnly = phone.replace(/\D/g, '');
+                // التحقق هل هو رقم موبايل مصري (يبدأ بـ 010, 011, 012, 015)
+                let isMobile = /^(010|011|012|015)\d{8}$/.test(digitsOnly);
                 
-                const callHtml = phone ? `
-                    <a href="tel:${phone}" class="call-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        ${phone}
-                    </a>
-                ` : '';
+                let waHtml = '';
+                if (isMobile) {
+                    // تجهيز الرقم للواتساب (إضافة كود مصر 20 وحذف الصفر الأول)
+                    let waNumber = '20' + digitsOnly.substring(1);
+                    waHtml = `<a href="https://wa.me/${waNumber}" target="_blank" class="wa-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> واتساب</a>`;
+                }
 
+                let phoneHtml = phone ? `<a href="tel:${phone}" class="call-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> اتصال</a>` : '';
+                
                 const searchQuery = encodeURIComponent(`${name} ${gov} ${address}`);
-                const mapHtml = `
-                    <a href="https://www.google.com/maps/search/?api=1&query=${searchQuery}" target="_blank" class="map-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        الخريطة
-                    </a>
-                `;
+                const mapHtml = `<a href="https://www.google.com/maps/search/?api=1&query=${searchQuery}" target="_blank" class="map-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> خريطة</a>`;
 
-                const actionButtons = `<div class="action-buttons">${callHtml} ${mapHtml}</div>`;
+                const actionButtons = `<div class="action-buttons">${phoneHtml} ${waHtml} ${mapHtml}</div>`;
                 const statusBadge = isDisabled ? `<span class="badge disabled-badge">معطل</span>` : '';
 
                 card.innerHTML = `
@@ -1511,7 +1828,7 @@
         });
 
         // ========================================================================
-        //  إعدادات التطبيق المتقدمة (مع حقل رابط جوجل شيت)
+        //  إعدادات التطبيق المتقدمة
         // ========================================================================
         function applyAppSettings() {
             document.getElementById('app-title').innerHTML = appSettings.title || 'الدليل الطبي';
@@ -1557,7 +1874,6 @@
             appSettings.desc = document.getElementById('edit-app-desc').value || "";
             appSettings.passcode = document.getElementById('edit-app-passcode').value;
             
-            // حفظ رابط جوجل شيت الجديد
             const oldUrl = appSettings.gsheetUrl;
             appSettings.gsheetUrl = document.getElementById('edit-app-gsheet-url').value.trim();
             
@@ -1573,7 +1889,6 @@
                 saveAppSettings(); 
                 applyAppSettings(); 
                 closeAppInfoModal();
-                // إذا تم تغيير الرابط، قم بجلب البيانات فوراً
                 if(appSettings.gsheetUrl && appSettings.gsheetUrl !== oldUrl) {
                     silentSync();
                 }
