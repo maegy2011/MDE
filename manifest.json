@@ -1,0 +1,16 @@
+{
+  "name": "الدليل الطبي للموظفين",
+  "short_name": "الدليل الطبي",
+  "description": "دليل الجهات الطبية المتعاقد معها",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#0F172A",
+  "icons": [
+    {
+      "src": "https://drive.google.com/uc?export=download&id=1xSsy8tErdqtA4XrKuMU7gaFREp_y6VOI",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
