@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدليل الطبي للموظفين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #0F172A;
+            --secondary-color: #F8FAFC;
+            --accent-color: #C5A880;
+            --cream-color: #FDFBF7;
+            --text-color: #334155;
+            --border-color: #E2E8F0;
+            --danger-color: #EF4444;
+            --warning-color: #F59E0B;
+            --success-color: #10B981;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #F1F5F9;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #F1F5F9;
+            padding-bottom: 15px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            background-color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
+        }
+        #app-logo {
+            max-height: 60px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        #app-title {
+            margin: 0;
+            color: #FFFFFF;
+            font-weight: 800;
+        }
+        #app-title .highlight {
+            color: var(--accent-color);
+        }
+        #app-desc {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #94A3B8;
+        }
+        #last-updated {
+            font-size: 11px;
+            color: var(--accent-color);
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        #push-notification {
+            display: none;
+            background-color: var(--success-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 5px;
+            animation: fadeInUp 0.5s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .header-buttons {
+            display: none;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .btn-header {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .btn-header:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+        .btn-export {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            display: none;
+        }
+        .btn-export:hover {
+            background-color: #059669;
+            color: white;
+        }
+        .btn-pdf {
+            background-color: #1E293B;
+            border-color: var(--accent-color);
+        }
+        .btn-pdf:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+        #btn-edit-app {
+            display: none;
+            background-color: #0EA5E9;
+            border-color: #0EA5E9;
+        }
+        #btn-edit-app:hover {
+            background-color: #0284C7;
+            color: white;
+        }
+        .admin-active-badge {
+            background-color: var(--warning-color);
+            color: #000;
+            border-color: var(--warning-color);
+            font-weight: bold;
+        }
+        .filters {
+            display: none;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px auto 0 auto;
+            max-width: 800px;
+            width: calc(100% - 30px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .search-main {
+            flex: 1 1 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+        }
+        .custom-select {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        .select-btn {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1001;
+            margin-top: 5px;
+            max-height: 250px;
+            flex-direction: column;
+        }
+        .dropdown-menu.hidden { display: none !important; }
+        .dropdown-menu:not(.hidden) { display: flex; }
+        .dropdown-search {
+            padding: 8px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Cairo', sans-serif;
+            outline: none;
+        }
+        .options-list {
+            overflow-y: auto;
+            padding: 5px;
+        }
+        .options-list label {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .options-list label:hover { background-color: #f0f2f5; }
+        .options-list input { margin-left: 8px; }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .upload-section, .sheet-selection {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px dashed var(--accent-color);
+        }
+        .upload-section {
+            border-color: var(--accent-color);
+        }
+        .upload-section hr {
+            border: 0;
+            border-top: 1px dashed #ccc;
+            margin: 20px 0;
+        }
+        .sheet-selection {
+            display: none;
+            border-style: solid;
+        }
+        .sheet-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: right;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #eee;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        .btn-google {
+            background-color: #0f9d58;
+        }
+        .btn-google:hover {
+            background-color: #0b7e45;
+        }
+        .results {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+            border-right: 4px solid var(--accent-color);
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+        }
+        .card.disabled-card {
+            opacity: 0.6;
+            border-right-color: #999;
+            background-color: #f8f9fa;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+        .card.disabled-card h3 {
+            color: #666;
+            text-decoration: line-through;
+        }
+        .badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge.specialty {
+            background: #E2E8F0;
+            color: var(--primary-color);
+        }
+        .badge.branch {
+            background: #E2E8F0;
+            color: #475569;
+        }
+        .badge.disabled-badge {
+            background: #EF4444;
+            color: white;
+        }
+        .info-row {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .call-btn {
+            display: block;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .admin-controls {
+            display: none;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .admin-mode-on .admin-controls {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+            min-width: 70px;
+        }
+        .btn-edit { background-color: var(--primary-color); }
+        .btn-toggle { background-color: #64748B; }
+        .btn-delete { background-color: var(--danger-color); }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+        }
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+        }
+        .btn-save { background-color: var(--success-color); color: white; }
+        .btn-cancel { background-color: #e9ecef; color: #333; }
+        .pagination-container {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .rows-selector select {
+            padding: 5px;
+            font-family: 'Cairo', sans-serif;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+        .page-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Cairo', sans-serif;
+        }
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .page-btn:disabled {
+            background: #eee;
+            cursor: not-allowed;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .sheet-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            display: block;
+        }
+        .sheet-item input { margin-left: 10px; }
+        @media (max-width: 600px) {
+            .header h2 { font-size: 18px; }
+            .filters { padding: 10px; }
+            .custom-select { min-width: 100%; }
+            .upload-section input[type="text"] { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-container">
+        <div class="header">
+            <img id="app-logo" src="" alt="Logo" style="display:none; max-height: 60px; border-radius: 5px; margin-bottom: 5px;">
+            <h2 id="app-title" style="margin: 0;">⚖️ <span class="highlight">الدليل الطبي</span> للموظفين</h2>
+            <p id="app-desc" style="margin: 5px 0 0 0; font-size:14px;">دليل شامل للجهات الطبية المعتمدة</p>
+            <span id="last-updated" style="font-size: 11px; color: #C5A880; margin-top: 5px; display: none;"></span>
+            <div id="push-notification">🔄 تم تحديث البيانات من جوجل شيت!</div>
+            <div class="header-buttons" id="header-buttons" style="display: none; margin-top: 10px;">
+                <button class="btn-header" onclick="clearData()">🔄 رفع ملف جديد</button>
+                <button class="btn-header" id="btn-admin-toggle" onclick="toggleAdminMode()">⚙️ وضع الإدارة</button>
+                <button class="btn-header btn-pdf" onclick="exportToPDF()">📄 طباعة PDF</button>
+                <button class="btn-header btn-export" id="btn-export" onclick="exportToExcel()">📥 تصدير للإكسيل</button>
+                <button class="btn-header" id="btn-edit-app" onclick="openAppInfoModal()" style="display: none; background-color: #0EA5E9; border-color: #0EA5E9;">📝 إعدادات التطبيق</button>
+            </div>
+        </div>
+        <div class="filters" id="filters">
+            <input type="text" id="search-input" class="search-main" placeholder="ابحث باسم الجهة، الفرع، أو العنوان..." oninput="applyFilters()">
+            <div class="custom-select">
+                <div class="select-btn" onclick="toggleDropdown('gov-dropdown')">
+                    <span id="gov-btn-text">كل المحافظات</span> <span>▼</span>
+                </div>
+                <div class="dropdown-menu hidden" id="gov-dropdown">
+                    <input type="text" class="dropdown-search" placeholder="ابحث عن محافظة..." onkeyup="filterOptions('gov-dropdown', this.value)">
+                    <div class="options-list" id="gov-options"></div>
+                </div>
+            </div>
+            <div class="custom-select">
+                <div class="select-btn" onclick="toggleDropdown('spec-dropdown')">
+                    <span id="spec-btn-text">كل التخصصات</span> <span>▼</span>
+                </div>
+                <div class="dropdown-menu hidden" id="spec-dropdown">
+                    <input type="text" class="dropdown-search" placeholder="ابحث عن تخصص..." onkeyup="filterOptions('spec-dropdown', this.value)">
+                    <div class="options-list" id="spec-options"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <div class="upload-section" id="upload-section">
+            <h3 style="color: var(--accent-color); margin-top: 0;">☁️ جلب البيانات من جوجل شيت (Google Sheets)</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">تأكد أن إعدادات مشاركة الشيت هي: <strong>"أي شخص لديه الرابط"</strong></p>
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
+                <input type="text" id="gsheet-url" placeholder="انسخ رابط جوجل شيت هنا..." style="flex: 1; min-width: 250px; max-width: 500px; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-family: 'Cairo', sans-serif;">
+                <button class="btn-primary btn-google" onclick="fetchFromGoogleSheet()">جلب البيانات</button>
+            </div>
+            <hr>
+            <h3 style="margin-bottom: 10px;">📁 أو قم برفع ملف إكسيل (Excel) من جهازك</h3>
+            <input type="file" id="excel-file" accept=".xlsx, .xls" style="margin-top: 10px;">
+        </div>
+        <div id="loading">جاري قراءة الملف... ⏳</div>
+        <div class="sheet-selection" id="sheet-selection">
+            <h3>حدد الشيتات التي تريد إدراجها:</h3>
+            <div class="sheet-list" id="checkbox-container"></div>
+            <button class="btn-primary" onclick="processSelectedSheets()">اعتماد وحفظ البيانات</button>
+        </div>
+        <div class="results" id="results"></div>
+        <div class="pagination-container" id="pagination-container">
+            <div class="rows-selector">
+                <label>عرض:</label>
+                <select id="rows-per-page" onchange="changeRowsPerPage()">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label>صفوف</label>
+            </div>
+            <div class="page-buttons" id="page-buttons"></div>
+            <div style="font-size: 14px; color: #666;" id="page-info"></div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-content">
+            <h3>✏️ تعديل بيانات الفرع</h3>
+            <input type="hidden" id="edit-id">
+            <div class="form-group"><label>اسم الجهة الطبية</label><input type="text" id="edit-name"></div>
+            <div class="form-group"><label>التخصص</label><input type="text" id="edit-spec"></div>
+            <div class="form-group"><label>المحافظة</label><input type="text" id="edit-gov"></div>
+            <div class="form-group"><label>الفرع</label><input type="text" id="edit-branch"></div>
+            <div class="form-group"><label>العنوان</label><input type="text" id="edit-address"></div>
+            <div class="form-group"><label>التليفون</label><input type="text" id="edit-phone"></div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="saveEdit()">حفظ التعديلات</button>
+                <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="app-info-modal">
+        <div class="modal-content">
+            <h3>📝 إعدادات هوية التطبيق</h3>
+            <div class="form-group">
+                <label>لوجو التطبيق (اختر صورة)</label>
+                <input type="file" id="edit-app-logo" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>عنوان التطبيق</label>
+                <input type="text" id="edit-app-title">
+            </div>
+            <div class="form-group">
+                <label>وصف التطبيق</label>
+                <input type="text" id="edit-app-desc">
+            </div>
+            <div class="form-group">
+                <label>رابط جوجل شيت الأساسي (للتحديث التلقائي)</label>
+                <input type="text" id="edit-gsheet-url" placeholder="https://docs.google.com/spreadsheets/d/...">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-save" onclick="saveAppInfo()">حفظ التعديلات</button>
+                <button class="btn-cancel" onclick="closeAppInfoModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pdf-container" style="display: none;"></div>
+
+    <script>
+        // ========================================================================
+        //  المتغيرات العامة
+        // ========================================================================
+        let globalWorkbook = null;
+        let allMedicalData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let rowsPerPage = 10;
+        let isAdminMode = false;
+        
+        let appSettings = {
+            title: "⚖️ الدليل الطبي للموظفين",
+            desc: "دليل شامل للجهات الطبية المعتمدة",
+            logo: "",
+            lastUpdated: "",
+            gsheetUrl: ""
+        };
+
+        let pusherChannel = null;
+
+        function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
+
+        // ========================================================================
+        //  التحميل الابتدائي
+        // ========================================================================
+        window.onload = function() {
+            const savedSettings = localStorage.getItem('medicalAppSettings');
+            if (savedSettings) {
+                try { appSettings = JSON.parse(savedSettings); } catch(e) {}
+            }
+            applyAppSettings();
+
+            const savedData = localStorage.getItem('medicalDirectoryData');
+            if (savedData) {
+                try {
+                    allMedicalData = JSON.parse(savedData);
+                    if (allMedicalData.length) showAppInterface();
+                } catch (e) { localStorage.removeItem('medicalDirectoryData'); }
+            }
+
+            // --------------------------------------------
+            //  🟢 تفعيل Pusher (المفاتيح تُحقن أثناء النشر)
+            // --------------------------------------------
+            if (appSettings.gsheetUrl) {
+                // Placeholders يتم استبدالها عبر GitHub Actions
+                const pusher = new Pusher('{{PUSHER_KEY}}', {
+                    cluster: '{{PUSHER_CLUSTER}}'
+                });
+
+                pusherChannel = pusher.subscribe('medical-directory');
+                pusherChannel.bind('data-updated', function(data) {
+                    console.log("📩 إشعار وارد من Pusher:", data);
+                    const notif = document.getElementById('push-notification');
+                    notif.style.display = 'block';
+                    setTimeout(() => { notif.style.display = 'none'; }, 5000);
+                    silentSync();
+                });
+            }
+        };
+
+        // ========================================================================
+        //  المزامنة الصامتة
+        // ========================================================================
+        async function silentSync() {
+            if (!appSettings.gsheetUrl) return;
+            try {
+                const match = appSettings.gsheetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                if (!match || match.length < 2) throw new Error("رابط غير صحيح");
+                const sheetId = match[1];
+                const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+
+                const response = await fetch(exportUrl);
+                if (!response.ok) throw new Error("تعذر جلب البيانات");
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                let newData = [];
+                workbook.SheetNames.forEach(sheetName => {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
+                    jsonData.forEach(row => {
+                        const cleanRow = { _id: generateId(), 'الحالة': '' };
+                        for (let key in row) {
+                            let trimmedKey = key.trim();
+                            cleanRow[trimmedKey] = row[key];
+                        }
+                        if (cleanRow['اسم الجهة الطبية']) {
+                            if (!cleanRow['المحافظة']) cleanRow['المحافظة'] = sheetName;
+                            newData.push(cleanRow);
+                        }
+                    });
+                });
+
+                if (newData.length > 0) {
+                    allMedicalData = newData;
+                    const now = new Date();
+                    appSettings.lastUpdated = "آخر تحديث للبيانات: " + now.toLocaleDateString('ar-EG') + ' الساعة ' + now.toLocaleTimeString('ar-EG');
+                    saveAppSettings();
+                    applyAppSettings();
+                    saveToLocal();
+                    populateFilters();
+                    applyFilters();
+                    console.log("✅ تم تحديث البيانات بنجاح عبر المزامنة الصامتة.");
+                }
+            } catch (error) {
+                console.error("❌ خطأ في المزامنة الصامتة:", error);
+            }
+        }
+
+        // ========================================================================
+        //  الوظائف الأساسية (حفظ، CRUD، تصدير، فلترة، ...)
+        // ========================================================================
+        function saveToLocal() {
+            try { localStorage.setItem('medicalDirectoryData', JSON.stringify(allMedicalData)); } 
+            catch (e) { console.error("Storage error", e); }
+        }
+
+        function clearData() {
+            if (confirm("هل أنت متأكد أنك تريد مسح البيانات الحالية ورفع ملف جديد؟")) {
+                localStorage.removeItem('medicalDirectoryData');
+                location.reload();
+            }
+        }
+
+        function toggleAdminMode() {
+            isAdminMode = !isAdminMode;
+            const btn = document.getElementById('btn-admin-toggle');
+            const exportBtn = document.getElementById('btn-export');
+            const editAppBtn = document.getElementById('btn-edit-app');
+            const container = document.getElementById('main-container');
+            
+            if (isAdminMode) {
+                btn.classList.add('admin-active-badge');
+                btn.innerText = '✅ وضع الإدارة مفعل';
+                exportBtn.style.display = 'inline-block';
+                editAppBtn.style.display = 'inline-block';
+                container.classList.add('admin-mode-on');
+            } else {
+                btn.classList.remove('admin-active-badge');
+                btn.innerText = '⚙️ وضع الإدارة';
+                exportBtn.style.display = 'none';
+                editAppBtn.style.display = 'none';
+                container.classList.remove('admin-mode-on');
+            }
+            applyFilters();
+        }
+
+        function deleteItem(id) {
+            if (confirm("هل أنت متأكد من حذف هذا الفرع نهائياً؟")) {
+                allMedicalData = allMedicalData.filter(item => item._id !== id);
+                saveToLocal();
+                applyFilters();
+            }
+        }
+
+        function toggleDisable(id) {
+            const item = allMedicalData.find(i => i._id === id);
+            if (item) {
+                item['الحالة'] = (item['الحالة'] === 'معطل') ? '' : 'معطل';
+                saveToLocal();
+                applyFilters();
+            }
+        }
+
+        function openEditModal(id) {
+            const item = allMedicalData.find(i => i._id === id);
+            if (!item) return;
+            document.getElementById('edit-id').value = item._id;
+            document.getElementById('edit-name').value = item['اسم الجهة الطبية'] || '';
+            document.getElementById('edit-spec').value = item['التخصص'] || '';
+            document.getElementById('edit-gov').value = item['المحافظة'] || '';
+            document.getElementById('edit-branch').value = item['الفروع'] || '';
+            document.getElementById('edit-address').value = item['العنوان'] || '';
+            document.getElementById('edit-phone').value = item['التليفون'] || '';
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('edit-modal').style.display = 'none'; }
+
+        function saveEdit() {
+            const id = document.getElementById('edit-id').value;
+            const item = allMedicalData.find(i => i._id === id);
+            if (!item) return;
+            item['اسم الجهة الطبية'] = document.getElementById('edit-name').value;
+            item['التخصص'] = document.getElementById('edit-spec').value;
+            item['المحافظة'] = document.getElementById('edit-gov').value;
+            item['الفروع'] = document.getElementById('edit-branch').value;
+            item['العنوان'] = document.getElementById('edit-address').value;
+            item['التليفون'] = document.getElementById('edit-phone').value;
+            saveToLocal();
+            closeModal();
+            populateFilters();
+            applyFilters();
+        }
+
+        function exportToExcel() {
+            if (!allMedicalData.length) return alert("لا توجد بيانات للتصدير.");
+            const wb = XLSX.utils.book_new();
+            const govs = [...new Set(allMedicalData.map(i => i['المحافظة']).filter(Boolean))];
+            
+            if (govs.length === 0) {
+                const data = allMedicalData.map(item => { const copy = {...item}; delete copy._id; return copy; });
+                const ws = XLSX.utils.json_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws, "جميع البيانات");
+            } else {
+                govs.forEach(gov => {
+                    const govData = allMedicalData.filter(i => i['المحافظة'] === gov).map(item => {
+                        const copy = {...item};
+                        delete copy._id;
+                        return copy;
+                    });
+                    if (govData.length) {
+                        const ws = XLSX.utils.json_to_sheet(govData);
+                        XLSX.utils.book_append_sheet(wb, ws, gov.substring(0, 31));
+                    }
+                });
+            }
+            XLSX.writeFile(wb, "الدليل_الطبي_المحدث.xlsx");
+        }
+
+        document.getElementById('excel-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('upload-section').style.display = 'none';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                globalWorkbook = XLSX.read(data, { type: 'array' });
+                const container = document.getElementById('checkbox-container');
+                container.innerHTML = '';
+                globalWorkbook.SheetNames.forEach(sheetName => {
+                    container.innerHTML += `<label class="sheet-item"><input type="checkbox" value="${sheetName}" checked> ${sheetName}</label>`;
+                });
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('sheet-selection').style.display = 'block';
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        async function fetchFromGoogleSheet() {
+            const urlInput = document.getElementById('gsheet-url').value.trim();
+            if (!urlInput) {
+                alert("الرجاء إدخال رابط جوجل شيت!");
+                return;
+            }
+            const match = urlInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (!match || match.length < 2) {
+                alert("رابط غير صحيح! تأكد من نسخ رابط جوجل شيت بالكامل من المتصفح.");
+                return;
+            }
+            const sheetId = match[1];
+            const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('upload-section').style.display = 'none';
+
+            try {
+                const response = await fetch(exportUrl);
+                if (!response.ok) throw new Error("Network response was not ok");
+                const arrayBuffer = await response.arrayBuffer();
+                const data = new Uint8Array(arrayBuffer);
+                globalWorkbook = XLSX.read(data, {type: 'array'});
+                const checkboxContainer = document.getElementById('checkbox-container');
+                checkboxContainer.innerHTML = '';
+                globalWorkbook.SheetNames.forEach(sheetName => {
+                    checkboxContainer.innerHTML += `<label class="sheet-item"><input type="checkbox" value="${sheetName}" checked> ${sheetName}</label>`;
+                });
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('sheet-selection').style.display = 'block';
+            } catch (error) {
+                console.error("Error fetching Google Sheet:", error);
+                alert("حدث خطأ أثناء جلب البيانات! تأكد من الآتي:\n1. الرابط صحيح.\n2. إعدادات المشاركة في جوجل شيت مضبوطة على (Anyone with the link).");
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('upload-section').style.display = 'block';
+            }
+        }
+
+        function processSelectedSheets() {
+            const checkboxes = document.querySelectorAll('#checkbox-container input[type="checkbox"]:checked');
+            const selectedSheets = Array.from(checkboxes).map(cb => cb.value);
+            if (!selectedSheets.length) return alert("الرجاء اختيار شيت واحد على الأقل!");
+
+            allMedicalData = [];
+            selectedSheets.forEach(sheetName => {
+                const worksheet = globalWorkbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
+                jsonData.forEach(row => {
+                    const cleanRow = { _id: generateId(), 'الحالة': '' };
+                    for (let key in row) {
+                        let trimmedKey = key.trim();
+                        cleanRow[trimmedKey] = row[key];
+                    }
+                    if (cleanRow['اسم الجهة الطبية']) {
+                        if (!cleanRow['المحافظة']) cleanRow['المحافظة'] = sheetName;
+                        allMedicalData.push(cleanRow);
+                    }
+                });
+            });
+
+            const now = new Date();
+            appSettings.lastUpdated = "آخر تحديث للبيانات: " + now.toLocaleDateString('ar-EG') + ' الساعة ' + now.toLocaleTimeString('ar-EG');
+            saveAppSettings();
+            applyAppSettings();
+            saveToLocal();
+            document.getElementById('sheet-selection').style.display = 'none';
+            showAppInterface();
+        }
+
+        function showAppInterface() {
+            document.getElementById('upload-section').style.display = 'none';
+            document.getElementById('sheet-selection').style.display = 'none';
+            document.getElementById('filters').style.display = 'flex';
+            document.getElementById('pagination-container').style.display = 'flex';
+            document.getElementById('header-buttons').style.display = 'flex';
+            populateFilters();
+            applyFilters();
+        }
+
+        function populateFilters() {
+            const governorates = [...new Set(allMedicalData.map(item => item['المحافظة']).filter(Boolean))].sort();
+            const specialties = [...new Set(allMedicalData.map(item => item['التخصص']).filter(Boolean))].sort();
+
+            document.getElementById('gov-options').innerHTML = governorates.map(gov =>
+                `<label><input type="checkbox" value="${gov}" onchange="applyFilters()"> ${gov}</label>`
+            ).join('');
+            document.getElementById('spec-options').innerHTML = specialties.map(spec =>
+                `<label><input type="checkbox" value="${spec}" onchange="applyFilters()"> ${spec}</label>`
+            ).join('');
+        }
+
+        function applyFilters() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const selectedGovs = Array.from(document.querySelectorAll('#gov-options input:checked')).map(cb => cb.value);
+            const selectedSpecs = Array.from(document.querySelectorAll('#spec-options input:checked')).map(cb => cb.value);
+
+            document.getElementById('gov-btn-text').innerText = selectedGovs.length ? `المحافظات (${selectedGovs.length})` : 'كل المحافظات';
+            document.getElementById('spec-btn-text').innerText = selectedSpecs.length ? `التخصصات (${selectedSpecs.length})` : 'كل التخصصات';
+
+            filteredData = allMedicalData.filter(item => {
+                if (!isAdminMode && item['الحالة'] === 'معطل') return false;
+                const matchGov = !selectedGovs.length || selectedGovs.includes(item['المحافظة']);
+                const matchSpec = !selectedSpecs.length || selectedSpecs.includes(item['التخصص']);
+                const textToSearch = `${item['اسم الجهة الطبية'] || ''} ${item['الفروع'] || ''} ${item['العنوان'] || ''}`.toLowerCase();
+                const matchSearch = searchVal === "" || textToSearch.includes(searchVal);
+                return matchGov && matchSpec && matchSearch;
+            });
+
+            currentPage = 1;
+            renderPage();
+        }
+
+        function changeRowsPerPage() {
+            rowsPerPage = parseInt(document.getElementById('rows-per-page').value);
+            currentPage = 1;
+            renderPage();
+        }
+
+        function renderPage() {
+            const totalItems = filteredData.length;
+            const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const pageData = filteredData.slice(start, end);
+            renderCards(pageData);
+            renderPagination(totalPages, totalItems);
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
+            if (!data.length) {
+                container.innerHTML = '<p style="text-align:center; width:100%; margin-top:20px;">لا توجد نتائج مطابقة للبحث.</p>';
+                return;
+            }
+            data.forEach(item => {
+                const isDisabled = item['الحالة'] === 'معطل';
+                const card = document.createElement('div');
+                card.className = `card ${isDisabled ? 'disabled-card' : ''}`;
+                const name = item['اسم الجهة الطبية'] || 'غير محدد';
+                const spec = item['التخصص'] || 'غير محدد';
+                const branch = item['الفروع'] || 'الفرع الرئيسي';
+                const gov = item['المحافظة'] || '';
+                const address = item['العنوان'] || 'العنوان غير متوفر';
+                const id = item._id;
+                let phone = String(item['التليفون'] || '').trim();
+                if (phone) phone = phone.replace(/(^|\D)(1[0125]\d{8})(?=\D|$)/g, '$10$2');
+                const phoneHtml = phone ? `<a href="tel:${phone}" class="call-btn">📞 اتصال: ${phone}</a>` : '';
+                const statusBadge = isDisabled ? `<span class="badge disabled-badge">معطل</span>` : '';
+
+                card.innerHTML = `
+                    <h3>${name}</h3>
+                    <div class="badges">
+                        <span class="badge specialty">${spec}</span>
+                        <span class="badge branch">${branch}</span>
+                        ${statusBadge}
+                    </div>
+                    <div class="info-row"><strong>📍 المحافظة:</strong> ${gov}</div>
+                    <div class="info-row"><strong>🏢 العنوان:</strong> ${address}</div>
+                    ${phoneHtml}
+                    <div class="admin-controls">
+                        <button class="btn-action btn-edit" onclick="openEditModal('${id}')">✏️ تعديل</button>
+                        <button class="btn-action btn-toggle" onclick="toggleDisable('${id}')">${isDisabled ? '👁️ تفعيل' : '👁️ تعطيل'}</button>
+                        <button class="btn-action btn-delete" onclick="deleteItem('${id}')">🗑️ حذف</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderPagination(totalPages, totalItems) {
+            const pageButtons = document.getElementById('page-buttons');
+            const pageInfo = document.getElementById('page-info');
+            pageButtons.innerHTML = '';
+            if (!totalItems) { pageInfo.innerText = ''; return; }
+            pageInfo.innerText = `إجمالي النتائج: ${totalItems} | صفحة ${currentPage} من ${totalPages}`;
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerText = 'السابق';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { currentPage--; renderPage(); window.scrollTo(0, 0); };
+            pageButtons.appendChild(prevBtn);
+
+            let start = Math.max(1, currentPage - 2);
+            let end = Math.min(totalPages, start + 4);
+            if (end - start < 4) start = Math.max(1, end - 4);
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { currentPage = i; renderPage(); window.scrollTo(0, 0); };
+                pageButtons.appendChild(btn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerText = 'التالي';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { currentPage++; renderPage(); window.scrollTo(0, 0); };
+            pageButtons.appendChild(nextBtn);
+        }
+
+        // ========================================================================
+        //  القوائم المنسدلة
+        // ========================================================================
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const isHidden = dropdown.classList.contains('hidden');
+            document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
+            if (isHidden) dropdown.classList.remove('hidden');
+        }
+
+        function filterOptions(dropdownId, searchText) {
+            const labels = document.querySelectorAll(`#${dropdownId} .options-list label`);
+            labels.forEach(label => {
+                label.style.display = label.textContent.toLowerCase().includes(searchText.toLowerCase()) ? 'flex' : 'none';
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.custom-select')) {
+                document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
+            }
+        });
+
+        // ========================================================================
+        //  إعدادات التطبيق
+        // ========================================================================
+        function applyAppSettings() {
+            document.getElementById('app-title').innerHTML = appSettings.title;
+            document.getElementById('app-desc').innerText = appSettings.desc;
+            document.title = appSettings.title;
+            const logoImg = document.getElementById('app-logo');
+            if (appSettings.logo) {
+                logoImg.src = appSettings.logo;
+                logoImg.style.display = 'block';
+            } else {
+                logoImg.style.display = 'none';
+            }
+            const lastUpdatedSpan = document.getElementById('last-updated');
+            if (appSettings.lastUpdated) {
+                lastUpdatedSpan.innerText = appSettings.lastUpdated;
+                lastUpdatedSpan.style.display = 'block';
+            } else {
+                lastUpdatedSpan.style.display = 'none';
+            }
+        }
+
+        function saveAppSettings() {
+            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings));
+        }
+
+        function openAppInfoModal() {
+            document.getElementById('edit-app-title').value = appSettings.title;
+            document.getElementById('edit-app-desc').value = appSettings.desc;
+            document.getElementById('edit-gsheet-url').value = appSettings.gsheetUrl || '';
+            document.getElementById('edit-app-logo').value = '';
+            document.getElementById('app-info-modal').style.display = 'flex';
+        }
+
+        function closeAppInfoModal() {
+            document.getElementById('app-info-modal').style.display = 'none';
+        }
+
+        function saveAppInfo() {
+            appSettings.title = document.getElementById('edit-app-title').value || "⚖️ الدليل الطبي للموظفين";
+            appSettings.desc = document.getElementById('edit-app-desc').value || "";
+            appSettings.gsheetUrl = document.getElementById('edit-gsheet-url').value.trim() || "";
+            
+            const logoFile = document.getElementById('edit-app-logo').files[0];
+            if (logoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appSettings.logo = e.target.result;
+                    saveAppSettings();
+                    applyAppSettings();
+                    closeAppInfoModal();
+                    // إعادة تحميل الصفحة لتفعيل Pusher بالرابط الجديد
+                    location.reload();
+                };
+                reader.readAsDataURL(logoFile);
+            } else {
+                saveAppSettings();
+                applyAppSettings();
+                closeAppInfoModal();
+                location.reload();
+            }
+        }
+
+        // ========================================================================
+        //  تصدير PDF – تصميم فاخر
+        // ========================================================================
+        function exportToPDF() {
+            if (filteredData.length === 0) {
+                alert("لا توجد بيانات لتصديرها. قم بالبحث أولاً.");
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading').innerText = 'جاري تجهيز الكتيب الفاخر (Landscape)... ⏳';
+
+            const pdfContainer = document.getElementById('pdf-container');
+            const creamBg = '#FDFBF7';
+            const goldColor = '#C5A880';
+            const darkSlate = '#0F172A';
+            
+            const modernJusticeIcon = `<svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M6 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M9 21h6"/></svg>`;
+            
+            const logoHtml = appSettings.logo ? 
+                `<img src="${appSettings.logo}" style="max-height: 110px; display: block; margin: 0 auto; border-radius: 8px;">` : 
+                modernJusticeIcon;
+
+            const smallLogoHtml = appSettings.logo ? 
+                `<img src="${appSettings.logo}" style="max-height: 45px; border-radius: 4px;">` : 
+                `<svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="1.5"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M6 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M9 21h6"/></svg>`;
+
+            let htmlContent = `
+                <div style="font-family: 'Cairo', sans-serif; direction: rtl; text-align: right; background-color: ${creamBg}; color: ${darkSlate};">
+                    
+                    <!-- Cover Page -->
+                    <div style="height: 210mm; width: 297mm; background-color: ${creamBg}; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; page-break-after: always; border: 10px solid ${goldColor}; box-sizing: border-box;">
+                        <div style="position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 2px solid ${goldColor}; pointer-events: none;"></div>
+                        <div style="position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(197, 168, 128, 0.4); pointer-events: none;"></div>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; pointer-events: none;">
+                            <svg width="600" height="600" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="0.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                        </div>
+                        <div style="z-index: 10; padding: 40px; background: rgba(253, 251, 247, 0.8); border-radius: 20px; backdrop-filter: blur(5px);">
+                            <div style="margin-bottom: 30px;">${logoHtml}</div>
+                            <h1 style="color: ${goldColor}; font-size: 55px; font-weight: 900; margin: 0 0 15px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.05);">${appSettings.title}</h1>
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin: 0 auto 25px auto;">
+                                <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
+                                <div style="width: 8px; height: 8px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
+                                <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
+                            </div>
+                            <p style="color: ${darkSlate}; font-size: 22px; font-weight: 600; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6;">${appSettings.desc}</p>
+                            <div style="display: inline-flex; gap: 40px; align-items: center; border-top: 1px solid rgba(197, 168, 128, 0.3); border-bottom: 1px solid rgba(197, 168, 128, 0.3); padding: 15px 40px;">
+                                <div>
+                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase;">تاريخ الإصدار</p>
+                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800;">${new Date().toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}</p>
+                                </div>
+                                <div style="width: 1px; height: 40px; background-color: ${goldColor};"></div>
+                                <div>
+                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase;">إجمالي الجهات</p>
+                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800;">${filteredData.length} جهة معتمدة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Pages -->
+                    <table style="width: 100%; border-collapse: collapse; background-color: ${creamBg};">
+                        <thead style="display: table-header-group;">
+                            <tr>
+                                <td colspan="6" style="padding: 0; border: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 30px 15px 30px; border-bottom: 2px solid ${goldColor}; margin-bottom: 20px; background-color: ${creamBg};">
+                                        <div>
+                                            <h2 style="color: ${goldColor}; margin: 0 0 5px 0; font-size: 22px; font-weight: 900;">${appSettings.title}</h2>
+                                            <p style="color: #64748B; margin: 0; font-size: 13px;">${appSettings.desc}</p>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 15px;">
+                                            <div style="text-align: left;">
+                                                <p style="color: #8C6239; margin: 0 0 3px 0; font-size: 14px; font-weight: 800; font-style: italic;">وثيقة داخلية</p>
+                                                <p style="color: #94A3B8; margin: 0; font-size: 11px;">${new Date().toLocaleDateString('ar-EG')}</p>
+                                            </div>
+                                            ${smallLogoHtml}
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; background-color: ${darkSlate}; color: ${goldColor}; font-weight: 800; font-size: 13px; padding: 14px 30px; border-radius: 8px 8px 0 0; margin: 0 20px;">
+                                        <div style="width: 4%; text-align: center;">#</div>
+                                        <div style="width: 22%; text-align: right; padding-right: 10px;">اسم الجهة الطبية</div>
+                                        <div style="width: 14%; text-align: right; padding-right: 10px;">التخصص</div>
+                                        <div style="width: 18%; text-align: right; padding-right: 10px;">المحافظة / الفرع</div>
+                                        <div style="width: 28%; text-align: right; padding-right: 10px;">العنوان التفصيلي</div>
+                                        <div style="width: 14%; text-align: center;">رقم التواصل</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tfoot style="display: table-footer-group;">
+                            <tr>
+                                <td colspan="6" style="padding: 0; border: none;">
+                                    <div style="padding: 15px 30px; border-top: 1px solid rgba(197, 168, 128, 0.4); margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748B; background-color: ${creamBg};">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 5px; height: 5px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
+                                            <span>تم إنشاء هذا الدليل آلياً - ${appSettings.title}</span>
+                                        </div>
+                                        <div>${appSettings.lastUpdated || 'نسخة محدثة'}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                        <tbody style="font-size: 12px;">
+            `;
+
+            filteredData.forEach((item, index) => {
+                let phone = String(item['التليفون'] || '').trim();
+                if(phone) phone = phone.replace(/(^|\D)(1[0125]\d{8})(?=\D|$)/g, '$10$2');
+
+                htmlContent += `
+                            <tr style="page-break-inside: avoid;">
+                                <td colspan="6" style="padding: 0 20px; border: none;">
+                                    <div style="display: flex; border-bottom: 1px solid rgba(197, 168, 128, 0.2); padding: 16px 10px; align-items: center;">
+                                        <div style="width: 4%; text-align: center; font-weight: 700; color: ${goldColor}; font-size: 12px;">${String(index + 1).padStart(2, '0')}</div>
+                                        <div style="width: 22%; text-align: right; padding-right: 10px; font-weight: 800; color: ${darkSlate}; font-size: 13px;">${item['اسم الجهة الطبية'] || '-'}</div>
+                                        <div style="width: 14%; text-align: right; padding-right: 10px;">
+                                            <span style="color: ${darkSlate}; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                                <span style="width: 4px; height: 4px; background-color: ${goldColor}; border-radius: 50%; display: inline-block;"></span>
+                                                ${item['التخصص'] || '-'}
+                                            </span>
+                                        </div>
+                                        <div style="width: 18%; text-align: right; padding-right: 10px;">
+                                            <div style="color: ${darkSlate}; font-weight: 800;">${item['المحافظة'] || ''}</div>
+                                            <div style="color: #64748B; font-size: 11px; margin-top: 3px;">${item['الفروع'] || ''}</div>
+                                        </div>
+                                        <div style="width: 28%; text-align: right; padding-right: 10px; color: #475569; line-height: 1.6; font-weight: 600;">${item['العنوان'] || '-'}</div>
+                                        <div style="width: 14%; text-align: center; direction: ltr; font-weight: 800; color: ${darkSlate}; font-size: 13px; letter-spacing: 0.5px;">${phone || '-'}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                `;
+            });
+
+            htmlContent += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            pdfContainer.innerHTML = htmlContent;
+            pdfContainer.style.display = 'block';
+
+            const opt = {
+                margin:       [0, 0, 0, 0], 
+                filename:     'الدليل_الطبي_الداخلي.pdf',
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: creamBg },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(pdfContainer).save().then(() => {
+                pdfContainer.style.display = 'none';
+                pdfContainer.innerHTML = '';
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading').innerText = 'جاري قراءة الملف... ⏳';
+            }).catch(err => {
+                console.error("PDF Error:", err);
+                alert("حدث خطأ أثناء إنشاء ملف الـ PDF.");
+                pdfContainer.style.display = 'none';
+                document.getElementById('loading').style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
