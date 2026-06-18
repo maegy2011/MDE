@@ -171,7 +171,7 @@
                 </h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                    <!-- الخيار الأول: Google Apps Script API (الطريقة الآمنة) -->
+                    <!-- الخيار الأول: Google Apps Script API -->
                     <div class="p-6 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                         <h4 class="font-bold mb-2 text-slate-800 dark:text-white flex items-center gap-2">
                             <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -467,14 +467,40 @@
         </div>
 
         <!-- ================================================================ -->
-        <!-- 8. حاوية الـ PDF المخفية -->
+        <!-- 8. نافذة اختيار الشيتات (تظهر عند جلب البيانات يدوياً) -->
+        <!-- ================================================================ -->
+        <div v-if="showSheetSelectionModal" class="fixed inset-0 z-[9999] bg-black/50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6">
+                <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">📄 اختيار الشيتات (المحافظات)</h3>
+                <p class="text-sm text-slate-500 mb-4">اختر الشيتات التي تريد استيرادها. سيتم حفظ اختيارك لتحديث البيانات تلقائياً في المرات القادمة.</p>
+                
+                <div class="max-h-60 overflow-y-auto mb-4 border border-slate-200 dark:border-slate-700 rounded-lg p-2">
+                    <label class="flex items-center gap-2 p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer border-b border-slate-200 dark:border-slate-700 mb-1">
+                        <input type="checkbox" @change="toggleAllSheets" :checked="selectedSheetsToImport.length === availableSheets.length && availableSheets.length > 0" class="accent-gold w-4 h-4">
+                        <span class="font-bold text-primary">تحديد الكل</span>
+                    </label>
+                    <label v-for="sheet in availableSheets" :key="sheet" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer">
+                        <input type="checkbox" :value="sheet" v-model="selectedSheetsToImport" class="accent-gold w-4 h-4">
+                        {{ sheet }}
+                    </label>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button @click="confirmSheetSelection" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ واستيراد</button>
+                    <button @click="showSheetSelectionModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- 9. حاوية الـ PDF المخفية -->
         <!-- ================================================================ -->
         <div id="pdf-export-container"></div>
 
     </div>
 
     <!-- ================================================================ -->
-    <!-- 9. الجافاسكريبت (Vue.js) -->
+    <!-- 10. الجافاسكريبت (Vue.js) -->
     <!-- ================================================================ -->
     <script>
         const { createApp, ref, computed, watch, onMounted } = Vue;
@@ -499,13 +525,20 @@
                 const currentPage = ref(1);
                 const itemsPerPage = ref(12);
 
+                // متغيرات اختيار الشيتات
+                const showSheetSelectionModal = ref(false);
+                const availableSheets = ref([]);
+                const selectedSheetsToImport = ref([]);
+                const tempFetchedData = ref([]);
+
                 const appSettings = ref({
                     title: '⚖️ الدليل الطبي للموظفين',
                     desc: 'دليل شامل للجهات الطبية المعتمدة',
                     logo: '',
                     lastUpdated: '',
                     gsheetUrl: '',
-                    passcode: '2026'
+                    passcode: '2026',
+                    savedSheets: [] // لحفظ الشيتات المختارة للتحديث التلقائي
                 });
                 const tempSettings = ref({ ...appSettings.value });
 
@@ -653,12 +686,54 @@
                 };
 
                 // =================================================================
-                //  دوال جلب البيانات (عبر Google Apps Script API الآمن)
+                //  دوال اختيار الشيتات
                 // =================================================================
-                
+                const toggleAllSheets = (e) => {
+                    if (e.target.checked) {
+                        selectedSheetsToImport.value = [...availableSheets.value];
+                    } else {
+                        selectedSheetsToImport.value = [];
+                    }
+                };
+
+                const promptSheetSelection = () => {
+                    // تحديد الشيتات المحفوظة مسبقاً (إن وجدت)
+                    if (appSettings.value.savedSheets && appSettings.value.savedSheets.length > 0) {
+                        selectedSheetsToImport.value = appSettings.value.savedSheets.filter(s => availableSheets.value.includes(s));
+                    } else {
+                        selectedSheetsToImport.value = [...availableSheets.value];
+                    }
+                    showSheetSelectionModal.value = true;
+                    isLoading.value = false;
+                };
+
+                const confirmSheetSelection = () => {
+                    if (selectedSheetsToImport.value.length === 0) return alert('الرجاء اختيار شيت واحد على الأقل!');
+                    
+                    // فلترة البيانات بناءً على الشيتات المختارة
+                    clinics.value = tempFetchedData.value.filter(row => selectedSheetsToImport.value.includes(row['المحافظة']));
+                    
+                    // حفظ البيانات
+                    localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                    
+                    // حفظ إعدادات الشيتات المختارة للمرات القادمة
+                    appSettings.value.savedSheets = [...selectedSheetsToImport.value];
+                    const now = new Date();
+                    appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
+                    localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                    
+                    showSheetSelectionModal.value = false;
+                    alert('تم جلب البيانات بنجاح! 🚀');
+                };
+
+                // =================================================================
+                //  دوال جلب البيانات
+                // =================================================================
                 const processExcelData = (workbook) => {
                     const data = [];
+                    const sheets = [];
                     workbook.SheetNames.forEach(sheetName => {
+                        sheets.push(sheetName);
                         const worksheet = workbook.Sheets[sheetName];
                         const json = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
                         json.forEach(row => {
@@ -675,7 +750,7 @@
                             if (cleanRow['اسم الجهة']) data.push(cleanRow);
                         });
                     });
-                    return data;
+                    return { data, sheets };
                 };
 
                 const handleFileUpload = (event) => {
@@ -687,22 +762,20 @@
                         try {
                             const data = new Uint8Array(e.target.result);
                             const workbook = XLSX.read(data, { type: 'array' });
-                            clinics.value = processExcelData(workbook);
-                            localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
-                            const now = new Date();
-                            appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
-                            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
-                            alert('تم رفع البيانات بنجاح!');
+                            const processed = processExcelData(workbook);
+                            
+                            tempFetchedData.value = processed.data;
+                            availableSheets.value = processed.sheets;
+                            
+                            promptSheetSelection();
                         } catch (error) {
                             alert('حدث خطأ أثناء قراءة الملف.');
-                        } finally {
                             isLoading.value = false;
                         }
                     };
                     reader.readAsArrayBuffer(file);
                 };
 
-                // جلب البيانات عبر Google Apps Script API (آمن 100%)
                 const fetchFromGoogleSheet = async () => {
                     const url = gsheetInput.value.trim();
                     if (!url) return alert('الرجاء إدخال رابط الـ API (Web App URL)!');
@@ -716,27 +789,29 @@
                         const jsonData = await response.json();
                         
                         if (jsonData && jsonData.length > 0) {
-                            clinics.value = jsonData;
-                            localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                            tempFetchedData.value = jsonData;
                             
-                            const now = new Date();
-                            appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
+                            // استخراج أسماء الشيتات (المحافظات) من البيانات القادمة
+                            const sheetsSet = new Set();
+                            jsonData.forEach(row => {
+                                if (row['المحافظة']) sheetsSet.add(row['المحافظة']);
+                            });
+                            availableSheets.value = Array.from(sheetsSet);
+                            
                             if (!appSettings.value.gsheetUrl) appSettings.value.gsheetUrl = url;
-                            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
                             
-                            alert('تم جلب البيانات بنجاح وبطريقة آمنة! 🚀');
+                            promptSheetSelection();
                         } else {
                             alert('لم يتم العثور على بيانات في الشيت.');
+                            isLoading.value = false;
                         }
                     } catch (error) {
                         console.error(error);
                         alert('حدث خطأ أثناء جلب البيانات. تأكد من الرابط.');
-                    } finally {
                         isLoading.value = false;
                     }
                 };
 
-                // المزامنة الصامتة عبر Google Apps Script API
                 const silentSync = async () => {
                     const url = appSettings.value.gsheetUrl;
                     if (!url || !url.includes('script.google.com')) return;
@@ -748,12 +823,17 @@
                         const jsonData = await response.json();
                         
                         if (jsonData && jsonData.length > 0) {
-                            clinics.value = jsonData;
+                            // فلترة البيانات بناءً على الشيتات المحفوظة مسبقاً
+                            let newData = jsonData;
+                            if (appSettings.value.savedSheets && appSettings.value.savedSheets.length > 0) {
+                                newData = jsonData.filter(row => appSettings.value.savedSheets.includes(row['المحافظة']));
+                            }
+                            
+                            clinics.value = newData;
                             localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
                             const now = new Date();
                             appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
                             localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
-                            console.log('✅ تم تحديث البيانات بنجاح عبر الـ API الآمن.');
                         }
                     } catch (error) {
                         console.error('خطأ في المزامنة:', error);
@@ -961,11 +1041,19 @@
                     }
                 });
 
+                // =================================================================
+                //  إرجاع المتغيرات والدوال
+                // =================================================================
                 return {
                     isDark, isLoggedIn, isAdminMode, isLoading, loginInput, loginError, gsheetInput,
                     clinics, appSettings, tempSettings, searchQuery, selectedGovs, selectedSpecs,
                     govOpen, specOpen, govSearch, specSearch, showSettingsModal, showAnalyticsModal,
                     showEditModal, editingClinic, currentPage, itemsPerPage, totalPages, paginatedClinics,
+                    
+                    // متغيرات ودوال اختيار الشيتات
+                    showSheetSelectionModal, availableSheets, selectedSheetsToImport,
+                    toggleAllSheets, confirmSheetSelection,
+                    
                     hasData, activeClinicsCount, uniqueGovs, uniqueSpecs,
                     filteredGovOptions, filteredSpecOptions, govHeaderText, specHeaderText, filteredClinics,
                     checkPasscode, toggleTheme, debounceSearch, applyFilters, clearFilters,
