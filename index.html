@@ -5,22 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>الدليل الطبي للموظفين</title>
     
-    <!-- ===== خطوط جوجل العربية الفاخرة ===== -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- ===== PWA Manifest ===== -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- ===== أيقونات التطبيق (Favicon & App Icons) ===== -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
-    <link rel="manifest" href="./site.webmanifest">
-    <link rel="mask-icon" href="./safari-pinned-tab.svg" color="#0f172a">
-    <meta name="msapplication-TileColor" content="#0f172a">
-    <meta name="theme-color" content="#0f172a">
-
-    <!-- ===== Google Analytics (gtag.js) ===== -->
-    <!-- استبدل G-XXXXXXXXXX برقم القياس الخاص بك، أو استخدم {{GA_MEASUREMENT_ID}} للحقن عبر GitHub Actions -->
+    <!-- ===== الخطوط والأيقونات ===== -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- ===== Google Analytics ===== -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{GA_MEASUREMENT_ID}}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -29,2291 +23,1042 @@
         gtag('config', '{{GA_MEASUREMENT_ID}}');
     </script>
 
-    <!-- ===== المكتبات الخارجية ===== -->
+    <!-- ===== المكتبات الأساسية ===== -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        :root {
-            --primary-color: #0F172A;
-            --secondary-color: #F8FAFC;
-            --accent-color: #C5A880;
-            --cream-color: #FDFBF7;
-            --text-color: #334155;
-            --border-color: #E2E8F0;
-            --danger-color: #EF4444;
-            --warning-color: #F59E0B;
-            --success-color: #10B981;
-            --wa-color: #25D366;
-        }
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            background-color: #F1F5F9;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        /* ===== الوضع الليلي الفاخر (Dark Mode) ===== */
-        body.dark-mode {
-            background-color: #0B1120;
-            color: #E2E8F0;
-            --text-color: #E2E8F0;
-            --border-color: #334155;
-        }
-        body.dark-mode .card {
-            background-color: #1E293B;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border-color: #334155;
-        }
-        body.dark-mode .card h3 {
-            color: #C5A880;
-        }
-        body.dark-mode .card .info-row {
-            color: #94A3B8;
-        }
-        body.dark-mode .modal-content,
-        body.dark-mode .login-box {
-            background-color: #1E293B;
-            color: #E2E8F0;
-            border-color: #C5A880;
-        }
-        body.dark-mode .modal-content input,
-        body.dark-mode .login-box input {
-            background-color: #0F172A;
-            color: white;
-            border-color: #334155;
-        }
-        body.dark-mode .modal-content h3 {
-            color: #C5A880;
-        }
-        body.dark-mode .upload-section {
-            background-color: #1E293B;
-            border-color: #334155;
-        }
-        body.dark-mode .upload-section h3 {
-            color: #C5A880 !important;
-        }
-        body.dark-mode .filters {
-            background-color: #1E293B;
-            border-color: #334155;
-        }
-        body.dark-mode .filters .search-main,
-        body.dark-mode .filters .select-btn {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        body.dark-mode .pagination-container {
-            background-color: #1E293B;
-            border-color: #334155;
-        }
-        body.dark-mode .page-btn {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        body.dark-mode .page-btn.active {
-            background-color: #C5A880;
-            color: #0F172A;
-        }
-        body.dark-mode .dropdown-menu {
-            background-color: #1E293B;
-            border-color: #334155;
-        }
-        body.dark-mode .dropdown-menu label {
-            color: #E2E8F0;
-        }
-        body.dark-mode .dropdown-menu label:hover {
-            background-color: #0F172A;
-        }
-        body.dark-mode .dropdown-search {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        body.dark-mode .modal-overlay .modal-content .form-group input {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        body.dark-mode .modal-overlay .modal-content .form-group label {
-            color: #C5A880;
-        }
-        body.dark-mode .sheet-selection {
-            background-color: #1E293B;
-            border-color: #334155;
-        }
-        body.dark-mode .sheet-selection h3 {
-            color: #C5A880;
-        }
-        body.dark-mode .sheet-list {
-            background-color: #0F172A;
-            border-color: #334155;
-        }
-        body.dark-mode .sheet-list label {
-            color: #E2E8F0;
-        }
-        body.dark-mode .badge.specialty {
-            background-color: #334155;
-            color: #C5A880;
-        }
-        body.dark-mode .badge.branch {
-            background-color: #334155;
-            color: #94A3B8;
-        }
-        body.dark-mode .call-btn {
-            background-color: #059669;
-        }
-        body.dark-mode .call-btn:hover {
-            background-color: #047857;
-        }
-        body.dark-mode .map-btn {
-            background-color: #0369A1;
-        }
-        body.dark-mode .map-btn:hover {
-            background-color: #0284C7;
-        }
-        body.dark-mode .wa-btn {
-            background-color: #1DA851;
-        }
-        body.dark-mode .wa-btn:hover {
-            background-color: #188C42;
-        }
-        body.dark-mode .admin-controls .btn-edit {
-            background-color: #1E40AF;
-        }
-        body.dark-mode .admin-controls .btn-toggle {
-            background-color: #475569;
-        }
-        body.dark-mode .admin-controls .btn-delete {
-            background-color: #B91C1C;
-        }
-        body.dark-mode .login-box svg {
-            stroke: #C5A880;
-        }
-        body.dark-mode .login-box h2 {
-            color: #C5A880;
-        }
-        body.dark-mode .chart-box {
-            background: #0F172A;
-            border-color: #334155;
-        }
-        body.dark-mode .stat-card {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-        }
 
-        /* ===== شاشة تسجيل الدخول ===== */
-        #login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
+    <!-- ===== إعدادات Tailwind ===== -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: { 
+                        gold: '#C5A880', 
+                        darkbg: '#0F172A', 
+                        cardbg: '#1E293B', 
+                        primary: '#0284C7' 
+                    }
+                }
+            }
         }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            color: #0F172A;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-width: 350px;
-            width: 90%;
-            border-top: 5px solid #C5A880;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin: 20px 0;
-            border: 2px solid #E2E8F0;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 2px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background: #C5A880;
-            color: #0F172A;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: all 0.3s;
-        }
-        .login-box button:hover {
-            background: #B8966A;
-        }
+    </script>
+
+    <style>
+        /* إخفاء شريط التمرير للأزرار */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* ===== الهيدر الأفقي المضغوط ===== */
-        .header {
-            background-color: var(--primary-color);
-            border-bottom: 3px solid var(--accent-color);
-            color: white;
-            padding: 8px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
-            min-height: 60px;
-            transition: background-color 0.3s;
-        }
-        body.dark-mode .header {
-            background-color: #0B1120;
-        }
-        .header-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        #app-logo {
-            max-height: 35px;
-            border-radius: 4px;
-            display: none;
-        }
-        .header-text h2 {
-            margin: 0;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #FFFFFF;
-            font-family: 'Tajawal', 'Cairo', sans-serif;
-            font-weight: 800;
-        }
-        .header-text h2 svg {
-            color: var(--accent-color);
-        }
-        .header-text p {
-            margin: 2px 0 0 0;
-            font-size: 11px;
-            color: #94A3B8;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-        }
-        .header-buttons {
-            display: none;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .btn-header {
-            background-color: rgba(255, 255, 255, 0.08);
-            color: white;
-            border: 1px solid rgba(197, 168, 128, 0.3);
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            font-size: 12px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            white-space: nowrap;
-        }
-        .btn-header:hover {
-            background-color: var(--accent-color);
-            color: var(--primary-color);
-        }
-        body.dark-mode .btn-header:hover {
-            background-color: var(--accent-color);
-            color: #0F172A;
-        }
-        .btn-header.btn-pdf {
-            background-color: #DC3545;
-            border-color: #DC3545;
-        }
-        .btn-header.btn-pdf:hover {
-            background-color: #B02A37;
-            color: white;
-        }
-        .btn-header.btn-export {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
-            display: none;
-        }
-        .btn-header.btn-export:hover {
-            background-color: #059669;
-            color: white;
-        }
-        #btn-edit-app {
-            display: none;
-            background-color: #0284C7;
-            border-color: #0284C7;
-        }
-        #btn-edit-app:hover {
-            background-color: #0369A1;
-            color: white;
-        }
-        #btn-analytics {
-            display: none;
-            background-color: #8B5CF6;
-            border-color: #8B5CF6;
-        }
-        #btn-analytics:hover {
-            background-color: #7C3AED;
-            color: white;
-        }
-        .admin-active-badge {
-            background-color: var(--warning-color);
-            color: #0F172A;
-            border-color: var(--warning-color);
-            font-weight: bold;
-        }
-        #theme-toggle {
-            background-color: transparent;
-            border: 1px solid #C5A880;
-            color: #C5A880;
-        }
-        #theme-toggle:hover {
-            background-color: #C5A880;
-            color: #0F172A;
-        }
-        body.dark-mode #theme-toggle {
-            border-color: #C5A880;
-            color: #C5A880;
-        }
-        body.dark-mode #theme-toggle:hover {
-            background-color: #C5A880;
-            color: #0F172A;
-        }
+        /* تصميم الـ PDF المخفي */
+        #pdf-export-container { display: none; }
         
-        /* ===== حاوية المحتوى ===== */
-        .main-container {
-            flex: 1;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
+        /* انتقالات ناعمة */
+        .transition-all { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .dark .card-hover:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         
-        /* ===== الفلاتر ===== */
-        .filters {
-            display: none;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            gap: 10px;
-            flex-wrap: wrap;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .search-main {
-            flex: 1 1 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            font-size: 14px;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .custom-select {
-            position: relative;
-            flex: 1;
-            min-width: 180px;
-        }
-        .select-btn {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 1001;
-            margin-top: 5px;
-            max-height: 250px;
-            flex-direction: column;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .dropdown-menu.hidden { display: none !important; }
-        .dropdown-menu:not(.hidden) { display: flex; }
-        .dropdown-search {
-            padding: 8px;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            outline: none;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .options-list {
-            overflow-y: auto;
-            padding: 5px;
-        }
-        .options-list label {
-            display: flex;
-            align-items: center;
-            padding: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: color 0.3s;
-        }
-        .options-list label:hover { background-color: #f0f2f5; }
-        body.dark-mode .options-list label:hover { background-color: #0F172A; }
-        .options-list input { margin-left: 8px; }
+        /* تنسيق القوائم المنسدلة */
+        .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .dark .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
         
-        /* ===== رفع الملفات ===== */
-        .upload-section, .sheet-selection {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 2px dashed var(--accent-color);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .upload-section {
-            border-color: #0284C7;
-        }
-        .upload-section hr {
-            border: 0;
-            border-top: 1px dashed #CBD5E1;
-            margin: 20px 0;
-            transition: border-color 0.3s;
-        }
-        body.dark-mode .upload-section hr {
-            border-color: #334155;
-        }
-        .sheet-selection {
-            display: none;
-            border-style: solid;
-        }
-        .sheet-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            text-align: right;
-            margin: 15px 0;
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        body.dark-mode .sheet-list {
-            background-color: #0F172A;
-            border-color: #334155;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
-        .btn-google {
-            background-color: #0284C7;
-        }
-        .btn-google:hover {
-            background-color: #0369A1;
-        }
-        
-        /* ===== البطاقات ===== */
-        .results {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            border: 1px solid var(--border-color);
-            border-right: 4px solid var(--accent-color);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
-        }
-        body.dark-mode .card:hover {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        }
-        .card.disabled-card {
-            opacity: 0.6;
-            border-right-color: #999;
-            background-color: #f8f9fa;
-        }
-        body.dark-mode .card.disabled-card {
-            background-color: #0F172A;
-            border-right-color: #64748B;
-        }
-        .card h3 {
-            margin: 0 0 10px 0;
-            color: var(--primary-color);
-            font-weight: 800;
-            font-size: 18px;
-            font-family: 'Tajawal', 'Cairo', sans-serif;
-            transition: color 0.3s;
-        }
-        .card.disabled-card h3 {
-            color: #666;
-            text-decoration: line-through;
-        }
-        body.dark-mode .card.disabled-card h3 {
-            color: #64748B;
-        }
-        .badges {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .badge {
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .badge.specialty {
-            background: #E2E8F0;
-            color: var(--primary-color);
-        }
-        .badge.branch {
-            background: #E2E8F0;
-            color: #475569;
-        }
-        .badge.disabled-badge {
-            background: #EF4444;
-            color: white;
-        }
-        .info-row {
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: color 0.3s;
-        }
-        
-        /* ===== أزرار الاتصال والخريطة والواتساب ===== */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .call-btn, .map-btn, .wa-btn {
-            flex: 1;
-            min-width: 80px;
-            text-align: center;
-            padding: 10px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            transition: all 0.3s;
-            border: none;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-        }
-        .call-btn {
-            background-color: var(--success-color);
-            color: white;
-        }
-        .call-btn:hover {
-            background-color: #059669;
-        }
-        .map-btn {
-            background-color: #0284C7;
-            color: white;
-        }
-        .map-btn:hover {
-            background-color: #0369A1;
-        }
-        .wa-btn {
-            background-color: #25D366;
-            color: white;
-        }
-        .wa-btn:hover {
-            background-color: #1DA851;
-        }
-        body.dark-mode .call-btn {
-            background-color: #059669;
-        }
-        body.dark-mode .call-btn:hover {
-            background-color: #047857;
-        }
-        body.dark-mode .map-btn {
-            background-color: #0369A1;
-        }
-        body.dark-mode .map-btn:hover {
-            background-color: #0284C7;
-        }
-        body.dark-mode .wa-btn {
-            background-color: #1DA851;
-        }
-        body.dark-mode .wa-btn:hover {
-            background-color: #188C42;
-        }
-        
-        /* ===== أزرار الإدارة ===== */
-        .admin-controls {
-            display: none;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-            transition: border-color 0.3s;
-        }
-        .admin-mode-on .admin-controls {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .btn-action {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            font-size: 13px;
-            font-weight: bold;
-            color: white;
-            min-width: 70px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: background-color 0.3s;
-        }
-        .btn-edit { background-color: var(--primary-color); }
-        .btn-toggle { background-color: #64748B; }
-        .btn-delete { background-color: var(--danger-color); }
-        body.dark-mode .btn-edit { background-color: #1E40AF; }
-        body.dark-mode .btn-toggle { background-color: #475569; }
-        body.dark-mode .btn-delete { background-color: #B91C1C; }
-        
-        /* ===== النوافذ المنبثقة ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .modal-content h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            font-family: 'Tajawal', 'Cairo', sans-serif;
-            transition: color 0.3s;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: color 0.3s;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        .form-group input[type="file"] {
-            padding: 5px;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .modal-buttons button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            font-weight: bold;
-        }
-        .btn-save { background-color: var(--success-color); color: white; }
-        .btn-cancel { background-color: #e9ecef; color: #333; }
-        body.dark-mode .btn-cancel { background-color: #334155; color: #E2E8F0; }
-        
-        /* ===== الترقيم ===== */
-        .pagination-container {
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            flex-wrap: wrap;
-            gap: 15px;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .rows-selector select {
-            padding: 5px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        body.dark-mode .rows-selector select {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        .page-buttons {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        .page-btn {
-            padding: 5px 10px;
-            border: 1px solid var(--border-color);
-            background: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: all 0.3s;
-        }
-        .page-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        .page-btn:disabled {
-            background: #eee;
-            cursor: not-allowed;
-        }
-        body.dark-mode .page-btn {
-            background-color: #0F172A;
-            color: #E2E8F0;
-            border-color: #334155;
-        }
-        body.dark-mode .page-btn.active {
-            background-color: #C5A880;
-            color: #0F172A;
-            border-color: #C5A880;
-        }
-        body.dark-mode .page-btn:disabled {
-            background-color: #1E293B;
-            color: #64748B;
-        }
-        #loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-            font-weight: bold;
-            color: var(--primary-color);
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: color 0.3s;
-        }
-        body.dark-mode #loading {
-            color: #C5A880;
-        }
-        .sheet-item {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-            display: block;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: color 0.3s, border-color 0.3s;
-        }
-        body.dark-mode .sheet-item {
-            border-color: #334155;
-            color: #E2E8F0;
-        }
-        .sheet-item input { margin-left: 10px; }
-        
-        /* ===== الفوتر المثبت ===== */
-        .footer {
-            background-color: var(--primary-color);
-            color: #94A3B8;
-            padding: 6px 20px;
-            font-size: 11px;
-            position: sticky;
-            bottom: 0;
-            z-index: 1000;
-            border-top: 2px solid var(--accent-color);
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 40px;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        body.dark-mode .footer {
-            background-color: #0B1120;
-            border-top-color: #C5A880;
-        }
-        .footer svg {
-            color: var(--accent-color);
-        }
-        #last-updated {
-            font-size: 10px;
-            color: #94A3B8;
-        }
-        
-        /* ===== الإشعارات ===== */
-        #push-notification {
-            display: none;
-            background-color: var(--success-color);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            animation: fadeInUp 0.5s ease;
-            margin: 0;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* ===== لوحة الإحصائيات (Analytics) ===== */
-        .stats-grid {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            flex: 1;
-            min-width: 120px;
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border-bottom: 4px solid #C5A880;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-        }
-        .stat-card span {
-            display: block;
-            font-size: 32px;
-            font-weight: 900;
-            color: #C5A880;
-            margin-top: 10px;
-        }
-        .charts-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .chart-box {
-            flex: 1;
-            min-width: 280px;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        
-        /* ===== توافق الشاشات الصغيرة ===== */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 10px 15px;
-                gap: 8px;
-                min-height: auto;
-            }
-            .header-content {
-                justify-content: center;
-            }
-            .header-buttons {
-                justify-content: center;
-                width: 100%;
-            }
-            .btn-header {
-                font-size: 11px;
-                padding: 4px 10px;
-            }
-            .main-container {
-                padding: 10px;
-            }
-            .filters {
-                padding: 10px;
-            }
-            .custom-select {
-                min-width: 100%;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
-            .call-btn, .map-btn, .wa-btn {
-                min-width: 100%;
-            }
-            .login-box {
-                padding: 25px;
-            }
-            .footer {
-                flex-direction: column;
-                gap: 4px;
-                text-align: center;
-                padding: 6px 10px;
-                font-size: 10px;
-            }
-            .stats-grid {
-                flex-direction: column;
-            }
-            .stat-card {
-                min-width: 100%;
-            }
-            .charts-container {
-                flex-direction: column;
-            }
-            .chart-box {
-                min-width: 100%;
-            }
-            .modal-content {
-                max-width: 100%;
-                padding: 15px;
-            }
-        }
-        @media (max-width: 480px) {
-            .header-text h2 {
-                font-size: 15px;
-            }
-            .header-text p {
-                font-size: 10px;
-            }
-            .btn-header {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-            .card {
-                padding: 15px;
-            }
-        }
+        /* شريط التمرير العام */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 dark:bg-darkbg text-slate-800 dark:text-slate-200 transition-colors duration-300 flex flex-col min-h-screen">
 
-    <!-- ============================================================ -->
-    <!-- شاشة تسجيل الدخول -->
-    <!-- ============================================================ -->
-    <div id="login-screen">
-        <div class="login-box">
-            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#C5A880" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <h2 style="margin: 15px 0 5px 0; font-size: 22px; font-family: 'Tajawal', 'Cairo', sans-serif;">وثيقة داخلية</h2>
-            <p style="color: #64748B; font-size: 13px; margin: 0; font-family: 'Cairo', 'Tajawal', sans-serif;">الرجاء إدخال كود المرور للوصول للدليل</p>
-            <input type="password" id="passcode-input" placeholder="كود المرور..." autofocus>
-            <button onclick="checkPasscode()">دخول</button>
-            <p id="login-error" style="color: #EF4444; font-size: 12px; margin-top: 10px; display: none; font-family: 'Cairo', 'Tajawal', sans-serif;">كود المرور غير صحيح!</p>
-        </div>
-    </div>
+    <div id="app" class="flex flex-col min-h-screen w-full">
 
-    <!-- ============================================================ -->
-    <!-- الهيدر الأفقي المضغوط -->
-    <!-- ============================================================ -->
-    <div class="header">
-        <div class="header-content">
-            <img id="app-logo" src="" alt="Logo" style="display:none; max-height: 35px; border-radius: 4px;">
-            <div class="header-text">
-                <h2 id="app-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                        <path d="M12 7v10"/>
-                        <path d="M7 12h10"/>
-                    </svg>
-                    الدليل الطبي
-                </h2>
-                <p id="app-desc">ابحث عن أقرب جهة طبية</p>
-            </div>
-        </div>
-        
-        <div class="header-buttons" id="header-buttons">
-            <!-- زر الوضع الليلي -->
-            <button class="btn-header" id="theme-toggle" onclick="toggleTheme()">
-                <svg id="theme-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        <!-- ================================================================ -->
+        <!-- 1. شاشة حماية الوصول (Login) -->
+        <!-- ================================================================ -->
+        <div v-if="!isLoggedIn && appSettings.passcode" class="fixed inset-0 z-[9999] bg-slate-900 flex flex-col justify-center items-center text-white p-4">
+            <div class="bg-white dark:bg-cardbg p-8 rounded-2xl text-center text-slate-900 dark:text-white shadow-2xl max-w-sm w-full border-t-4 border-gold">
+                <svg class="w-16 h-16 mx-auto text-gold mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
-                <span id="theme-text">ليلي</span>
-            </button>
-            
-            <button class="btn-header" onclick="clearData()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 2v6h-6"/>
-                    <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
-                    <path d="M3 22v-6h6"/>
-                    <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                <h2 class="text-2xl font-bold mb-1">وثيقة داخلية</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">الرجاء إدخال كود المرور للوصول للدليل</p>
+                <input v-model="loginInput" type="password" placeholder="كود المرور..." @keyup.enter="checkPasscode"
+                       class="w-full p-3 mb-4 text-center tracking-widest border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                <button @click="checkPasscode" class="w-full p-3 bg-gold text-slate-900 font-bold rounded-lg hover:bg-yellow-600 transition">دخول</button>
+                <p v-if="loginError" class="text-red-500 text-sm mt-3">كود المرور غير صحيح!</p>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- 2. الهيدر المضغوط والاحترافي -->
+        <!-- ================================================================ -->
+        <header v-if="isLoggedIn || !appSettings.passcode" class="sticky top-0 z-40 bg-slate-900 border-b-2 border-gold text-white px-4 py-2 shadow-md flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <img v-if="appSettings.logo" :src="appSettings.logo" class="h-8 rounded">
+                <svg v-else class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    <path d="M12 7v10"/><path d="M7 12h10"/>
                 </svg>
-                تحديث
-            </button>
-            <button class="btn-header" id="btn-admin-toggle" onclick="toggleAdminMode()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
-                الإدارة
-            </button>
-            <button class="btn-header btn-pdf" onclick="exportToPDF()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10 9 9 9 8 9"/>
-                </svg>
-                PDF
-            </button>
-            <button class="btn-header btn-export" id="btn-export" onclick="exportToExcel()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                إكسيل
-            </button>
-            <button class="btn-header" id="btn-edit-app" onclick="openAppInfoModal()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                </svg>
-                إعدادات
-            </button>
-            <button class="btn-header" id="btn-analytics" onclick="openAnalyticsModal()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 20V10M12 20V4M6 20v-6"/>
-                </svg>
-                إحصائيات
-            </button>
-            <span id="push-notification">🔄 تم تحديث البيانات!</span>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- الفلاتر -->
-    <!-- ============================================================ -->
-    <div class="filters" id="filters">
-        <input type="text" id="search-input" class="search-main" placeholder="ابحث باسم الجهة، الفرع، أو العنوان..." oninput="applyFilters()">
-        <div class="custom-select">
-            <div class="select-btn" onclick="toggleDropdown('gov-dropdown')">
-                <span id="gov-btn-text">كل المحافظات</span> <span>▼</span>
-            </div>
-            <div class="dropdown-menu hidden" id="gov-dropdown">
-                <input type="text" class="dropdown-search" placeholder="ابحث عن محافظة..." onkeyup="filterOptions('gov-dropdown', this.value)">
-                <div class="options-list" id="gov-options"></div>
-            </div>
-        </div>
-        <div class="custom-select">
-            <div class="select-btn" onclick="toggleDropdown('spec-dropdown')">
-                <span id="spec-btn-text">كل التخصصات</span> <span>▼</span>
-            </div>
-            <div class="dropdown-menu hidden" id="spec-dropdown">
-                <input type="text" class="dropdown-search" placeholder="ابحث عن تخصص..." onkeyup="filterOptions('spec-dropdown', this.value)">
-                <div class="options-list" id="spec-options"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- المحتوى الرئيسي -->
-    <!-- ============================================================ -->
-    <div class="main-container">
-        <div class="upload-section" id="upload-section">
-            <h3 style="color: #0284C7; margin-top: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Tajawal', 'Cairo', sans-serif;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
-                </svg>
-                جلب البيانات من جوجل شيت
-            </h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 15px; font-family: 'Cairo', 'Tajawal', sans-serif;">تأكد أن إعدادات مشاركة الشيت هي: <strong>"أي شخص لديه الرابط"</strong></p>
-            
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px;">
-                <input type="text" id="gsheet-url" placeholder="انسخ رابط جوجل شيت هنا..." style="flex: 1; min-width: 250px; max-width: 500px; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-family: 'Cairo', 'Tajawal', sans-serif;">
-                <button class="btn-primary btn-google" onclick="fetchFromGoogleSheet()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    جلب
-                </button>
-            </div>
-            
-            <hr>
-            
-            <h3 style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Tajawal', 'Cairo', sans-serif;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="12" y1="18" x2="12" y2="12"/>
-                    <line x1="9" y1="15" x2="15" y2="15"/>
-                </svg>
-                أو قم برفع ملف إكسيل (Excel)
-            </h3>
-            <input type="file" id="excel-file" accept=".xlsx, .xls" style="margin-top: 10px;">
-        </div>
-
-        <div id="loading">جاري قراءة الملف... ⏳</div>
-
-        <div class="sheet-selection" id="sheet-selection">
-            <h3 style="font-family: 'Tajawal', 'Cairo', sans-serif;">حدد الشيتات التي تريد إدراجها:</h3>
-            <div class="sheet-list" id="checkbox-container"></div>
-            <button class="btn-primary" onclick="processSelectedSheets()">اعتماد وحفظ البيانات</button>
-        </div>
-
-        <div class="results" id="results"></div>
-
-        <div class="pagination-container" id="pagination-container">
-            <div class="rows-selector">
-                <label style="font-family: 'Cairo', 'Tajawal', sans-serif;">عرض:</label>
-                <select id="rows-per-page" onchange="changeRowsPerPage()">
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-                <label style="font-family: 'Cairo', 'Tajawal', sans-serif;">صفوف</label>
-            </div>
-            <div class="page-buttons" id="page-buttons"></div>
-            <div style="font-size: 14px; color: #666; font-family: 'Cairo', 'Tajawal', sans-serif;" id="page-info"></div>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- الفوتر المثبت -->
-    <!-- ============================================================ -->
-    <div class="footer" id="app-footer">
-        <div style="display: flex; align-items: center; gap: 6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span>وثيقة داخلية مؤمنة</span>
-        </div>
-        <span id="last-updated" style="font-size: 10px;"></span>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- النوافذ المنبثقة -->
-    <!-- ============================================================ -->
-
-    <!-- نافذة تعديل بيانات الفرع -->
-    <div class="modal-overlay" id="edit-modal">
-        <div class="modal-content">
-            <h3>✏️ تعديل بيانات الفرع</h3>
-            <input type="hidden" id="edit-id">
-            <div class="form-group"><label>اسم الجهة الطبية</label><input type="text" id="edit-name"></div>
-            <div class="form-group"><label>التخصص</label><input type="text" id="edit-spec"></div>
-            <div class="form-group"><label>المحافظة</label><input type="text" id="edit-gov"></div>
-            <div class="form-group"><label>الفرع</label><input type="text" id="edit-branch"></div>
-            <div class="form-group"><label>العنوان</label><input type="text" id="edit-address"></div>
-            <div class="form-group"><label>التليفون</label><input type="text" id="edit-phone"></div>
-            <div class="modal-buttons">
-                <button class="btn-save" onclick="saveEdit()">حفظ التعديلات</button>
-                <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة إعدادات التطبيق المتقدمة -->
-    <div class="modal-overlay" id="app-info-modal">
-        <div class="modal-content">
-            <h3>📝 إعدادات التطبيق المتقدمة</h3>
-            <div class="form-group">
-                <label>لوجو التطبيق (اختر صورة من جهازك)</label>
-                <input type="file" id="edit-app-logo" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>أو ضع رابط اللوجو من جوجل درايف</label>
-                <input type="text" id="edit-app-logo-url" placeholder="https://drive.google.com/file/d/...">
-            </div>
-            <div class="form-group">
-                <label>عنوان التطبيق</label>
-                <input type="text" id="edit-app-title">
-            </div>
-            <div class="form-group">
-                <label>وصف التطبيق</label>
-                <input type="text" id="edit-app-desc">
-            </div>
-            <div class="form-group">
-                <label>رابط جوجل شيت (للمزامنة اللحظية)</label>
-                <input type="text" id="edit-app-gsheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." style="direction: ltr; text-align: left;">
-            </div>
-            <div class="form-group">
-                <label>كود مرور الموظفين (للحماية)</label>
-                <input type="text" id="edit-app-passcode" placeholder="مثال: 2026">
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-save" onclick="saveAppInfo()">حفظ التعديلات</button>
-                <button class="btn-cancel" onclick="closeAppInfoModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== نافذة لوحة الإحصائيات (Analytics) ===== -->
-    <div class="modal-overlay" id="analytics-modal">
-        <div class="modal-content" style="max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto;">
-            <h3 style="display: flex; align-items: center; gap: 10px; color: var(--primary-color);">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C5A880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 20V10M12 20V4M6 20v-6"/>
-                </svg>
-                لوحة البيانات والإحصائيات (Analytics)
-            </h3>
-            
-            <div class="stats-grid">
-                <div class="stat-card">إجمالي الجهات<span id="stat-total">0</span></div>
-                <div class="stat-card">المحافظات المغطاة<span id="stat-govs">0</span></div>
-                <div class="stat-card">التخصصات المتاحة<span id="stat-specs">0</span></div>
-            </div>
-
-            <div class="charts-container">
-                <div class="chart-box"><canvas id="govChart"></canvas></div>
-                <div class="chart-box"><canvas id="specChart"></canvas></div>
-            </div>
-
-            <div class="modal-buttons" style="margin-top: 25px;">
-                <button class="btn-cancel" onclick="closeAnalyticsModal()" style="width: 100%;">إغلاق اللوحة</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- حاوية الـ PDF المخفية -->
-    <div id="pdf-container" style="display: none;"></div>
-
-    <!-- ============================================================ -->
-    <!-- الجافاسكريبت -->
-    <!-- ============================================================ -->
-    <script>
-        // ========================================================================
-        //  المتغيرات العامة
-        // ========================================================================
-        let globalWorkbook = null;
-        let allMedicalData = [];
-        let filteredData = [];
-        let currentPage = 1;
-        let rowsPerPage = 10;
-        let isAdminMode = false;
-        
-        let appSettings = {
-            title: "⚖️ الدليل الطبي للموظفين",
-            desc: "دليل شامل للجهات الطبية المعتمدة",
-            logo: "",
-            lastUpdated: "",
-            gsheetUrl: "",
-            passcode: "2026"
-        };
-
-        let pusherChannel = null;
-        let govChartInstance = null;
-        let specChartInstance = null;
-
-        function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
-
-        // ========================================================================
-        //  دوال الوضع الليلي (Dark Mode)
-        // ========================================================================
-        function toggleTheme() {
-            const body = document.body;
-            body.classList.toggle('dark-mode');
-            const isDark = body.classList.contains('dark-mode');
-            localStorage.setItem('medicalDarkMode', isDark);
-            updateThemeIcon(isDark);
-        }
-
-        function updateThemeIcon(isDark) {
-            const icon = document.getElementById('theme-icon');
-            const text = document.getElementById('theme-text');
-            if (isDark) {
-                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-                text.innerText = 'نهاري';
-            } else {
-                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-                text.innerText = 'ليلي';
-            }
-        }
-
-        // ========================================================================
-        //  دوال التحقق من كود المرور
-        // ========================================================================
-        function checkPasscode() {
-            const input = document.getElementById('passcode-input').value;
-            if (input === appSettings.passcode || appSettings.passcode === "") {
-                document.getElementById('login-screen').style.display = 'none';
-                sessionStorage.setItem('isLoggedIn', 'true');
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('passcode-input').value = '';
-                document.getElementById('passcode-input').focus();
-            }
-        }
-
-        document.getElementById('passcode-input').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') checkPasscode();
-        });
-
-        // ========================================================================
-        //  التحميل الابتدائي
-        // ========================================================================
-        window.onload = function() {
-            // استرجاع الوضع الليلي
-            const savedTheme = localStorage.getItem('medicalDarkMode');
-            if (savedTheme === 'true') {
-                document.body.classList.add('dark-mode');
-                updateThemeIcon(true);
-            }
-
-            const savedSettings = localStorage.getItem('medicalAppSettings');
-            if (savedSettings) {
-                try { appSettings = JSON.parse(savedSettings); } catch(e) {}
-            }
-            applyAppSettings();
-
-            if (sessionStorage.getItem('isLoggedIn') === 'true' || appSettings.passcode === "") {
-                document.getElementById('login-screen').style.display = 'none';
-            }
-
-            const savedData = localStorage.getItem('medicalDirectoryData');
-            if (savedData) {
-                try {
-                    allMedicalData = JSON.parse(savedData);
-                    if (allMedicalData.length) showAppInterface();
-                } catch (e) { localStorage.removeItem('medicalDirectoryData'); }
-            }
-
-            // تفعيل Pusher
-            if (appSettings.gsheetUrl) {
-                const pusher = new Pusher('{{PUSHER_KEY}}', {
-                    cluster: '{{PUSHER_CLUSTER}}'
-                });
-                pusherChannel = pusher.subscribe('medical-directory');
-                pusherChannel.bind('data-updated', function(data) {
-                    console.log("📩 إشعار وارد من Pusher:", data);
-                    const notif = document.getElementById('push-notification');
-                    notif.style.display = 'inline-block';
-                    setTimeout(() => { notif.style.display = 'none'; }, 5000);
-                    silentSync();
-                });
-            }
-
-            // تسجيل Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log("✅ PWA مسجل"))
-                    .catch(err => console.log("⚠️ فشل PWA:", err));
-            }
-        };
-
-        // ========================================================================
-        //  المزامنة الصامتة
-        // ========================================================================
-        async function silentSync() {
-            if (!appSettings.gsheetUrl) return;
-            try {
-                const match = appSettings.gsheetUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-                if (!match || match.length < 2) throw new Error("رابط غير صحيح");
-                const sheetId = match[1];
-                const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
-
-                const response = await fetch(exportUrl);
-                if (!response.ok) throw new Error("تعذر جلب البيانات");
-                const arrayBuffer = await response.arrayBuffer();
-                const data = new Uint8Array(arrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
-
-                let newData = [];
-                workbook.SheetNames.forEach(sheetName => {
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
-                    jsonData.forEach(row => {
-                        const cleanRow = { _id: generateId(), 'الحالة': '' };
-                        for (let key in row) {
-                            let trimmedKey = key.trim();
-                            cleanRow[trimmedKey] = row[key];
-                        }
-                        if (cleanRow['اسم الجهة الطبية']) {
-                            if (!cleanRow['المحافظة']) cleanRow['المحافظة'] = sheetName;
-                            newData.push(cleanRow);
-                        }
-                    });
-                });
-
-                if (newData.length > 0) {
-                    allMedicalData = newData;
-                    const now = new Date();
-                    appSettings.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' الساعة ' + now.toLocaleTimeString('ar-EG');
-                    saveAppSettings();
-                    applyAppSettings();
-                    saveToLocal();
-                    populateFilters();
-                    applyFilters();
-                    console.log("✅ تم تحديث البيانات بنجاح.");
-                }
-            } catch (error) {
-                console.error("❌ خطأ في المزامنة:", error);
-            }
-        }
-
-        // ========================================================================
-        //  حفظ البيانات
-        // ========================================================================
-        function saveToLocal() {
-            try { localStorage.setItem('medicalDirectoryData', JSON.stringify(allMedicalData)); } 
-            catch (e) { console.error("Storage error", e); }
-        }
-
-        function clearData() {
-            if (confirm("هل أنت متأكد أنك تريد مسح البيانات الحالية ورفع ملف جديد؟")) {
-                localStorage.removeItem('medicalDirectoryData');
-                location.reload();
-            }
-        }
-
-        // ========================================================================
-        //  وضع الإدارة
-        // ========================================================================
-        function toggleAdminMode() {
-            isAdminMode = !isAdminMode;
-            const btn = document.getElementById('btn-admin-toggle');
-            const exportBtn = document.getElementById('btn-export');
-            const editAppBtn = document.getElementById('btn-edit-app');
-            const analyticsBtn = document.getElementById('btn-analytics');
-            const container = document.querySelector('.main-container');
-            
-            const adminIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
-            
-            const activeIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-
-            if(isAdminMode) {
-                btn.classList.add('admin-active-badge');
-                btn.innerHTML = `${activeIcon} الإدارة مفعلة`;
-                exportBtn.style.display = 'inline-flex';
-                editAppBtn.style.display = 'inline-flex';
-                analyticsBtn.style.display = 'inline-flex';
-                container.classList.add('admin-mode-on');
-            } else {
-                btn.classList.remove('admin-active-badge');
-                btn.innerHTML = `${adminIcon} الإدارة`;
-                exportBtn.style.display = 'none';
-                editAppBtn.style.display = 'none';
-                analyticsBtn.style.display = 'none';
-                container.classList.remove('admin-mode-on');
-            }
-            applyFilters();
-        }
-
-        // ========================================================================
-        //  عمليات CRUD
-        // ========================================================================
-        function deleteItem(id) {
-            if (confirm("هل أنت متأكد من حذف هذا الفرع نهائياً؟")) {
-                allMedicalData = allMedicalData.filter(item => item._id !== id);
-                saveToLocal();
-                applyFilters();
-            }
-        }
-
-        function toggleDisable(id) {
-            const item = allMedicalData.find(i => i._id === id);
-            if (item) {
-                item['الحالة'] = (item['الحالة'] === 'معطل') ? '' : 'معطل';
-                saveToLocal();
-                applyFilters();
-            }
-        }
-
-        function openEditModal(id) {
-            const item = allMedicalData.find(i => i._id === id);
-            if (!item) return;
-            document.getElementById('edit-id').value = item._id;
-            document.getElementById('edit-name').value = item['اسم الجهة الطبية'] || '';
-            document.getElementById('edit-spec').value = item['التخصص'] || '';
-            document.getElementById('edit-gov').value = item['المحافظة'] || '';
-            document.getElementById('edit-branch').value = item['الفروع'] || '';
-            document.getElementById('edit-address').value = item['العنوان'] || '';
-            document.getElementById('edit-phone').value = item['التليفون'] || '';
-            document.getElementById('edit-modal').style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('edit-modal').style.display = 'none'; }
-
-        function saveEdit() {
-            const id = document.getElementById('edit-id').value;
-            const item = allMedicalData.find(i => i._id === id);
-            if (!item) return;
-            item['اسم الجهة الطبية'] = document.getElementById('edit-name').value;
-            item['التخصص'] = document.getElementById('edit-spec').value;
-            item['المحافظة'] = document.getElementById('edit-gov').value;
-            item['الفروع'] = document.getElementById('edit-branch').value;
-            item['العنوان'] = document.getElementById('edit-address').value;
-            item['التليفون'] = document.getElementById('edit-phone').value;
-            saveToLocal();
-            closeModal();
-            populateFilters();
-            applyFilters();
-        }
-
-        // ========================================================================
-        //  تصدير Excel
-        // ========================================================================
-        function exportToExcel() {
-            if (!allMedicalData.length) return alert("لا توجد بيانات للتصدير.");
-            const wb = XLSX.utils.book_new();
-            const govs = [...new Set(allMedicalData.map(i => i['المحافظة']).filter(Boolean))];
-            
-            if (govs.length === 0) {
-                const data = allMedicalData.map(item => { const copy = {...item}; delete copy._id; return copy; });
-                const ws = XLSX.utils.json_to_sheet(data);
-                XLSX.utils.book_append_sheet(wb, ws, "جميع البيانات");
-            } else {
-                govs.forEach(gov => {
-                    const govData = allMedicalData.filter(i => i['المحافظة'] === gov).map(item => {
-                        const copy = {...item};
-                        delete copy._id;
-                        return copy;
-                    });
-                    if (govData.length) {
-                        const ws = XLSX.utils.json_to_sheet(govData);
-                        XLSX.utils.book_append_sheet(wb, ws, gov.substring(0, 31));
-                    }
-                });
-            }
-            XLSX.writeFile(wb, "الدليل_الطبي_المحدث.xlsx");
-        }
-
-        // ========================================================================
-        //  رفع الملف المحلي
-        // ========================================================================
-        document.getElementById('excel-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('upload-section').style.display = 'none';
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                globalWorkbook = XLSX.read(data, { type: 'array' });
-                const container = document.getElementById('checkbox-container');
-                container.innerHTML = '';
-                globalWorkbook.SheetNames.forEach(sheetName => {
-                    container.innerHTML += `<label class="sheet-item"><input type="checkbox" value="${sheetName}" checked> ${sheetName}</label>`;
-                });
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('sheet-selection').style.display = 'block';
-            };
-            reader.readAsArrayBuffer(file);
-        });
-
-        // ========================================================================
-        //  جلب من Google Sheets
-        // ========================================================================
-        async function fetchFromGoogleSheet() {
-            const urlInput = document.getElementById('gsheet-url').value.trim();
-            if (!urlInput) {
-                alert("الرجاء إدخال رابط جوجل شيت!");
-                return;
-            }
-            const match = urlInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
-            if (!match || match.length < 2) {
-                alert("رابط غير صحيح! تأكد من نسخ رابط جوجل شيت بالكامل من المتصفح.");
-                return;
-            }
-            const sheetId = match[1];
-            const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
-
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('upload-section').style.display = 'none';
-
-            try {
-                const response = await fetch(exportUrl);
-                if (!response.ok) throw new Error("Network response was not ok");
-                const arrayBuffer = await response.arrayBuffer();
-                const data = new Uint8Array(arrayBuffer);
-                globalWorkbook = XLSX.read(data, {type: 'array'});
-                const checkboxContainer = document.getElementById('checkbox-container');
-                checkboxContainer.innerHTML = '';
-                globalWorkbook.SheetNames.forEach(sheetName => {
-                    checkboxContainer.innerHTML += `<label class="sheet-item"><input type="checkbox" value="${sheetName}" checked> ${sheetName}</label>`;
-                });
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('sheet-selection').style.display = 'block';
-            } catch (error) {
-                console.error("Error fetching Google Sheet:", error);
-                alert("حدث خطأ أثناء جلب البيانات! تأكد من الآتي:\n1. الرابط صحيح.\n2. إعدادات المشاركة في جوجل شيت مضبوطة على (Anyone with the link).");
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('upload-section').style.display = 'block';
-            }
-        }
-
-        // ========================================================================
-        //  معالجة الشيتات
-        // ========================================================================
-        function processSelectedSheets() {
-            const checkboxes = document.querySelectorAll('#checkbox-container input[type="checkbox"]:checked');
-            const selectedSheets = Array.from(checkboxes).map(cb => cb.value);
-            if (!selectedSheets.length) return alert("الرجاء اختيار شيت واحد على الأقل!");
-
-            allMedicalData = [];
-            selectedSheets.forEach(sheetName => {
-                const worksheet = globalWorkbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
-                jsonData.forEach(row => {
-                    const cleanRow = { _id: generateId(), 'الحالة': '' };
-                    for (let key in row) {
-                        let trimmedKey = key.trim();
-                        cleanRow[trimmedKey] = row[key];
-                    }
-                    if (cleanRow['اسم الجهة الطبية']) {
-                        if (!cleanRow['المحافظة']) cleanRow['المحافظة'] = sheetName;
-                        allMedicalData.push(cleanRow);
-                    }
-                });
-            });
-
-            const now = new Date();
-            appSettings.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' الساعة ' + now.toLocaleTimeString('ar-EG');
-            saveAppSettings();
-            applyAppSettings();
-            saveToLocal();
-            document.getElementById('sheet-selection').style.display = 'none';
-            showAppInterface();
-        }
-
-        // ========================================================================
-        //  عرض الواجهة
-        // ========================================================================
-        function showAppInterface() {
-            document.getElementById('upload-section').style.display = 'none';
-            document.getElementById('sheet-selection').style.display = 'none';
-            document.getElementById('header-buttons').style.display = 'flex';
-            document.getElementById('filters').style.display = 'flex';
-            document.getElementById('pagination-container').style.display = 'flex';
-            document.getElementById('app-footer').style.display = 'flex';
-            populateFilters();
-            applyFilters();
-        }
-
-        function populateFilters() {
-            const governorates = [...new Set(allMedicalData.map(item => item['المحافظة']).filter(Boolean))].sort();
-            const specialties = [...new Set(allMedicalData.map(item => item['التخصص']).filter(Boolean))].sort();
-
-            document.getElementById('gov-options').innerHTML = governorates.map(gov =>
-                `<label><input type="checkbox" value="${gov}" onchange="applyFilters()"> ${gov}</label>`
-            ).join('');
-            document.getElementById('spec-options').innerHTML = specialties.map(spec =>
-                `<label><input type="checkbox" value="${spec}" onchange="applyFilters()"> ${spec}</label>`
-            ).join('');
-        }
-
-        // ========================================================================
-        //  الفلترة والترقيم
-        // ========================================================================
-        function applyFilters() {
-            const searchVal = document.getElementById('search-input').value.toLowerCase();
-            const selectedGovs = Array.from(document.querySelectorAll('#gov-options input:checked')).map(cb => cb.value);
-            const selectedSpecs = Array.from(document.querySelectorAll('#spec-options input:checked')).map(cb => cb.value);
-
-            document.getElementById('gov-btn-text').innerText = selectedGovs.length ? `المحافظات (${selectedGovs.length})` : 'كل المحافظات';
-            document.getElementById('spec-btn-text').innerText = selectedSpecs.length ? `التخصصات (${selectedSpecs.length})` : 'كل التخصصات';
-
-            filteredData = allMedicalData.filter(item => {
-                if (!isAdminMode && item['الحالة'] === 'معطل') return false;
-                const matchGov = !selectedGovs.length || selectedGovs.includes(item['المحافظة']);
-                const matchSpec = !selectedSpecs.length || selectedSpecs.includes(item['التخصص']);
-                const textToSearch = `${item['اسم الجهة الطبية'] || ''} ${item['الفروع'] || ''} ${item['العنوان'] || ''}`.toLowerCase();
-                const matchSearch = searchVal === "" || textToSearch.includes(searchVal);
-                return matchGov && matchSpec && matchSearch;
-            });
-
-            currentPage = 1;
-            renderPage();
-        }
-
-        function changeRowsPerPage() {
-            rowsPerPage = parseInt(document.getElementById('rows-per-page').value);
-            currentPage = 1;
-            renderPage();
-        }
-
-        function renderPage() {
-            const totalItems = filteredData.length;
-            const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
-            const start = (currentPage - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
-            const pageData = filteredData.slice(start, end);
-            renderCards(pageData);
-            renderPagination(totalPages, totalItems);
-        }
-
-        // ========================================================================
-        //  عرض البطاقات مع تتبع Google Analytics لأزرار الاتصال والواتساب
-        // ========================================================================
-        function renderCards(data) {
-            const container = document.getElementById('results');
-            container.innerHTML = '';
-            if (!data.length) {
-                container.innerHTML = '<p style="text-align:center; width:100%; margin-top:20px; color:#94A3B8; font-family: \'Cairo\', \'Tajawal\', sans-serif;">لا توجد نتائج مطابقة للبحث.</p>';
-                return;
-            }
-            data.forEach(item => {
-                const isDisabled = item['الحالة'] === 'معطل';
-                const card = document.createElement('div');
-                card.className = `card ${isDisabled ? 'disabled-card' : ''}`;
-                const name = item['اسم الجهة الطبية'] || 'غير محدد';
-                const spec = item['التخصص'] || 'غير محدد';
-                const branch = item['الفروع'] || 'الفرع الرئيسي';
-                const gov = item['المحافظة'] || '';
-                const address = item['العنوان'] || 'العنوان غير متوفر';
-                const id = item._id;
-                
-                let phone = String(item['التليفون'] || '').trim();
-                if (phone) phone = phone.replace(/(^|\D)(1[0125]\d{8})(?=\D|$)/g, '$10$2');
-
-                // استخراج الأرقام فقط لفحصها
-                let digitsOnly = phone.replace(/\D/g, '');
-                // التحقق هل هو رقم موبايل مصري (يبدأ بـ 010, 011, 012, 015)
-                let isMobile = /^(010|011|012|015)\d{8}$/.test(digitsOnly);
-                
-                let waHtml = '';
-                if (isMobile) {
-                    let waNumber = '20' + digitsOnly.substring(1);
-                    // إضافة تتبع Google Analytics عند النقر على واتساب مع اسم العيادة
-                    waHtml = `<a href="https://wa.me/${waNumber}" target="_blank" class="wa-btn" onclick="if(typeof gtag === 'function') gtag('event', 'whatsapp_click', { 'clinic_name': '${name.replace(/'/g, "\\'")}' });"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> واتساب</a>`;
-                }
-
-                // إضافة تتبع Google Analytics عند النقر على اتصال مع اسم العيادة
-                let phoneHtml = phone ? `<a href="tel:${phone}" class="call-btn" onclick="if(typeof gtag === 'function') gtag('event', 'phone_call', { 'clinic_name': '${name.replace(/'/g, "\\'")}' });"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> اتصال</a>` : '';
-                
-                const searchQuery = encodeURIComponent(`${name} ${gov} ${address}`);
-                const mapHtml = `<a href="https://www.google.com/maps/search/?api=1&query=${searchQuery}" target="_blank" class="map-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> خريطة</a>`;
-
-                const actionButtons = `<div class="action-buttons">${phoneHtml} ${waHtml} ${mapHtml}</div>`;
-                const statusBadge = isDisabled ? `<span class="badge disabled-badge">معطل</span>` : '';
-
-                card.innerHTML = `
-                    <h3>${name}</h3>
-                    <div class="badges">
-                        <span class="badge specialty">${spec}</span>
-                        <span class="badge branch">${branch}</span>
-                        ${statusBadge}
-                    </div>
-                    <div class="info-row"><strong>📍 المحافظة:</strong> ${gov}</div>
-                    <div class="info-row"><strong>🏢 العنوان:</strong> ${address}</div>
-                    ${actionButtons}
-                    <div class="admin-controls">
-                        <button class="btn-action btn-edit" onclick="openEditModal('${id}')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            تعديل
-                        </button>
-                        <button class="btn-action btn-toggle" onclick="toggleDisable('${id}')">
-                            ${isDisabled ? '👁️ تفعيل' : '👁️ تعطيل'}
-                        </button>
-                        <button class="btn-action btn-delete" onclick="deleteItem('${id}')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            حذف
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderPagination(totalPages, totalItems) {
-            const pageButtons = document.getElementById('page-buttons');
-            const pageInfo = document.getElementById('page-info');
-            pageButtons.innerHTML = '';
-            if (!totalItems) { pageInfo.innerText = ''; return; }
-            pageInfo.innerText = `إجمالي النتائج: ${totalItems} | صفحة ${currentPage} من ${totalPages}`;
-
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.innerText = 'السابق';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => { currentPage--; renderPage(); window.scrollTo(0, 0); };
-            pageButtons.appendChild(prevBtn);
-
-            let start = Math.max(1, currentPage - 2);
-            let end = Math.min(totalPages, start + 4);
-            if (end - start < 4) start = Math.max(1, end - 4);
-            for (let i = start; i <= end; i++) {
-                const btn = document.createElement('button');
-                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                btn.innerText = i;
-                btn.onclick = () => { currentPage = i; renderPage(); window.scrollTo(0, 0); };
-                pageButtons.appendChild(btn);
-            }
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.innerText = 'التالي';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => { currentPage++; renderPage(); window.scrollTo(0, 0); };
-            pageButtons.appendChild(nextBtn);
-        }
-
-        // ========================================================================
-        //  القوائم المنسدلة
-        // ========================================================================
-        function toggleDropdown(id) {
-            const dropdown = document.getElementById(id);
-            const isHidden = dropdown.classList.contains('hidden');
-            document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
-            if (isHidden) dropdown.classList.remove('hidden');
-        }
-
-        function filterOptions(dropdownId, searchText) {
-            const labels = document.querySelectorAll(`#${dropdownId} .options-list label`);
-            labels.forEach(label => {
-                label.style.display = label.textContent.toLowerCase().includes(searchText.toLowerCase()) ? 'flex' : 'none';
-            });
-        }
-
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.custom-select')) {
-                document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
-            }
-        });
-
-        // ========================================================================
-        //  إعدادات التطبيق المتقدمة
-        // ========================================================================
-        function applyAppSettings() {
-            document.getElementById('app-title').innerHTML = appSettings.title || 'الدليل الطبي';
-            document.getElementById('app-desc').innerText = appSettings.desc || 'ابحث عن أقرب جهة طبية';
-            document.title = appSettings.title || 'الدليل الطبي للموظفين';
-            
-            const logoImg = document.getElementById('app-logo');
-            if (appSettings.logo) {
-                logoImg.src = appSettings.logo;
-                logoImg.style.display = 'block';
-            } else {
-                logoImg.style.display = 'none';
-            }
-            
-            const footerUpdated = document.getElementById('last-updated');
-            if (appSettings.lastUpdated) {
-                footerUpdated.innerText = appSettings.lastUpdated;
-            } else {
-                footerUpdated.innerText = '';
-            }
-        }
-
-        function saveAppSettings() {
-            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings));
-        }
-
-        function openAppInfoModal() {
-            document.getElementById('edit-app-title').value = appSettings.title;
-            document.getElementById('edit-app-desc').value = appSettings.desc;
-            document.getElementById('edit-app-passcode').value = appSettings.passcode;
-            document.getElementById('edit-app-gsheet-url').value = appSettings.gsheetUrl || '';
-            document.getElementById('edit-app-logo-url').value = '';
-            document.getElementById('edit-app-logo').value = '';
-            document.getElementById('app-info-modal').style.display = 'flex';
-        }
-
-        function closeAppInfoModal() {
-            document.getElementById('app-info-modal').style.display = 'none';
-        }
-
-        function saveAppInfo() {
-            appSettings.title = document.getElementById('edit-app-title').value || "الدليل الطبي";
-            appSettings.desc = document.getElementById('edit-app-desc').value || "";
-            appSettings.passcode = document.getElementById('edit-app-passcode').value;
-            
-            const oldUrl = appSettings.gsheetUrl;
-            appSettings.gsheetUrl = document.getElementById('edit-app-gsheet-url').value.trim();
-            
-            const logoUrl = document.getElementById('edit-app-logo-url').value;
-            const logoFile = document.getElementById('edit-app-logo').files[0];
-            
-            if (logoUrl && logoUrl.includes('drive.google.com')) {
-                const match = logoUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-                if (match) appSettings.logo = `https://drive.google.com/uc?id=${match[1]}`;
-            }
-
-            const finalizeSave = () => {
-                saveAppSettings(); 
-                applyAppSettings(); 
-                closeAppInfoModal();
-                if(appSettings.gsheetUrl && appSettings.gsheetUrl !== oldUrl) {
-                    silentSync();
-                }
-            };
-
-            if (logoFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    appSettings.logo = e.target.result;
-                    finalizeSave();
-                };
-                reader.readAsDataURL(logoFile);
-            } else {
-                finalizeSave();
-            }
-        }
-
-        // ========================================================================
-        //  دوال لوحة الإحصائيات (Analytics)
-        // ========================================================================
-        function openAnalyticsModal() {
-            document.getElementById('analytics-modal').style.display = 'flex';
-            generateAnalytics();
-        }
-
-        function closeAnalyticsModal() {
-            document.getElementById('analytics-modal').style.display = 'none';
-        }
-
-        function generateAnalytics() {
-            // 1. حساب الأرقام
-            const activeData = allMedicalData.filter(item => item['الحالة'] !== 'معطل');
-            const govs = {};
-            const specs = {};
-
-            activeData.forEach(item => {
-                const gov = item['المحافظة'] || 'غير محدد';
-                const spec = item['التخصص'] || 'غير محدد';
-                govs[gov] = (govs[gov] || 0) + 1;
-                specs[spec] = (specs[spec] || 0) + 1;
-            });
-
-            document.getElementById('stat-total').innerText = activeData.length;
-            document.getElementById('stat-govs').innerText = Object.keys(govs).length;
-            document.getElementById('stat-specs').innerText = Object.keys(specs).length;
-
-            // 2. تجهيز بيانات الرسوم البيانية
-            const govLabels = Object.keys(govs).sort((a, b) => govs[b] - govs[a]);
-            const govData = govLabels.map(l => govs[l]);
-
-            const specLabels = Object.keys(specs).sort((a, b) => specs[b] - specs[a]).slice(0, 10);
-            const specData = specLabels.map(l => specs[l]);
-
-            // تحديد ألوان الخطوط بناءً على الوضع الليلي/النهاري
-            const isDark = document.body.classList.contains('dark-mode');
-            const textColor = isDark ? '#E2E8F0' : '#334155';
-            const gridColor = isDark ? '#334155' : '#E2E8F0';
-
-            // ألوان المخطط الدائري
-            const colors = ['#C5A880', '#0F172A', '#0284C7', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F43F5E', '#F97316', '#84CC16', '#06B6D4', '#6366F1', '#D946EF'];
-
-            // 3. رسم خريطة المحافظات (Doughnut Chart)
-            if(govChartInstance) govChartInstance.destroy();
-            const ctxGov = document.getElementById('govChart').getContext('2d');
-            govChartInstance = new Chart(ctxGov, {
-                type: 'doughnut',
-                data: {
-                    labels: govLabels,
-                    datasets: [{
-                        data: govData,
-                        backgroundColor: colors.slice(0, govLabels.length),
-                        borderWidth: isDark ? 2 : 0,
-                        borderColor: isDark ? '#0F172A' : '#fff'
-                    }]
-                },
-                options: { 
-                    responsive: true, 
-                    plugins: { 
-                        legend: { position: 'right', labels: { color: textColor, font: { family: 'Cairo' } } }, 
-                        title: { display: true, text: 'التوزيع الجغرافي (حسب المحافظة)', color: textColor, font: { family: 'Cairo', size: 16 } } 
-                    } 
-                }
-            });
-
-            // 4. رسم خريطة التخصصات (Bar Chart)
-            if(specChartInstance) specChartInstance.destroy();
-            const ctxSpec = document.getElementById('specChart').getContext('2d');
-            specChartInstance = new Chart(ctxSpec, {
-                type: 'bar',
-                data: {
-                    labels: specLabels,
-                    datasets: [{
-                        label: 'عدد الجهات',
-                        data: specData,
-                        backgroundColor: '#C5A880',
-                        borderRadius: 6
-                    }]
-                },
-                options: { 
-                    responsive: true, 
-                    scales: { 
-                        y: { ticks: { color: textColor }, grid: { color: gridColor } }, 
-                        x: { ticks: { color: textColor, font: { family: 'Cairo' } }, grid: { display: false } } 
-                    }, 
-                    plugins: { 
-                        legend: { display: false }, 
-                        title: { display: true, text: 'أكثر 10 تخصصات تعاقداً', color: textColor, font: { family: 'Cairo', size: 16 } } 
-                    } 
-                }
-            });
-        }
-
-        // ========================================================================
-        //  تصدير PDF مع تتبع Google Analytics
-        // ========================================================================
-        function exportToPDF() {
-            // إرسال حدث إلى Google Analytics عند تحميل PDF
-            if (typeof gtag === 'function') {
-                gtag('event', 'download_pdf', { 'event_category': 'Engagement' });
-            }
-
-            if (filteredData.length === 0) {
-                alert("لا توجد بيانات لتصديرها. قم بالبحث أولاً.");
-                return;
-            }
-
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('loading').innerText = 'جاري تجهيز الكتيب الفاخر (Landscape)... ⏳';
-
-            const pdfContainer = document.getElementById('pdf-container');
-            const creamBg = '#FDFBF7';
-            const goldColor = '#C5A880';
-            const darkSlate = '#0F172A';
-            
-            const modernJusticeIcon = `<svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M6 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M9 21h6"/></svg>`;
-            
-            const logoHtml = appSettings.logo ? 
-                `<img src="${appSettings.logo}" style="max-height: 110px; display: block; margin: 0 auto; border-radius: 8px;">` : 
-                modernJusticeIcon;
-
-            const smallLogoHtml = appSettings.logo ? 
-                `<img src="${appSettings.logo}" style="max-height: 45px; border-radius: 4px;">` : 
-                `<svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="1.5"><path d="M12 3v18"/><path d="M3 7h18"/><path d="M6 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/><path d="M9 21h6"/></svg>`;
-
-            let htmlContent = `
-                <div style="font-family: 'Cairo', 'Tajawal', sans-serif; direction: rtl; text-align: right; background-color: ${creamBg}; color: ${darkSlate};">
-                    
-                    <!-- Cover Page -->
-                    <div style="height: 210mm; width: 297mm; background-color: ${creamBg}; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; page-break-after: always; border: 10px solid ${goldColor}; box-sizing: border-box;">
-                        <div style="position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 2px solid ${goldColor}; pointer-events: none;"></div>
-                        <div style="position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(197, 168, 128, 0.4); pointer-events: none;"></div>
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; pointer-events: none;">
-                            <svg width="600" height="600" viewBox="0 0 24 24" fill="none" stroke="${goldColor}" stroke-width="0.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-                        </div>
-                        <div style="z-index: 10; padding: 40px; background: rgba(253, 251, 247, 0.8); border-radius: 20px; backdrop-filter: blur(5px);">
-                            <div style="margin-bottom: 30px;">${logoHtml}</div>
-                            <h1 style="color: ${goldColor}; font-size: 55px; font-weight: 900; margin: 0 0 15px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.05); font-family: 'Tajawal', 'Cairo', sans-serif;">${appSettings.title}</h1>
-                            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin: 0 auto 25px auto;">
-                                <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
-                                <div style="width: 8px; height: 8px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
-                                <div style="width: 80px; height: 2px; background-color: ${goldColor};"></div>
-                            </div>
-                            <p style="color: ${darkSlate}; font-size: 22px; font-weight: 600; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6; font-family: 'Cairo', 'Tajawal', sans-serif;">${appSettings.desc}</p>
-                            <div style="display: inline-flex; gap: 40px; align-items: center; border-top: 1px solid rgba(197, 168, 128, 0.3); border-bottom: 1px solid rgba(197, 168, 128, 0.3); padding: 15px 40px;">
-                                <div>
-                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase; font-family: 'Cairo', 'Tajawal', sans-serif;">تاريخ الإصدار</p>
-                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800; font-family: 'Tajawal', 'Cairo', sans-serif;">${new Date().toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' })}</p>
-                                </div>
-                                <div style="width: 1px; height: 40px; background-color: ${goldColor};"></div>
-                                <div>
-                                    <p style="color: #64748B; font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase; font-family: 'Cairo', 'Tajawal', sans-serif;">إجمالي الجهات</p>
-                                    <p style="color: ${darkSlate}; font-size: 18px; margin: 0; font-weight: 800; font-family: 'Tajawal', 'Cairo', sans-serif;">${filteredData.length} جهة معتمدة</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Data Pages -->
-                    <table style="width: 100%; border-collapse: collapse; background-color: ${creamBg};">
-                        <thead style="display: table-header-group;">
-                            <tr>
-                                <td colspan="6" style="padding: 0; border: none;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 30px 15px 30px; border-bottom: 2px solid ${goldColor}; margin-bottom: 20px; background-color: ${creamBg};">
-                                        <div>
-                                            <h2 style="color: ${goldColor}; margin: 0 0 5px 0; font-size: 22px; font-weight: 900; font-family: 'Tajawal', 'Cairo', sans-serif;">${appSettings.title}</h2>
-                                            <p style="color: #64748B; margin: 0; font-size: 13px; font-family: 'Cairo', 'Tajawal', sans-serif;">${appSettings.desc}</p>
-                                        </div>
-                                        <div style="display: flex; align-items: center; gap: 15px;">
-                                            <div style="text-align: left;">
-                                                <p style="color: #8C6239; margin: 0 0 3px 0; font-size: 14px; font-weight: 800; font-style: italic; font-family: 'Cairo', 'Tajawal', sans-serif;">وثيقة داخلية</p>
-                                                <p style="color: #94A3B8; margin: 0; font-size: 11px; font-family: 'Cairo', 'Tajawal', sans-serif;">${new Date().toLocaleDateString('ar-EG')}</p>
-                                            </div>
-                                            ${smallLogoHtml}
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; background-color: ${darkSlate}; color: ${goldColor}; font-weight: 800; font-size: 13px; padding: 14px 30px; border-radius: 8px 8px 0 0; margin: 0 20px; font-family: 'Cairo', 'Tajawal', sans-serif;">
-                                        <div style="width: 4%; text-align: center;">#</div>
-                                        <div style="width: 22%; text-align: right; padding-right: 10px;">اسم الجهة الطبية</div>
-                                        <div style="width: 14%; text-align: right; padding-right: 10px;">التخصص</div>
-                                        <div style="width: 18%; text-align: right; padding-right: 10px;">المحافظة / الفرع</div>
-                                        <div style="width: 28%; text-align: right; padding-right: 10px;">العنوان التفصيلي</div>
-                                        <div style="width: 14%; text-align: center;">رقم التواصل</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </thead>
-                        <tfoot style="display: table-footer-group;">
-                            <tr>
-                                <td colspan="6" style="padding: 0; border: none;">
-                                    <div style="padding: 15px 30px; border-top: 1px solid rgba(197, 168, 128, 0.4); margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748B; background-color: ${creamBg}; font-family: 'Cairo', 'Tajawal', sans-serif;">
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <div style="width: 5px; height: 5px; background-color: ${goldColor}; transform: rotate(45deg);"></div>
-                                            <span>تم إنشاء هذا الدليل آلياً - ${appSettings.title}</span>
-                                        </div>
-                                        <div>${appSettings.lastUpdated || 'نسخة محدثة'}</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody style="font-size: 12px;">
-            `;
-
-            filteredData.forEach((item, index) => {
-                let phone = String(item['التليفون'] || '').trim();
-                if(phone) phone = phone.replace(/(^|\D)(1[0125]\d{8})(?=\D|$)/g, '$10$2');
-
-                htmlContent += `
-                            <tr style="page-break-inside: avoid;">
-                                <td colspan="6" style="padding: 0 20px; border: none;">
-                                    <div style="display: flex; border-bottom: 1px solid rgba(197, 168, 128, 0.2); padding: 16px 10px; align-items: center;">
-                                        <div style="width: 4%; text-align: center; font-weight: 700; color: ${goldColor}; font-size: 12px; font-family: 'Cairo', 'Tajawal', sans-serif;">${String(index + 1).padStart(2, '0')}</div>
-                                        <div style="width: 22%; text-align: right; padding-right: 10px; font-weight: 800; color: ${darkSlate}; font-size: 13px; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['اسم الجهة الطبية'] || '-'}</div>
-                                        <div style="width: 14%; text-align: right; padding-right: 10px;">
-                                            <span style="color: ${darkSlate}; font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: 'Cairo', 'Tajawal', sans-serif;">
-                                                <span style="width: 4px; height: 4px; background-color: ${goldColor}; border-radius: 50%; display: inline-block;"></span>
-                                                ${item['التخصص'] || '-'}
-                                            </span>
-                                        </div>
-                                        <div style="width: 18%; text-align: right; padding-right: 10px;">
-                                            <div style="color: ${darkSlate}; font-weight: 800; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['المحافظة'] || ''}</div>
-                                            <div style="color: #64748B; font-size: 11px; margin-top: 3px; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['الفروع'] || ''}</div>
-                                        </div>
-                                        <div style="width: 28%; text-align: right; padding-right: 10px; color: #475569; line-height: 1.6; font-weight: 600; font-family: 'Cairo', 'Tajawal', sans-serif;">${item['العنوان'] || '-'}</div>
-                                        <div style="width: 14%; text-align: center; direction: ltr; font-weight: 800; color: ${darkSlate}; font-size: 13px; letter-spacing: 0.5px; font-family: 'Cairo', 'Tajawal', sans-serif;">${phone || '-'}</div>
-                                    </div>
-                                </td>
-                            </tr>
-                `;
-            });
-
-            htmlContent += `
-                        </tbody>
-                    </table>
+                <div>
+                    <h1 class="text-base font-bold leading-none">{{ appSettings.title }}</h1>
+                    <p class="text-[10px] text-slate-400">{{ appSettings.desc }}</p>
                 </div>
-            `;
+            </div>
+            
+            <!-- أزرار الهيدر (قابلة للتمرير على الموبايل) -->
+            <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 hide-scrollbar">
+                <button @click="toggleTheme" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded border border-gold text-gold hover:bg-gold hover:text-slate-900 whitespace-nowrap transition-all">
+                    <svg v-if="isDark" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    {{ isDark ? 'نهاري' : 'ليلي' }}
+                </button>
+                
+                <template v-if="hasData">
+                    <button @click="silentSync" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 whitespace-nowrap transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
+                        </svg> تحديث
+                    </button>
+                    <button @click="isAdminMode = !isAdminMode" :class="isAdminMode ? 'bg-green-600 border-green-600' : 'bg-slate-800 border-slate-800'" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded border hover:bg-opacity-80 whitespace-nowrap transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg> الإدارة
+                    </button>
+                    <button @click="exportToPDF" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-red-600 hover:bg-red-700 whitespace-nowrap transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg> PDF
+                    </button>
+                    
+                    <!-- أزرار تظهر فقط في وضع الإدارة -->
+                    <template v-if="isAdminMode">
+                        <button @click="showAnalyticsModal = true; generateAnalytics()" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-purple-600 hover:bg-purple-700 whitespace-nowrap transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M18 20V10M12 20V4M6 20v-6"/>
+                            </svg> إحصائيات
+                        </button>
+                        <button @click="openSettingsModal" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-blue-600 hover:bg-blue-700 whitespace-nowrap transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg> إعدادات
+                        </button>
+                    </template>
+                </template>
+            </div>
+        </header>
 
-            pdfContainer.innerHTML = htmlContent;
-            pdfContainer.style.display = 'block';
+        <!-- ================================================================ -->
+        <!-- 3. المحتوى الرئيسي -->
+        <!-- ================================================================ -->
+        <main v-if="isLoggedIn || !appSettings.passcode" class="flex-1 w-full max-w-7xl mx-auto p-4">
+            
+            <!-- شاشة جلب البيانات (تظهر إذا لم يكن هناك بيانات) -->
+            <div v-if="!hasData" class="bg-white dark:bg-cardbg p-8 rounded-2xl shadow text-center mt-10 border border-slate-200 dark:border-slate-700">
+                <h3 class="text-xl font-bold text-primary mb-2 flex justify-center items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                    </svg>
+                    جلب البيانات من جوجل شيت
+                </h3>
+                <p class="text-sm text-slate-500 mb-6">تأكد أن إعدادات مشاركة الشيت هي: "أي شخص لديه الرابط"</p>
+                <div class="flex flex-col md:flex-row gap-3 justify-center max-w-2xl mx-auto">
+                    <input v-model="gsheetInput" type="text" placeholder="انسخ رابط جوجل شيت هنا..." class="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-primary text-left" dir="ltr">
+                    <button @click="fetchFromGoogleSheet" class="px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 flex justify-center items-center gap-2 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg> جلب
+                    </button>
+                </div>
+                <div v-if="isLoading" class="mt-4 text-primary font-bold animate-pulse">جاري تحميل البيانات...</div>
+            </div>
 
-            const opt = {
-                margin:       [0, 0, 0, 0], 
-                filename:     'الدليل_الطبي_الداخلي.pdf',
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: creamBg },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
+            <!-- واجهة التطبيق (الفلاتر والكروت) -->
+            <div v-if="hasData">
+                
+                <!-- القوائم المنسدلة الذكية والبحث -->
+                <div class="bg-white dark:bg-cardbg p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex flex-col md:flex-row gap-3">
+                    
+                    <!-- مربع البحث -->
+                    <div class="relative flex-[2]">
+                        <input v-model="searchQuery" @input="debounceSearch" type="text" placeholder="ابحث باسم الجهة أو العنوان..." 
+                               class="w-full p-3 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 focus:border-gold outline-none text-sm transition-colors">
+                        <svg class="w-4 h-4 absolute right-3 top-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
 
-            html2pdf().set(opt).from(pdfContainer).save().then(() => {
-                pdfContainer.style.display = 'none';
-                pdfContainer.innerHTML = '';
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('loading').innerText = 'جاري قراءة الملف... ⏳';
-            }).catch(err => {
-                console.error("PDF Error:", err);
-                alert("حدث خطأ أثناء إنشاء ملف الـ PDF.");
-                pdfContainer.style.display = 'none';
-                document.getElementById('loading').style.display = 'none';
-            });
-        }
+                    <!-- قائمة المحافظات -->
+                    <div class="relative flex-1">
+                        <div @click="govOpen = !govOpen; specOpen = false" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 cursor-pointer flex justify-between items-center text-sm hover:border-gold transition-colors">
+                            <span class="font-bold truncate">{{ govHeaderText }}</span>
+                            <svg class="w-4 h-4 text-slate-500 transition-transform" :class="govOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div v-if="govOpen" @click="govOpen = false" class="fixed inset-0 z-30"></div>
+                        <div v-if="govOpen" class="absolute top-full mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
+                            <div class="p-2 border-b border-slate-100 dark:border-slate-700">
+                                <input v-model="govSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-gold transition-colors">
+                            </div>
+                            <div class="max-h-48 overflow-y-auto p-1">
+                                <label v-for="gov in filteredGovOptions" :key="gov" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer text-sm transition-colors">
+                                    <input type="checkbox" :value="gov" v-model="selectedGovs" @change="applyFilters" class="accent-gold w-4 h-4">
+                                    {{ gov }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-        // ========================================================================
-        //  مراقبة تغييرات الوضع الليلي لإعادة رسم الإحصائيات
-        // ========================================================================
-        const observer = new MutationObserver(() => {
-            if (document.getElementById('analytics-modal').style.display === 'flex') {
-                generateAnalytics();
+                    <!-- قائمة التخصصات -->
+                    <div class="relative flex-1">
+                        <div @click="specOpen = !specOpen; govOpen = false" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 cursor-pointer flex justify-between items-center text-sm hover:border-gold transition-colors">
+                            <span class="font-bold truncate">{{ specHeaderText }}</span>
+                            <svg class="w-4 h-4 text-slate-500 transition-transform" :class="specOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                        <div v-if="specOpen" @click="specOpen = false" class="fixed inset-0 z-30"></div>
+                        <div v-if="specOpen" class="absolute top-full mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
+                            <div class="p-2 border-b border-slate-100 dark:border-slate-700">
+                                <input v-model="specSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-gold transition-colors">
+                            </div>
+                            <div class="max-h-48 overflow-y-auto p-1">
+                                <label v-for="spec in filteredSpecOptions" :key="spec" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer text-sm transition-colors">
+                                    <input type="checkbox" :value="spec" v-model="selectedSpecs" @change="applyFilters" class="accent-gold w-4 h-4">
+                                    {{ spec }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- زر مسح الفلاتر -->
+                    <button @click="clearFilters" class="p-3 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-lg hover:bg-red-200 transition flex justify-center items-center" title="مسح الفلاتر">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- شريط النتائج -->
+                <div class="flex justify-between items-center mb-4 text-sm text-slate-500 dark:text-slate-400">
+                    <p>تم العثور على <span class="font-bold text-gold">{{ filteredClinics.length }}</span> جهة طبية</p>
+                    <div v-if="isAdminMode" class="text-xs text-slate-400">وضع الإدارة مفعل</div>
+                </div>
+
+                <!-- شبكة الكروت -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div v-for="clinic in filteredClinics" :key="clinic._id" 
+                         class="bg-white dark:bg-cardbg p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 card-hover transition-all flex flex-col justify-between relative"
+                         :class="clinic['الحالة'] === 'معطل' ? 'opacity-60 border-red-400/30' : ''">
+                        
+                        <!-- شريط حالة التعطيل -->
+                        <div v-if="isAdminMode && clinic['الحالة'] === 'معطل'" class="absolute top-0 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-bl-xl z-10 font-bold shadow">
+                            معطل
+                        </div>
+                        
+                        <!-- المحتوى -->
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-gold">{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-2 py-1 rounded-full">{{ clinic['التخصص'] || 'عام' }}</span>
+                            </div>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">المحافظة:</span> {{ clinic['المحافظة'] || '' }}</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">الفرع:</span> {{ clinic['الفرع'] || 'الفرع الرئيسي' }}</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-3"><span class="font-semibold">العنوان:</span> {{ clinic['العنوان'] || 'غير متوفر' }}</p>
+                        </div>
+                        
+                        <!-- الأزرار -->
+                        <div class="grid grid-cols-3 gap-2 mt-2">
+                            <a v-if="clinic['التليفون']" :href="'tel:' + clinic['التليفون']" class="p-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                اتصال
+                            </a>
+                            <a v-if="getWaLink(clinic['التليفون'])" :href="getWaLink(clinic['التليفون'])" target="_blank" class="p-2 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                                </svg>
+                                واتساب
+                            </a>
+                            <a :href="getMapLink(clinic)" target="_blank" class="p-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                خريطة
+                            </a>
+                        </div>
+                        
+                        <!-- أزرار الإدارة (تظهر فقط في وضع الإدارة) -->
+                        <div v-if="isAdminMode" class="flex gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                            <button @click="openEditModal(clinic)" class="flex-1 p-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition-all">
+                                تعديل
+                            </button>
+                            <button @click="toggleClinicStatus(clinic)" class="flex-1 p-1.5 bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-bold rounded-lg transition-all">
+                                {{ clinic['الحالة'] === 'معطل' ? 'تفعيل' : 'تعطيل' }}
+                            </button>
+                            <button @click="deleteClinic(clinic._id)" class="flex-1 p-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-all">
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================================================================ -->
+        <!-- 4. الفوتر المثبت -->
+        <!-- ================================================================ -->
+        <footer v-if="isLoggedIn || !appSettings.passcode" class="bg-slate-900 border-t-2 border-gold text-slate-400 text-xs p-2 flex flex-col md:flex-row justify-between items-center gap-2 mt-4">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>وثيقة داخلية مؤمنة</span>
+            </div>
+            <span>{{ appSettings.lastUpdated || 'نسخة محدثة' }}</span>
+        </footer>
+
+        <!-- ================================================================ -->
+        <!-- 5. نافذة الإعدادات (Settings Modal) -->
+        <!-- ================================================================ -->
+        <div v-if="showSettingsModal" @click.self="showSettingsModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">⚙️ إعدادات التطبيق</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">عنوان التطبيق</label>
+                        <input v-model="tempSettings.title" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">الوصف</label>
+                        <input v-model="tempSettings.desc" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">كود المرور</label>
+                        <input v-model="tempSettings.passcode" type="text" placeholder="2026" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">رابط جوجل شيت (للتحديث التلقائي)</label>
+                        <input v-model="tempSettings.gsheetUrl" type="text" placeholder="https://docs.google.com/spreadsheets/d/..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors text-left" dir="ltr">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button @click="saveSettings" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ</button>
+                    <button @click="showSettingsModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- 6. نافذة الإحصائيات (Analytics Modal) -->
+        <!-- ================================================================ -->
+        <div v-if="showAnalyticsModal" @click.self="showAnalyticsModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-4xl p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+                    <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                    </svg>
+                    لوحة الإحصائيات (Analytics)
+                </h3>
+                
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                        <p class="text-slate-400 text-sm">إجمالي الجهات</p>
+                        <span class="text-3xl font-bold text-gold">{{ activeClinicsCount }}</span>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                        <p class="text-slate-400 text-sm">المحافظات</p>
+                        <span class="text-3xl font-bold text-gold">{{ uniqueGovs.length }}</span>
+                    </div>
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                        <p class="text-slate-400 text-sm">التخصصات</p>
+                        <span class="text-3xl font-bold text-gold">{{ uniqueSpecs.length }}</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
+                        <canvas id="govChart"></canvas>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
+                        <canvas id="specChart"></canvas>
+                    </div>
+                </div>
+                
+                <button @click="showAnalyticsModal = false" class="w-full mt-6 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إغلاق</button>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- 7. نافذة تعديل بيانات الفرع -->
+        <!-- ================================================================ -->
+        <div v-if="showEditModal" @click.self="showEditModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">✏️ تعديل بيانات الفرع</h3>
+                <div v-if="editingClinic" class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">اسم الجهة</label>
+                        <input v-model="editingClinic['اسم الجهة']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">التخصص</label>
+                        <input v-model="editingClinic['التخصص']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">المحافظة</label>
+                        <input v-model="editingClinic['المحافظة']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">الفرع</label>
+                        <input v-model="editingClinic['الفرع']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">العنوان</label>
+                        <input v-model="editingClinic['العنوان']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">التليفون</label>
+                        <input v-model="editingClinic['التليفون']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button @click="saveEdit" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ</button>
+                    <button @click="showEditModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- 8. حاوية الـ PDF المخفية -->
+        <!-- ================================================================ -->
+        <div id="pdf-export-container"></div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- 9. الجافاسكريبت (Vue.js) -->
+    <!-- ================================================================ -->
+    <script>
+        const { createApp, ref, computed, watch, onMounted } = Vue;
+
+        const app = createApp({
+            setup() {
+                // =================================================================
+                //  المتغيرات (Reactive State)
+                // =================================================================
+                const isDark = ref(false);
+                const isLoggedIn = ref(false);
+                const isAdminMode = ref(false);
+                const isLoading = ref(false);
+                const loginInput = ref('');
+                const loginError = ref(false);
+                const gsheetInput = ref('');
+                const searchQuery = ref('');
+                const showSettingsModal = ref(false);
+                const showAnalyticsModal = ref(false);
+                const showEditModal = ref(false);
+                const editingClinic = ref(null);
+
+                // إعدادات التطبيق
+                const appSettings = ref({
+                    title: '⚖️ الدليل الطبي للموظفين',
+                    desc: 'دليل شامل للجهات الطبية المعتمدة',
+                    logo: '',
+                    lastUpdated: '',
+                    gsheetUrl: '',
+                    passcode: '2026'
+                });
+                const tempSettings = ref({ ...appSettings.value });
+
+                // الفلاتر
+                const selectedGovs = ref([]);
+                const selectedSpecs = ref([]);
+                const govOpen = ref(false);
+                const specOpen = ref(false);
+                const govSearch = ref('');
+                const specSearch = ref('');
+
+                // البيانات
+                const clinics = ref([]);
+
+                // =================================================================
+                //  الدوال المساعدة (Computed)
+                // =================================================================
+                const hasData = computed(() => clinics.value && clinics.value.length > 0);
+                const activeClinicsCount = computed(() => clinics.value.filter(c => c['الحالة'] !== 'معطل').length);
+
+                const uniqueGovs = computed(() => {
+                    const govs = new Set();
+                    clinics.value.forEach(c => { if (c['المحافظة']) govs.add(c['المحافظة']); });
+                    return Array.from(govs);
+                });
+
+                const uniqueSpecs = computed(() => {
+                    const specs = new Set();
+                    clinics.value.forEach(c => { if (c['التخصص']) specs.add(c['التخصص']); });
+                    return Array.from(specs);
+                });
+
+                const filteredGovOptions = computed(() => {
+                    if (!govSearch.value) return uniqueGovs.value;
+                    return uniqueGovs.value.filter(g => g.includes(govSearch.value));
+                });
+
+                const filteredSpecOptions = computed(() => {
+                    if (!specSearch.value) return uniqueSpecs.value;
+                    return uniqueSpecs.value.filter(s => s.includes(specSearch.value));
+                });
+
+                const govHeaderText = computed(() => {
+                    if (selectedGovs.value.length === 0) return 'كل المحافظات';
+                    if (selectedGovs.value.length === 1) return selectedGovs.value[0];
+                    return `${selectedGovs.value.length} محافظات`;
+                });
+
+                const specHeaderText = computed(() => {
+                    if (selectedSpecs.value.length === 0) return 'كل التخصصات';
+                    if (selectedSpecs.value.length === 1) return selectedSpecs.value[0];
+                    return `${selectedSpecs.value.length} تخصصات`;
+                });
+
+                // =================================================================
+                //  البيانات المفلترة
+                // =================================================================
+                let searchTimeout = null;
+
+                const filteredClinics = computed(() => {
+                    let result = [...clinics.value];
+                    
+                    // فلترة حسب الحالة (إخفاء المعطلين إذا لم يكن في وضع الإدارة)
+                    if (!isAdminMode.value) {
+                        result = result.filter(c => c['الحالة'] !== 'معطل');
+                    }
+                    
+                    // فلترة حسب المحافظات
+                    if (selectedGovs.value.length > 0) {
+                        result = result.filter(c => selectedGovs.value.includes(c['المحافظة']));
+                    }
+                    
+                    // فلترة حسب التخصصات
+                    if (selectedSpecs.value.length > 0) {
+                        result = result.filter(c => selectedSpecs.value.includes(c['التخصص']));
+                    }
+                    
+                    // فلترة حسب البحث
+                    if (searchQuery.value.trim()) {
+                        const query = searchQuery.value.trim().toLowerCase();
+                        result = result.filter(c => {
+                            const searchText = [
+                                c['اسم الجهة'], c['التخصص'], c['المحافظة'], 
+                                c['الفرع'], c['العنوان'], c['التليفون']
+                            ].join(' ').toLowerCase();
+                            return searchText.includes(query);
+                        });
+                    }
+                    
+                    return result;
+                });
+
+                // =================================================================
+                //  دوال الفلاتر
+                // =================================================================
+                const applyFilters = () => {
+                    // الفلاتر تطبق تلقائياً عبر computed
+                };
+
+                const debounceSearch = () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(applyFilters, 300);
+                };
+
+                const clearFilters = () => {
+                    selectedGovs.value = [];
+                    selectedSpecs.value = [];
+                    searchQuery.value = '';
+                    govSearch.value = '';
+                    specSearch.value = '';
+                    govOpen.value = false;
+                    specOpen.value = false;
+                };
+
+                // =================================================================
+                //  دوال الحماية والجلسة
+                // =================================================================
+                const checkPasscode = () => {
+                    if (loginInput.value === appSettings.value.passcode || !appSettings.value.passcode) {
+                        isLoggedIn.value = true;
+                        loginError.value = false;
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                    } else {
+                        loginError.value = true;
+                        loginInput.value = '';
+                    }
+                };
+
+                const toggleTheme = () => {
+                    isDark.value = !isDark.value;
+                    document.documentElement.classList.toggle('dark', isDark.value);
+                    localStorage.setItem('medicalDarkMode', isDark.value);
+                };
+
+                // =================================================================
+                //  دوال الإعدادات
+                // =================================================================
+                const openSettingsModal = () => {
+                    tempSettings.value = { ...appSettings.value };
+                    showSettingsModal.value = true;
+                };
+
+                const saveSettings = () => {
+                    appSettings.value = { ...tempSettings.value };
+                    localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                    showSettingsModal.value = false;
+                    if (appSettings.value.gsheetUrl) {
+                        silentSync();
+                    }
+                };
+
+                // =================================================================
+                //  دوال جلب البيانات
+                // =================================================================
+                const processExcelData = (workbook) => {
+                    const data = [];
+                    const sheetNames = workbook.SheetNames;
+                    
+                    sheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const json = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
+                        json.forEach(row => {
+                            const cleanRow = {
+                                _id: '_' + Math.random().toString(36).substr(2, 9),
+                                'اسم الجهة': row['اسم الجهة'] || row['اسم الجهة الطبية'] || '',
+                                'التخصص': row['التخصص'] || '',
+                                'المحافظة': row['المحافظة'] || sheetName,
+                                'الفرع': row['الفرع'] || row['الفروع'] || '',
+                                'العنوان': row['العنوان'] || '',
+                                'التليفون': row['التليفون'] || row['رقم التليفون'] || '',
+                                'الحالة': row['الحالة'] || ''
+                            };
+                            if (cleanRow['اسم الجهة']) {
+                                data.push(cleanRow);
+                            }
+                        });
+                    });
+                    
+                    return data;
+                };
+
+                const fetchFromGoogleSheet = async () => {
+                    const url = gsheetInput.value.trim();
+                    if (!url) {
+                        alert('الرجاء إدخال رابط جوجل شيت!');
+                        return;
+                    }
+                    
+                    const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                    if (!match) {
+                        alert('رابط غير صحيح! تأكد من نسخ الرابط بالكامل.');
+                        return;
+                    }
+                    
+                    const sheetId = match[1];
+                    const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+                    
+                    isLoading.value = true;
+                    
+                    try {
+                        const response = await fetch(exportUrl);
+                        if (!response.ok) throw new Error('فشل جلب البيانات');
+                        const arrayBuffer = await response.arrayBuffer();
+                        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                        clinics.value = processExcelData(workbook);
+                        localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                        
+                        const now = new Date();
+                        appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
+                        localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                        
+                        // حفظ رابط جوجل شيت في الإعدادات
+                        if (!appSettings.value.gsheetUrl) {
+                            appSettings.value.gsheetUrl = url;
+                            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                        }
+                        
+                    } catch (error) {
+                        console.error('خطأ:', error);
+                        alert('حدث خطأ أثناء جلب البيانات. تأكد من الرابط وإعدادات المشاركة.');
+                    } finally {
+                        isLoading.value = false;
+                    }
+                };
+
+                // =================================================================
+                //  المزامنة الصامتة (Silent Sync)
+                // =================================================================
+                const silentSync = async () => {
+                    const url = appSettings.value.gsheetUrl;
+                    if (!url) return;
+                    
+                    const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                    if (!match) return;
+                    
+                    const sheetId = match[1];
+                    const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+                    
+                    try {
+                        const response = await fetch(exportUrl);
+                        if (!response.ok) throw new Error('فشل التحديث');
+                        const arrayBuffer = await response.arrayBuffer();
+                        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                        const newData = processExcelData(workbook);
+                        if (newData.length > 0) {
+                            clinics.value = newData;
+                            localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                            const now = new Date();
+                            appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
+                            localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                        }
+                    } catch (error) {
+                        console.error('خطأ في المزامنة:', error);
+                    }
+                };
+
+                // =================================================================
+                //  دوال الإدارة (CRUD)
+                // =================================================================
+                const openEditModal = (clinic) => {
+                    editingClinic.value = { ...clinic };
+                    showEditModal.value = true;
+                };
+
+                const saveEdit = () => {
+                    if (!editingClinic.value) return;
+                    const index = clinics.value.findIndex(c => c._id === editingClinic.value._id);
+                    if (index !== -1) {
+                        clinics.value[index] = { ...editingClinic.value };
+                        localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                    }
+                    showEditModal.value = false;
+                    editingClinic.value = null;
+                };
+
+                const toggleClinicStatus = (clinic) => {
+                    clinic['الحالة'] = clinic['الحالة'] === 'معطل' ? '' : 'معطل';
+                    localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                };
+
+                const deleteClinic = (id) => {
+                    if (confirm('هل أنت متأكد من حذف هذا الفرع نهائياً؟')) {
+                        clinics.value = clinics.value.filter(c => c._id !== id);
+                        localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                    }
+                };
+
+                // =================================================================
+                //  دوال المساعدة (واتساب وخريطة)
+                // =================================================================
+                const isMobileNumber = (phone) => {
+                    const digits = phone ? phone.replace(/\D/g, '') : '';
+                    return /^(010|011|012|015)\d{8}$/.test(digits);
+                };
+
+                const getWaLink = (phone) => {
+                    if (!phone) return null;
+                    const digits = phone.replace(/\D/g, '');
+                    if (!isMobileNumber(phone)) return null;
+                    const waNumber = '20' + digits.substring(1);
+                    return `https://wa.me/${waNumber}`;
+                };
+
+                const getMapLink = (clinic) => {
+                    const query = encodeURIComponent([clinic['اسم الجهة'], clinic['المحافظة'], clinic['العنوان']].join(' '));
+                    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+                };
+
+                // =================================================================
+                //  دوال الإحصائيات (Chart.js)
+                // =================================================================
+                let govChartInstance = null;
+                let specChartInstance = null;
+
+                const generateAnalytics = () => {
+                    setTimeout(() => {
+                        const govCtx = document.getElementById('govChart');
+                        const specCtx = document.getElementById('specChart');
+                        if (!govCtx || !specCtx) return;
+
+                        if (govChartInstance) { govChartInstance.destroy(); govChartInstance = null; }
+                        if (specChartInstance) { specChartInstance.destroy(); specChartInstance = null; }
+
+                        const activeData = clinics.value.filter(c => c['الحالة'] !== 'معطل');
+                        const govCounts = {};
+                        const specCounts = {};
+
+                        activeData.forEach(c => {
+                            if (c['المحافظة']) govCounts[c['المحافظة']] = (govCounts[c['المحافظة']] || 0) + 1;
+                            if (c['التخصص']) specCounts[c['التخصص']] = (specCounts[c['التخصص']] || 0) + 1;
+                        });
+
+                        const textColor = isDark.value ? '#e2e8f0' : '#475569';
+                        const gridColor = isDark.value ? '#334155' : '#e2e8f0';
+
+                        // رسم المحافظات (Bar Chart)
+                        govChartInstance = new Chart(govCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: Object.keys(govCounts),
+                                datasets: [{
+                                    label: 'عدد الجهات',
+                                    data: Object.values(govCounts),
+                                    backgroundColor: '#C5A880',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { display: false },
+                                    title: { display: true, text: 'توزيع الجهات حسب المحافظة', color: textColor, font: { family: 'Cairo', size: 14 } }
+                                },
+                                scales: {
+                                    y: { ticks: { color: textColor }, grid: { color: gridColor } },
+                                    x: { ticks: { color: textColor }, grid: { display: false } }
+                                }
+                            }
+                        });
+
+                        // أكثر 10 تخصصات (Doughnut Chart)
+                        const sortedSpecs = Object.entries(specCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+                        const colors = ['#C5A880', '#0284C7', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#EC4899', '#14B8A6', '#F97316', '#6366F1'];
+
+                        specChartInstance = new Chart(specCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: sortedSpecs.map(s => s[0]),
+                                datasets: [{
+                                    data: sortedSpecs.map(s => s[1]),
+                                    backgroundColor: colors.slice(0, sortedSpecs.length),
+                                    borderColor: isDark.value ? '#0F172A' : '#fff',
+                                    borderWidth: isDark.value ? 2 : 0
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'right', labels: { color: textColor, font: { family: 'Cairo' } } },
+                                    title: { display: true, text: 'أكثر 10 تخصصات', color: textColor, font: { family: 'Cairo', size: 14 } }
+                                }
+                            }
+                        });
+                    }, 100);
+                };
+
+                // =================================================================
+                //  تصدير PDF الفاخر
+                // =================================================================
+                const exportToPDF = () => {
+                    if (filteredClinics.value.length === 0) {
+                        alert("لا توجد بيانات لتصديرها. قم بالبحث أولاً.");
+                        return;
+                    }
+
+                    const container = document.getElementById('pdf-export-container');
+                    container.style.display = 'block';
+                    container.innerHTML = '';
+
+                    let html = `
+                    <div style="font-family: 'Cairo', sans-serif; direction: rtl; padding: 30px; background-color: #FDFBF7; color: #0F172A; max-width: 1200px; margin: 0 auto;">
+                        <div style="text-align: center; border-bottom: 3px solid #C5A880; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="color: #0F172A; font-size: 32px; margin: 0; font-weight: 900;">${appSettings.value.title}</h1>
+                            <p style="color: #C5A880; font-size: 18px; margin: 10px 0; font-weight: 600;">${appSettings.value.desc}</p>
+                            <p style="color: #64748B; font-size: 12px;">${appSettings.value.lastUpdated || new Date().toLocaleDateString('ar-EG')}</p>
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: right;">
+                            <thead>
+                                <tr style="background-color: #0F172A; color: #C5A880;">
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">م</th>
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">اسم الجهة</th>
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">التخصص</th>
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">المحافظة</th>
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">العنوان</th>
+                                    <th style="padding: 12px; border: 1px solid #E2E8F0;">التليفون</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    filteredClinics.value.forEach((clinic, index) => {
+                        const bg = index % 2 === 0 ? '#FFFFFF' : '#F8FAFC';
+                        html += `
+                            <tr style="background-color: ${bg};">
+                                <td style="padding: 10px; border: 1px solid #E2E8F0; text-align: center;">${index + 1}</td>
+                                <td style="padding: 10px; border: 1px solid #E2E8F0; font-weight: bold;">${clinic['اسم الجهة'] || ''}</td>
+                                <td style="padding: 10px; border: 1px solid #E2E8F0;">${clinic['التخصص'] || ''}</td>
+                                <td style="padding: 10px; border: 1px solid #E2E8F0;">${clinic['المحافظة'] || ''}</td>
+                                <td style="padding: 10px; border: 1px solid #E2E8F0;">${clinic['العنوان'] || ''}</td>
+                                <td style="padding: 10px; border: 1px solid #E2E8F0; direction: ltr; text-align: right;">${clinic['التليفون'] || ''}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                            </tbody>
+                        </table>
+                        <div style="text-align: center; margin-top: 30px; padding-top: 15px; border-top: 2px dashed #CBD5E1; color: #94A3B8; font-size: 11px;">
+                            <p>تم إنشاء هذا الدليل آلياً - ${appSettings.value.title}</p>
+                            <p>${appSettings.value.lastUpdated || ''}</p>
+                        </div>
+                    </div>`;
+
+                    container.innerHTML = html;
+
+                    const opt = {
+                        margin: 10,
+                        filename: 'الدليل_الطبي_الداخلي.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                    };
+
+                    html2pdf().set(opt).from(container).save().then(() => {
+                        container.style.display = 'none';
+                        container.innerHTML = '';
+                    }).catch(err => {
+                        console.error('PDF Error:', err);
+                        alert('حدث خطأ أثناء إنشاء ملف الـ PDF.');
+                        container.style.display = 'none';
+                        container.innerHTML = '';
+                    });
+                };
+
+                // =================================================================
+                //  إعداد Pusher (للتحديث اللحظي)
+                // =================================================================
+                const setupPusher = () => {
+                    try {
+                        // سيتم استبدال {{PUSHER_KEY}} و {{PUSHER_CLUSTER}} تلقائياً عبر GitHub Actions
+                        const PUSHER_KEY = '{{PUSHER_KEY}}';
+                        const PUSHER_CLUSTER = '{{PUSHER_CLUSTER}}';
+                        
+                        if (PUSHER_KEY && PUSHER_KEY !== '{{PUSHER_KEY}}') {
+                            const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER });
+                            const channel = pusher.subscribe('medical-directory');
+                            channel.bind('data-updated', function(data) {
+                                console.log("📩 إشعار وارد من Pusher:", data);
+                                // تحديث البيانات في الخلفية
+                                silentSync();
+                            });
+                        } else {
+                            console.log("⚠️ Pusher not configured - please set PUSHER_KEY and PUSHER_CLUSTER in GitHub Secrets");
+                        }
+                    } catch (e) {
+                        console.log("⚠️ Pusher configuration error:", e);
+                    }
+                };
+
+                // =================================================================
+                //  دورة حياة التطبيق (Lifecycle Hooks)
+                // =================================================================
+                onMounted(() => {
+                    // استرجاع الوضع الليلي
+                    const savedTheme = localStorage.getItem('medicalDarkMode');
+                    if (savedTheme === 'true') {
+                        isDark.value = true;
+                        document.documentElement.classList.add('dark');
+                    }
+
+                    // استرجاع الإعدادات
+                    const savedSettings = localStorage.getItem('medicalAppSettings');
+                    if (savedSettings) {
+                        try {
+                            const parsed = JSON.parse(savedSettings);
+                            appSettings.value = { ...appSettings.value, ...parsed };
+                        } catch (e) { console.error('خطأ في قراءة الإعدادات'); }
+                    }
+
+                    // التحقق من تسجيل الدخول
+                    if (sessionStorage.getItem('isLoggedIn') === 'true' || !appSettings.value.passcode) {
+                        isLoggedIn.value = true;
+                    }
+
+                    // استرجاع البيانات
+                    const savedData = localStorage.getItem('medicalDirectoryData');
+                    if (savedData) {
+                        try {
+                            clinics.value = JSON.parse(savedData);
+                            setupPusher();
+                        } catch (e) { console.error('خطأ في قراءة البيانات'); }
+                    }
+
+                    // ============================================================
+                    //  تسجيل Service Worker (PWA)
+                    // ============================================================
+                    if ('serviceWorker' in navigator) {
+                        window.addEventListener('load', () => {
+                            navigator.serviceWorker.register('./service-worker.js')
+                                .then(registration => {
+                                    console.log('✅ Service Worker مسجل بنجاح:', registration.scope);
+                                })
+                                .catch(err => {
+                                    console.log('❌ فشل تسجيل Service Worker:', err);
+                                });
+                        });
+                    }
+                });
+
+                // =================================================================
+                //  إرجاع كل المتغيرات والدوال
+                // =================================================================
+                return {
+                    // State
+                    isDark, isLoggedIn, isAdminMode, isLoading, 
+                    loginInput, loginError, gsheetInput,
+                    clinics, appSettings, tempSettings,
+                    searchQuery, selectedGovs, selectedSpecs,
+                    govOpen, specOpen, govSearch, specSearch,
+                    showSettingsModal, showAnalyticsModal, showEditModal, editingClinic,
+                    
+                    // Computed
+                    hasData, activeClinicsCount, uniqueGovs, uniqueSpecs,
+                    filteredGovOptions, filteredSpecOptions,
+                    govHeaderText, specHeaderText, filteredClinics,
+                    
+                    // Methods
+                    checkPasscode, toggleTheme, debounceSearch, applyFilters, clearFilters,
+                    openSettingsModal, saveSettings,
+                    fetchFromGoogleSheet, silentSync,
+                    openEditModal, saveEdit, toggleClinicStatus, deleteClinic,
+                    getWaLink, getMapLink,
+                    generateAnalytics, exportToPDF
+                };
             }
         });
-        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-        // ========================================================================
-        //  إعادة رسم الإحصائيات عند تغيير حجم الشاشة
-        // ========================================================================
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (document.getElementById('analytics-modal').style.display === 'flex') {
-                    generateAnalytics();
-                }
-            }, 300);
-        });
+        app.mount('#app');
     </script>
 </body>
 </html>
