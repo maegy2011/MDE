@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -24,22 +24,24 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
       
-      # ============================================================
-      #  حقن المفاتيح السرية في ملف index.html
-      # ============================================================
-      
-      - name: Inject Pusher Secrets
+      - name: Inject Secrets into HTML
         run: |
           sed -i 's/{{PUSHER_KEY}}/${{ secrets.PUSHER_KEY }}/g' index.html
           sed -i 's/{{PUSHER_CLUSTER}}/${{ secrets.PUSHER_CLUSTER }}/g' index.html
-      
-      - name: Inject Google Analytics Measurement ID
-        run: |
           sed -i 's/{{GA_MEASUREMENT_ID}}/${{ secrets.GA_MEASUREMENT_ID }}/g' index.html
+
+      - name: Update Service Worker Cache Version
+        run: |
+          sed -i "s/medical-app-v3-pro/medical-app-${{ github.sha }}/g" service-worker.js
       
-      # ============================================================
-      #  إعداد ونشر الموقع على GitHub Pages
-      # ============================================================
+      - name: Prepare Deployment Folder
+        run: |
+          mkdir dist
+          cp index.html dist/
+          cp manifest.json dist/ || true
+          cp service-worker.js dist/ || true
+          cp *.png dist/ || true
+          cp *.ico dist/ || true
       
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
@@ -47,7 +49,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'dist'
           
       - name: Deploy to GitHub Pages
         id: deployment
