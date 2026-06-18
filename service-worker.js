@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medical-app-v3.8.1';
+const CACHE_NAME = 'medical-app-v3.9';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
