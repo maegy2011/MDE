@@ -65,7 +65,7 @@
         </div>
 
         <!-- ================================================================ -->
-        <!-- 1. الهيدر الفاخر (تدرج كحلي مع إطار ذهبي) -->
+        <!-- 1. الهيدر الفاخر -->
         <!-- ================================================================ -->
         <header class="sticky top-0 z-40 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b-[4px] border-gold text-white px-6 py-3 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4 w-full md:w-auto">
@@ -305,7 +305,7 @@
         </main>
 
         <!-- ================================================================ -->
-        <!-- 3. الفوتر الفاخر (تدرج كحلي مع إطار ذهبي) -->
+        <!-- 3. الفوتر الفاخر -->
         <!-- ================================================================ -->
         <footer class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-t-[4px] border-gold text-slate-300 text-sm px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-3 mt-auto shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]">
             <div class="flex items-center gap-2 font-bold">
@@ -787,7 +787,7 @@
                 };
 
                 // =================================================================
-                //  تصدير PDF الفاخر (مع غلاف وتكرار الهيدر والفوتر)
+                //  تصدير PDF (مع غلاف وفاصل صفحة صحيح)
                 // =================================================================
                 const exportToPDF = () => {
                     if (filteredClinics.value.length === 0) return alert("لا توجد بيانات لتصديرها.");
@@ -795,16 +795,15 @@
                     container.style.display = 'block';
                     container.innerHTML = '';
                     const dateStr = appSettings.value.lastUpdated || new Date().toLocaleDateString('ar-EG');
-                    const logoHtml = appSettings.value.logo ? `<img src="${appSettings.value.logo}" style="max-height:100px;margin-bottom:20px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);">` : '';
-                    const watermark = appSettings.value.logo ? `<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.03;z-index:-1;pointer-events:none;"><img src="${appSettings.value.logo}" style="width:700px;filter:grayscale(100%);"></div>` : '';
-                    let html = `<div style="font-family:'Cairo',sans-serif;direction:rtl;background-color:#FDFBF7;color:#0F172A;width:100%;">${watermark}<div style="page-break-after:always;height:95vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);color:#C5A880;border:12px solid #C5A880;padding:50px;text-align:center;box-sizing:border-box;position:relative;">${logoHtml}<h1 style="font-size:54px;font-weight:900;margin:20px 0;color:#FFFFFF;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">${appSettings.value.title}</h1><h2 style="font-size:28px;font-weight:700;margin:0 0 40px 0;color:#C5A880;">وثيقة داخلية - وزارة العدل</h2><div style="width:150px;height:5px;background-color:#C5A880;margin:20px auto;border-radius:5px;"></div><p style="font-size:20px;color:#94A3B8;margin-top:40px;max-width:80%;line-height:1.6;">${appSettings.value.desc}</p><div style="position:absolute;bottom:40px;left:0;right:0;text-align:center;"><p style="font-size:16px;color:#64748B;font-weight:bold;">تاريخ الإصدار: ${dateStr}</p></div></div><table style="width:100%;border-collapse:collapse;font-size:13px;text-align:right;"><thead style="display:table-header-group;"><tr><td colspan="6" style="padding:0 0 15px 0;border-bottom:4px solid #C5A880;margin-bottom:20px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><h3 style="margin:0;font-size:22px;font-weight:900;color:#0F172A;">${appSettings.value.title}</h3><span style="color:#C5A880;font-size:13px;font-weight:bold;">وثيقة داخلية</span></div>${appSettings.value.logo?`<img src="${appSettings.value.logo}" style="height:45px;border-radius:4px;">`:''}</div></td></tr><tr style="background-color:#0F172A;color:#C5A880;"><th style="padding:14px 10px;border:1px solid #C5A880;width:5%;">م</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">اسم الجهة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التخصص</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">المحافظة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">العنوان</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التليفون</th></tr></thead><tfoot style="display:table-footer-group;"><tr><td colspan="6" style="padding:15px 0 0 0;border-top:3px solid #C5A880;text-align:center;color:#64748B;font-size:12px;font-weight:bold;">تم إنشاء هذا الدليل آلياً | ${dateStr}</td></tr></tfoot><tbody>`;
+                    const logoHtml = appSettings.value.logo ? `<img src="${appSettings.value.logo}" style="max-height:120px;margin-bottom:30px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.5);">` : '';
+                    let html = `<div style="font-family:'Cairo',sans-serif;direction:rtl;background-color:#FDFBF7;color:#0F172A;width:100%;"><div style="height:188mm;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);border:10px solid #C5A880;padding:40px;box-sizing:border-box;text-align:center;position:relative;">${logoHtml}<h1 style="font-size:55px;font-weight:900;margin:0 0 20px 0;color:#FFFFFF;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">${appSettings.value.title}</h1><h2 style="font-size:28px;font-weight:700;margin:0 0 30px 0;color:#C5A880;">وثيقة داخلية - وزارة العدل</h2><div style="width:150px;height:5px;background-color:#C5A880;margin:0 auto 30px auto;border-radius:3px;"></div><p style="font-size:20px;color:#94A3B8;max-width:80%;line-height:1.6;">${appSettings.value.desc}</p><div style="position:absolute;bottom:30px;left:0;right:0;text-align:center;"><p style="font-size:16px;color:#64748B;font-weight:bold;">تاريخ الإصدار: ${dateStr}</p></div></div><div class="html2pdf__page-break"></div><div><table style="width:100%;border-collapse:collapse;font-size:13px;text-align:right;"><thead style="display:table-header-group;"><tr><td colspan="6" style="padding:0 0 15px 0;border-bottom:4px solid #C5A880;margin-bottom:20px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><h3 style="margin:0;font-size:22px;font-weight:900;color:#0F172A;">${appSettings.value.title}</h3><span style="color:#C5A880;font-size:13px;font-weight:bold;">وثيقة داخلية</span></div>${appSettings.value.logo?`<img src="${appSettings.value.logo}" style="height:45px;border-radius:4px;">`:''}</div></td></tr><tr style="background-color:#0F172A;color:#C5A880;"><th style="padding:14px 10px;border:1px solid #C5A880;width:5%;">م</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">اسم الجهة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التخصص</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">المحافظة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">العنوان</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التليفون</th></tr></thead><tfoot style="display:table-footer-group;"><tr><td colspan="6" style="padding:15px 0 0 0;border-top:3px solid #C5A880;text-align:center;color:#64748B;font-size:12px;font-weight:bold;">تم إنشاء هذا الدليل آلياً | ${dateStr}</td></tr></tfoot><tbody>`;
                     filteredClinics.value.forEach((clinic, index) => {
                         const bg = index % 2 === 0 ? '#FFFFFF' : '#FDFBF7';
                         html += `<tr style="background-color:${bg};page-break-inside:avoid;"><td style="padding:12px 10px;border:1px solid #E2E8F0;text-align:center;font-weight:900;color:#0F172A;">${index+1}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;font-weight:bold;color:#0F172A;">${clinic['اسم الجهة']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;font-weight:600;">${clinic['التخصص']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;font-weight:600;">${clinic['المحافظة']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;">${clinic['العنوان']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;direction:ltr;text-align:right;color:#0F172A;font-weight:bold;">${clinic['التليفون']||''}</td></tr>`;
                     });
-                    html += `</tbody></table></div>`;
+                    html += `</tbody></table></div></div>`;
                     container.innerHTML = html;
-                    const opt = { margin: [10, 10, 10, 10], filename: 'الدليل_الطبي_الداخلي.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
+                    const opt = { margin: 10, filename: 'الدليل_الطبي_الداخلي.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }, pagebreak: { mode: ['css', 'legacy'] } };
                     html2pdf().set(opt).from(container).save().then(() => { container.style.display = 'none'; container.innerHTML = ''; });
                 };
 
