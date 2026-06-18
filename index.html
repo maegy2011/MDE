@@ -640,8 +640,27 @@
                 };
 
                 // =================================================================
-                //  دوال جلب البيانات
+                //  دوال جلب البيانات (محدثة لتخطي حظر CORS)
                 // =================================================================
+                
+                // دالة مساعدة لتخطي حظر المتصفح باستخدام خوادم وسيطة (Proxies)
+                const fetchWithProxy = async (targetUrl) => {
+                    const proxies = [
+                        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+                        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`
+                    ];
+                    
+                    for (const proxy of proxies) {
+                        try {
+                            const response = await fetch(proxy);
+                            if (response.ok) return response;
+                        } catch (e) {
+                            console.warn('Proxy failed:', proxy);
+                        }
+                    }
+                    throw new Error('فشل الاتصال بجوجل شيت بسبب حماية المتصفح (CORS).');
+                };
+
                 const processExcelData = (workbook) => {
                     const data = [];
                     workbook.SheetNames.forEach(sheetName => {
@@ -695,20 +714,25 @@
                     if (!match) return alert('رابط غير صحيح!');
                     const sheetId = match[1];
                     const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+                    
                     isLoading.value = true;
                     try {
-                        const response = await fetch(exportUrl);
-                        if (!response.ok) throw new Error('فشل جلب البيانات');
+                        const response = await fetchWithProxy(exportUrl);
                         const arrayBuffer = await response.arrayBuffer();
                         const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                        
                         clinics.value = processExcelData(workbook);
                         localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
+                        
                         const now = new Date();
                         appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
                         if (!appSettings.value.gsheetUrl) appSettings.value.gsheetUrl = url;
                         localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
+                        
+                        alert('تم جلب البيانات بنجاح! 🚀');
                     } catch (error) {
-                        alert('حدث خطأ أثناء جلب البيانات.');
+                        console.error(error);
+                        alert('حدث خطأ أثناء جلب البيانات. تأكد من أن إعدادات مشاركة الشيت هي (Anyone with link).');
                     } finally {
                         isLoading.value = false;
                     }
@@ -721,12 +745,13 @@
                     if (!match) return;
                     const sheetId = match[1];
                     const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+                    
                     try {
-                        const response = await fetch(exportUrl);
-                        if (!response.ok) throw new Error('فشل التحديث');
+                        const response = await fetchWithProxy(exportUrl);
                         const arrayBuffer = await response.arrayBuffer();
                         const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
                         const newData = processExcelData(workbook);
+                        
                         if (newData.length > 0) {
                             clinics.value = newData;
                             localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
