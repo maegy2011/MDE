@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medical-app-v3.6';
+const CACHE_NAME = 'medical-app-v3.7';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -9,7 +9,8 @@ const ASSETS_TO_CACHE = [
     'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
     'https://js.pusher.com/8.2.0/pusher.min.js',
-    'https://cdn.jsdelivr.net/npm/chart.js'
+    'https://cdn.jsdelivr.net/npm/chart.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
 
 self.addEventListener('install', event => {
@@ -38,7 +39,6 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    // تجاهل طلبات الـ API من الكاش (لأنها تتغير دائماً)
     if (event.request.url.includes('script.google.com')) return;
     if (event.request.url.includes('pusher.com')) return;
     if (event.request.url.includes('google-analytics.com')) return;
