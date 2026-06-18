@@ -51,9 +51,11 @@
         .transition-all { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+<body class="bg-[#FDFBF7] text-slate-800 transition-colors duration-300 flex flex-col min-h-screen relative" style="background-image: radial-gradient(#C5A880 0.5px, transparent 0.5px); background-size: 20px 20px;">
 
     <div id="app" class="flex flex-col min-h-screen w-full relative">
 
@@ -63,36 +65,34 @@
         </div>
 
         <!-- ================================================================ -->
-        <!-- 1. الهيدر المضغوط (بدون شرط تسجيل الدخول) -->
+        <!-- 1. الهيدر الفاخر (تدرج كحلي مع إطار ذهبي) -->
         <!-- ================================================================ -->
-        <header class="sticky top-0 z-10 bg-slate-900 border-b-2 border-gold text-white px-4 py-2 shadow-md flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3 w-full md:w-auto">
-                <img v-if="appSettings.logo" :src="appSettings.logo" class="h-8 rounded">
-                <svg v-else class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                    <path d="M12 7v10"/><path d="M7 12h10"/>
+        <header class="sticky top-0 z-40 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b-[4px] border-gold text-white px-6 py-3 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <img v-if="appSettings.logo" :src="appSettings.logo" class="h-10 rounded shadow-sm">
+                <svg v-else class="w-8 h-8 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
                 <div>
-                    <h1 class="text-base font-bold leading-none">{{ appSettings.title }}</h1>
-                    <p class="text-[10px] text-slate-400">{{ appSettings.desc }}</p>
+                    <h1 class="text-lg font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-l from-gold to-yellow-200">{{ appSettings.title }}</h1>
+                    <p class="text-xs text-slate-300 font-semibold">{{ appSettings.desc }}</p>
                 </div>
             </div>
-
             <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 hide-scrollbar">
                 <template v-if="hasData">
-                    <button @click="silentSync" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 whitespace-nowrap transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <button @click="silentSync" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded bg-slate-800/80 hover:bg-slate-700 border border-slate-600 whitespace-nowrap transition-all">
+                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/>
                         </svg> تحديث
                     </button>
-                    <button @click="isAdminMode = !isAdminMode" :class="isAdminMode ? 'bg-green-600 border-green-600' : 'bg-slate-800 border-slate-800'" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded border hover:bg-opacity-80 whitespace-nowrap transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <button @click="isAdminMode=!isAdminMode" :class="isAdminMode?'bg-green-700 border-green-600':'bg-slate-800/80 border-slate-600'" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded border hover:bg-opacity-80 whitespace-nowrap transition-all">
+                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="3"/>
                             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                         </svg> الإدارة
                     </button>
-                    <button @click="exportToPDF" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-red-600 hover:bg-red-700 whitespace-nowrap transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <button @click="exportToPDF" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded bg-red-700 hover:bg-red-800 border border-red-600 whitespace-nowrap transition-all">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                             <line x1="16" y1="13" x2="8" y2="13"/>
@@ -100,8 +100,8 @@
                             <polyline points="10 9 9 9 8 9"/>
                         </svg> PDF
                     </button>
-                    <button @click="exportToExcel" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-green-600 hover:bg-green-700 whitespace-nowrap transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <button @click="exportToExcel" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded bg-emerald-700 hover:bg-emerald-800 border border-emerald-600 whitespace-nowrap transition-all">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                             <line x1="8" y1="13" x2="16" y2="13"/>
@@ -109,15 +109,14 @@
                             <polyline points="10 9 9 9 8 9"/>
                         </svg> Excel
                     </button>
-
                     <template v-if="isAdminMode">
-                        <button @click="showAnalyticsModal = true; generateAnalytics()" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-purple-600 hover:bg-purple-700 whitespace-nowrap transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <button @click="showAnalyticsModal=true;generateAnalytics()" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded bg-purple-700 hover:bg-purple-800 border border-purple-600 whitespace-nowrap transition-all">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M18 20V10M12 20V4M6 20v-6"/>
                             </svg> إحصائيات
                         </button>
-                        <button @click="openSettingsModal" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-blue-600 hover:bg-blue-700 whitespace-nowrap transition-all">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <button @click="openSettingsModal" class="flex items-center gap-1 px-4 py-2 text-xs font-bold rounded bg-blue-700 hover:bg-blue-800 border border-blue-600 whitespace-nowrap transition-all">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg> إعدادات
@@ -128,7 +127,7 @@
         </header>
 
         <!-- ================================================================ -->
-        <!-- 2. المحتوى الرئيسي (بدون شرط تسجيل الدخول) -->
+        <!-- 2. المحتوى الرئيسي -->
         <!-- ================================================================ -->
         <main class="flex-1 w-full max-w-7xl mx-auto p-4 relative z-10">
 
@@ -306,16 +305,16 @@
         </main>
 
         <!-- ================================================================ -->
-        <!-- 3. الفوتر (بدون شرط تسجيل الدخول) -->
+        <!-- 3. الفوتر الفاخر (تدرج كحلي مع إطار ذهبي) -->
         <!-- ================================================================ -->
-        <footer class="bg-slate-900 border-t-2 border-gold text-slate-400 text-xs p-2 flex flex-col md:flex-row justify-between items-center gap-2 mt-auto relative z-10">
-            <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <footer class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-t-[4px] border-gold text-slate-300 text-sm px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-3 mt-auto shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]">
+            <div class="flex items-center gap-2 font-bold">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
                 <span>وثيقة داخلية مؤمنة</span>
             </div>
-            <span>{{ appSettings.lastUpdated || 'نسخة محدثة' }}</span>
+            <span class="font-semibold text-gold">{{ appSettings.lastUpdated || 'نسخة محدثة' }}</span>
         </footer>
 
         <!-- ================================================================ -->
@@ -788,21 +787,24 @@
                 };
 
                 // =================================================================
-                //  تصدير PDF (مع العلامة المائية)
+                //  تصدير PDF الفاخر (مع غلاف وتكرار الهيدر والفوتر)
                 // =================================================================
                 const exportToPDF = () => {
                     if (filteredClinics.value.length === 0) return alert("لا توجد بيانات لتصديرها.");
                     const container = document.getElementById('pdf-export-container');
                     container.style.display = 'block';
                     container.innerHTML = '';
-                    let html = `<div style="font-family:'Cairo',sans-serif;direction:rtl;padding:30px;background-color:#FDFBF7;color:#0F172A;max-width:1200px;margin:0 auto;position:relative;z-index:1;">${appSettings.value.logo?`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.05;z-index:-1;pointer-events:none;"><img src="${appSettings.value.logo}" style="width:500px;filter:grayscale(100%);"></div>`:''}<div style="text-align:center;border-bottom:3px solid #C5A880;padding-bottom:20px;margin-bottom:30px;"><h1 style="color:#0F172A;font-size:32px;margin:0;font-weight:900;">${appSettings.value.title}</h1><p style="color:#C5A880;font-size:18px;margin:10px 0;font-weight:600;">${appSettings.value.desc}</p><p style="color:#64748B;font-size:12px;">${appSettings.value.lastUpdated||new Date().toLocaleDateString('ar-EG')}</p></div><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right;"><thead><tr style="background-color:#0F172A;color:#C5A880;"><th style="padding:12px;border:1px solid #E2E8F0;">م</th><th style="padding:12px;border:1px solid #E2E8F0;">اسم الجهة</th><th style="padding:12px;border:1px solid #E2E8F0;">التخصص</th><th style="padding:12px;border:1px solid #E2E8F0;">المحافظة</th><th style="padding:12px;border:1px solid #E2E8F0;">العنوان</th><th style="padding:12px;border:1px solid #E2E8F0;">التليفون</th></tr></thead><tbody>`;
+                    const dateStr = appSettings.value.lastUpdated || new Date().toLocaleDateString('ar-EG');
+                    const logoHtml = appSettings.value.logo ? `<img src="${appSettings.value.logo}" style="max-height:100px;margin-bottom:20px;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.3);">` : '';
+                    const watermark = appSettings.value.logo ? `<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.03;z-index:-1;pointer-events:none;"><img src="${appSettings.value.logo}" style="width:700px;filter:grayscale(100%);"></div>` : '';
+                    let html = `<div style="font-family:'Cairo',sans-serif;direction:rtl;background-color:#FDFBF7;color:#0F172A;width:100%;">${watermark}<div style="page-break-after:always;height:95vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);color:#C5A880;border:12px solid #C5A880;padding:50px;text-align:center;box-sizing:border-box;position:relative;">${logoHtml}<h1 style="font-size:54px;font-weight:900;margin:20px 0;color:#FFFFFF;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">${appSettings.value.title}</h1><h2 style="font-size:28px;font-weight:700;margin:0 0 40px 0;color:#C5A880;">وثيقة داخلية - وزارة العدل</h2><div style="width:150px;height:5px;background-color:#C5A880;margin:20px auto;border-radius:5px;"></div><p style="font-size:20px;color:#94A3B8;margin-top:40px;max-width:80%;line-height:1.6;">${appSettings.value.desc}</p><div style="position:absolute;bottom:40px;left:0;right:0;text-align:center;"><p style="font-size:16px;color:#64748B;font-weight:bold;">تاريخ الإصدار: ${dateStr}</p></div></div><table style="width:100%;border-collapse:collapse;font-size:13px;text-align:right;"><thead style="display:table-header-group;"><tr><td colspan="6" style="padding:0 0 15px 0;border-bottom:4px solid #C5A880;margin-bottom:20px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><h3 style="margin:0;font-size:22px;font-weight:900;color:#0F172A;">${appSettings.value.title}</h3><span style="color:#C5A880;font-size:13px;font-weight:bold;">وثيقة داخلية</span></div>${appSettings.value.logo?`<img src="${appSettings.value.logo}" style="height:45px;border-radius:4px;">`:''}</div></td></tr><tr style="background-color:#0F172A;color:#C5A880;"><th style="padding:14px 10px;border:1px solid #C5A880;width:5%;">م</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">اسم الجهة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التخصص</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">المحافظة</th><th style="padding:14px 10px;border:1px solid #C5A880;width:25%;">العنوان</th><th style="padding:14px 10px;border:1px solid #C5A880;width:15%;">التليفون</th></tr></thead><tfoot style="display:table-footer-group;"><tr><td colspan="6" style="padding:15px 0 0 0;border-top:3px solid #C5A880;text-align:center;color:#64748B;font-size:12px;font-weight:bold;">تم إنشاء هذا الدليل آلياً | ${dateStr}</td></tr></tfoot><tbody>`;
                     filteredClinics.value.forEach((clinic, index) => {
-                        const bg = index % 2 === 0 ? '#FFFFFF' : '#F8FAFC';
-                        html += `<tr style="background-color:${bg};"><td style="padding:10px;border:1px solid #E2E8F0;text-align:center;">${index+1}</td><td style="padding:10px;border:1px solid #E2E8F0;font-weight:bold;">${clinic['اسم الجهة']||''}</td><td style="padding:10px;border:1px solid #E2E8F0;">${clinic['التخصص']||''}</td><td style="padding:10px;border:1px solid #E2E8F0;">${clinic['المحافظة']||''}</td><td style="padding:10px;border:1px solid #E2E8F0;">${clinic['العنوان']||''}</td><td style="padding:10px;border:1px solid #E2E8F0;direction:ltr;text-align:right;">${clinic['التليفون']||''}</td></tr>`;
+                        const bg = index % 2 === 0 ? '#FFFFFF' : '#FDFBF7';
+                        html += `<tr style="background-color:${bg};page-break-inside:avoid;"><td style="padding:12px 10px;border:1px solid #E2E8F0;text-align:center;font-weight:900;color:#0F172A;">${index+1}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;font-weight:bold;color:#0F172A;">${clinic['اسم الجهة']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;font-weight:600;">${clinic['التخصص']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;font-weight:600;">${clinic['المحافظة']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;color:#334155;">${clinic['العنوان']||''}</td><td style="padding:12px 10px;border:1px solid #E2E8F0;direction:ltr;text-align:right;color:#0F172A;font-weight:bold;">${clinic['التليفون']||''}</td></tr>`;
                     });
-                    html += `</tbody></table><div style="text-align:center;margin-top:30px;padding-top:15px;border-top:2px dashed #CBD5E1;color:#94A3B8;font-size:11px;"><p>تم إنشاء هذا الدليل آلياً - ${appSettings.value.title}</p><p>${appSettings.value.lastUpdated||''}</p></div></div>`;
+                    html += `</tbody></table></div>`;
                     container.innerHTML = html;
-                    const opt = { margin: 10, filename: 'الدليل_الطبي_الداخلي.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
+                    const opt = { margin: [10, 10, 10, 10], filename: 'الدليل_الطبي_الداخلي.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
                     html2pdf().set(opt).from(container).save().then(() => { container.style.display = 'none'; container.innerHTML = ''; });
                 };
 
