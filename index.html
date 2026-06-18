@@ -55,6 +55,8 @@
         .dark .card-hover:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
         .dark .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        /* تحسين عرض الأيقونات SVG */
+        .card-icon svg { width: 28px; height: 28px; stroke-width: 1.5; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-darkbg text-slate-800 dark:text-slate-200 transition-colors duration-300 flex flex-col min-h-screen">
@@ -278,22 +280,34 @@
                 <!-- شبكة الكروت -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div v-for="clinic in paginatedClinics" :key="clinic._id" 
-                         class="bg-white dark:bg-cardbg p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 card-hover transition-all flex flex-col justify-between relative"
+                         class="bg-white dark:bg-cardbg p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 card-hover transition-all flex flex-col justify-between relative group"
                          :class="clinic['الحالة'] === 'معطل' ? 'opacity-60 border-red-400/30' : ''">
                         
                         <div v-if="isAdminMode && clinic['الحالة'] === 'معطل'" class="absolute top-0 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-bl-xl z-10 font-bold shadow">معطل</div>
                         
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-gold">{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
-                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-2 py-1 rounded-full">{{ clinic['التخصص'] || 'عام' }}</span>
+                        <!-- ===== الهيدر الجديد مع الأيقونة الذكية والتأثير الحركي ===== -->
+                        <div class="flex items-start gap-3 mb-3 cursor-default">
+                            <!-- مربع الأيقونة مع تأثير Hover -->
+                            <div :class="['p-3 rounded-2xl flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3 group-hover:shadow-md card-icon', getSpecialtyConfig(clinic['التخصص']).bgClass, getSpecialtyConfig(clinic['التخصص']).iconColor]" v-html="getSpecialtyConfig(clinic['التخصص']).svg">
                             </div>
+                            
+                            <!-- اسم الجهة والتخصص -->
+                            <div class="flex-1 pt-1">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-gold leading-tight mb-1.5 transition-colors group-hover:text-primary dark:group-hover:text-yellow-500">{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
+                                <span :class="['text-xs px-2.5 py-1 rounded-full font-bold inline-block transition-all duration-300 group-hover:shadow-sm', getSpecialtyConfig(clinic['التخصص']).bgClass, getSpecialtyConfig(clinic['التخصص']).textClass]">
+                                    {{ clinic['التخصص'] || 'عام' }}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- باقي المعلومات -->
+                        <div>
                             <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">المحافظة:</span> {{ clinic['المحافظة'] || '' }}</p>
                             <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">الفرع:</span> {{ clinic['الفرع'] || 'الفرع الرئيسي' }}</p>
                             <p class="text-sm text-slate-500 dark:text-slate-400 mb-3"><span class="font-semibold">العنوان:</span> {{ clinic['العنوان'] || 'غير متوفر' }}</p>
                         </div>
                         
-                        <!-- ===== الأزرار المصححة ===== -->
+                        <!-- ===== الأزرار ===== -->
                         <div class="grid grid-cols-3 gap-2 mt-2">
                             <!-- زر الاتصال الأصلي الآمن -->
                             <a v-if="clinic['التليفون']" :href="'tel:' + clinic['التليفون']" class="p-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
@@ -318,6 +332,7 @@
                             </a>
                         </div>
                         
+                        <!-- أزرار الإدارة -->
                         <div v-if="isAdminMode" class="flex gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
                             <button @click="openEditModal(clinic)" class="flex-1 p-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition-all">تعديل</button>
                             <button @click="toggleClinicStatus(clinic)" class="flex-1 p-1.5 bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-bold rounded-lg transition-all">{{ clinic['الحالة'] === 'معطل' ? 'تفعيل' : 'تعطيل' }}</button>
@@ -544,7 +559,7 @@
                 const clinics = ref([]);
 
                 // =================================================================
-                //  Computed (دون تغيير)
+                //  Computed
                 // =================================================================
                 const hasData = computed(() => clinics.value && clinics.value.length > 0);
                 const activeClinicsCount = computed(() => clinics.value.filter(c => c['الحالة'] !== 'معطل').length);
@@ -852,7 +867,59 @@
                 };
 
                 // =================================================================
-                //  دوال المساعدة (واتساب وخريطة) - النسخة الآمنة
+                //  المحلل الذكي للتخصصات (أيقونات، ألوان، وتصنيفات)
+                // =================================================================
+                const getSpecialtyConfig = (spec) => {
+                    const s = (spec || '').toLowerCase();
+                    
+                    // التصميم الافتراضي (عام)
+                    let config = {
+                        bgClass: 'bg-slate-100 dark:bg-slate-800',
+                        textClass: 'text-slate-700 dark:text-slate-300',
+                        iconColor: 'text-slate-500 dark:text-slate-400',
+                        svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M10 9h4M12 7v4"/></svg>`
+                    };
+
+                    // تصنيف التخصصات
+                    if (s.includes('أسنان') || s.includes('اسنان')) {
+                        config = { bgClass: 'bg-cyan-100 dark:bg-cyan-900/30', textClass: 'text-cyan-700 dark:text-cyan-300', iconColor: 'text-cyan-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c-2.5 0-4.5-2-4.5-4.5V12c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5v5.5c0 2.5-2 4.5-4.5 4.5z"/><path d="M12 22v-4"/></svg>` };
+                    } else if (s.includes('قلب') || s.includes('اوعية') || s.includes('أوعية')) {
+                        config = { bgClass: 'bg-red-100 dark:bg-red-900/30', textClass: 'text-red-700 dark:text-red-300', iconColor: 'text-red-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>` };
+                    } else if (s.includes('عيون') || s.includes('رمد')) {
+                        config = { bgClass: 'bg-blue-100 dark:bg-blue-900/30', textClass: 'text-blue-700 dark:text-blue-300', iconColor: 'text-blue-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>` };
+                    } else if (s.includes('عظام') || s.includes('حروق')) {
+                        config = { bgClass: 'bg-stone-200 dark:bg-stone-800', textClass: 'text-stone-700 dark:text-stone-300', iconColor: 'text-stone-600 dark:text-stone-400', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 10c.7-.7 1.4-1.4 2.1-2.1a3 3 0 0 0-4.2-4.2L12.8 5.8a2 2 0 0 0-2.8 0L7.9 3.7a3 3 0 0 0-4.2 4.2L5.8 10a2 2 0 0 0 0 2.8l-2.1 2.1a3 3 0 0 0 4.2 4.2l2.1-2.1a2 2 0 0 0 2.8 0l2.1 2.1a3 3 0 0 0 4.2-4.2l-2.1-2.1a2 2 0 0 0 0-2.8z"/></svg>` };
+                    } else if (s.includes('هضمي') || s.includes('مناظير')) {
+                        config = { bgClass: 'bg-amber-100 dark:bg-amber-900/30', textClass: 'text-amber-700 dark:text-amber-300', iconColor: 'text-amber-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` };
+                    } else if (s.includes('مخ') || s.includes('اعصاب') || s.includes('أعصاب') || s.includes('فقري')) {
+                        config = { bgClass: 'bg-teal-100 dark:bg-teal-900/30', textClass: 'text-teal-700 dark:text-teal-300', iconColor: 'text-teal-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 2.5 2.5 0 0 1-.28-4.7 2.5 2.5 0 0 1 3.18-4.4A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 2.5 2.5 0 0 0 .28-4.7 2.5 2.5 0 0 0-3.18-4.4A2.5 2.5 0 0 0 14.5 2Z"/></svg>` };
+                    } else if (s.includes('علاج') || s.includes('كيماوي') || s.includes('اورام') || s.includes('أورام')) {
+                        config = { bgClass: 'bg-emerald-100 dark:bg-emerald-900/30', textClass: 'text-emerald-700 dark:text-emerald-300', iconColor: 'text-emerald-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.5 20.5 19 12a4.95 4.95 0 1 0-7-7L3.5 13.5a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>` };
+                    } else if (s.includes('اشعة') || s.includes('أشعة') || s.includes('تحاليل')) {
+                        config = { bgClass: 'bg-indigo-100 dark:bg-indigo-900/30', textClass: 'text-indigo-700 dark:text-indigo-300', iconColor: 'text-indigo-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>` };
+                    } else if (s.includes('كورونا') || s.includes('عزل')) {
+                        config = { bgClass: 'bg-red-200 dark:bg-red-900/50', textClass: 'text-red-800 dark:text-red-200', iconColor: 'text-red-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>` };
+                    } else if (s.includes('انف') || s.includes('أذن') || s.includes('اذن') || s.includes('حنجرة')) {
+                        config = { bgClass: 'bg-orange-100 dark:bg-orange-900/30', textClass: 'text-orange-700 dark:text-orange-300', iconColor: 'text-orange-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 21s-5-2-5-8V7a5 5 0 0 1 10 0v6c0 6-5 8-5 8z"/><path d="M11 14c-1.5 0-2.5-1-2.5-2.5V7"/></svg>` };
+                    } else if (s.includes('صدر')) {
+                        config = { bgClass: 'bg-sky-100 dark:bg-sky-900/30', textClass: 'text-sky-700 dark:text-sky-300', iconColor: 'text-sky-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z"/><path d="M12 14v6"/><path d="M8 20h8"/></svg>` };
+                    } else if (s.includes('باطن') || s.includes('سكر') || s.includes('غدد')) {
+                        config = { bgClass: 'bg-yellow-100 dark:bg-yellow-900/30', textClass: 'text-yellow-700 dark:text-yellow-300', iconColor: 'text-yellow-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` };
+                    } else if (s.includes('جلدية')) {
+                        config = { bgClass: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', textClass: 'text-fuchsia-700 dark:text-fuchsia-300', iconColor: 'text-fuchsia-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>` };
+                    } else if (s.includes('مسالك')) {
+                        config = { bgClass: 'bg-lime-100 dark:bg-lime-900/30', textClass: 'text-lime-700 dark:text-lime-300', iconColor: 'text-lime-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>` };
+                    } else if (s.includes('روماتيزم') || s.includes('مناعة')) {
+                        config = { bgClass: 'bg-rose-100 dark:bg-rose-900/30', textClass: 'text-rose-700 dark:text-rose-300', iconColor: 'text-rose-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.5c-4.5 0-8-3.5-8-8 0-3.5 2.5-6.5 6-7.5V2m4 3c3.5 1 6 4 6 7.5 0 4.5-3.5 8-8 8"/></svg>` };
+                    } else if (s.includes('جراحة')) {
+                        config = { bgClass: 'bg-slate-200 dark:bg-slate-700', textClass: 'text-slate-800 dark:text-slate-200', iconColor: 'text-slate-600 dark:text-slate-400', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>` };
+                    }
+                    
+                    return config;
+                };
+
+                // =================================================================
+                //  دوال المساعدة (واتساب وخريطة)
                 // =================================================================
                 const getWaLink = (phone) => {
                     if (!phone) return null;
@@ -1049,7 +1116,10 @@
                     checkPasscode, toggleTheme, debounceSearch, applyFilters, clearFilters,
                     openSettingsModal, saveSettings, handleFileUpload, fetchFromGoogleSheet, silentSync,
                     openEditModal, saveEdit, toggleClinicStatus, deleteClinic,
-                    getWaLink, getMapLink, generateAnalytics, exportToPDF, exportToExcel
+                    
+                    // دوال التخصصات والمساعدة
+                    getSpecialtyConfig, getWaLink, getMapLink, 
+                    generateAnalytics, exportToPDF, exportToExcel
                 };
             }
         });
