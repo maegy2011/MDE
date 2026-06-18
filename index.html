@@ -13,7 +13,7 @@
 
     <!-- ===== الخطوط ===== -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    
+
     <!-- ===== المكتبات الأساسية ===== -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -34,7 +34,6 @@
     <!-- ===== إعدادات Tailwind ===== -->
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Cairo', 'sans-serif'] },
@@ -48,18 +47,13 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
         #pdf-export-container { display: none; }
         .transition-all { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .dark .card-hover:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-        .dark .dropdown-shadow { box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        /* تحسين عرض الأيقونات SVG */
-        .card-icon svg { width: 28px; height: 28px; stroke-width: 1.5; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-darkbg text-slate-800 dark:text-slate-200 transition-colors duration-300 flex flex-col min-h-screen">
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
 
     <div id="app" class="flex flex-col min-h-screen w-full">
 
@@ -67,14 +61,14 @@
         <!-- 1. شاشة حماية الوصول (Login) -->
         <!-- ================================================================ -->
         <div v-if="!isLoggedIn && appSettings.passcode" class="fixed inset-0 z-[9999] bg-slate-900 flex flex-col justify-center items-center text-white p-4">
-            <div class="bg-white dark:bg-cardbg p-8 rounded-2xl text-center text-slate-900 dark:text-white shadow-2xl max-w-sm w-full border-t-4 border-gold">
+            <div class="bg-white p-8 rounded-2xl text-center text-slate-900 shadow-2xl max-w-sm w-full border-t-4 border-gold">
                 <svg class="w-16 h-16 mx-auto text-gold mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
                 <h2 class="text-2xl font-bold mb-1">وثيقة داخلية</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">الرجاء إدخال كود المرور للوصول للدليل</p>
-                <input v-model="loginInput" type="password" placeholder="كود المرور..." @keyup.enter="checkPasscode" class="w-full p-3 mb-4 text-center tracking-widest border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                <p class="text-sm text-slate-500 mb-6">الرجاء إدخال كود المرور للوصول للدليل</p>
+                <input v-model="loginInput" type="password" placeholder="كود المرور..." @keyup.enter="checkPasscode" class="w-full p-3 mb-4 text-center tracking-widest border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold">
                 <button @click="checkPasscode" class="w-full p-3 bg-gold text-slate-900 font-bold rounded-lg hover:bg-yellow-600 transition">دخول</button>
                 <p v-if="loginError" class="text-red-500 text-sm mt-3">كود المرور غير صحيح!</p>
             </div>
@@ -95,19 +89,8 @@
                     <p class="text-[10px] text-slate-400">{{ appSettings.desc }}</p>
                 </div>
             </div>
-            
+
             <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 hide-scrollbar">
-                <button @click="toggleTheme" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded border border-gold text-gold hover:bg-gold hover:text-slate-900 whitespace-nowrap transition-all">
-                    <svg v-if="isDark" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="5"/>
-                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                    </svg>
-                    <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                    </svg>
-                    {{ isDark ? 'نهاري' : 'ليلي' }}
-                </button>
-                
                 <template v-if="hasData">
                     <button @click="silentSync" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-slate-800 hover:bg-slate-700 whitespace-nowrap transition-all">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -138,7 +121,7 @@
                             <polyline points="10 9 9 9 8 9"/>
                         </svg> Excel
                     </button>
-                    
+
                     <template v-if="isAdminMode">
                         <button @click="showAnalyticsModal = true; generateAnalytics()" class="flex items-center gap-1 px-3 py-1.5 text-xs rounded bg-purple-600 hover:bg-purple-700 whitespace-nowrap transition-all">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -160,9 +143,9 @@
         <!-- 3. المحتوى الرئيسي -->
         <!-- ================================================================ -->
         <main v-if="isLoggedIn || !appSettings.passcode" class="flex-1 w-full max-w-7xl mx-auto p-4">
-            
+
             <!-- شاشة جلب البيانات -->
-            <div v-if="!hasData" class="bg-white dark:bg-cardbg p-8 rounded-2xl shadow text-center mt-10 border border-slate-200 dark:border-slate-700">
+            <div v-if="!hasData" class="bg-white p-8 rounded-2xl shadow text-center mt-10 border border-slate-200">
                 <h3 class="text-xl font-bold text-primary mb-6 flex justify-center items-center gap-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -171,13 +154,13 @@
                     </svg>
                     إضافة قاعدة البيانات
                 </h3>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                     <!-- الخيار الأول: جوجل شيت API -->
-                    <div class="p-6 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-800/50">
-                        <h4 class="font-bold mb-2 text-slate-800 dark:text-white">الربط مع جوجل شيت (API)</h4>
+                    <div class="p-6 border border-slate-200 rounded-xl bg-slate-50">
+                        <h4 class="font-bold mb-2 text-slate-800">الربط مع جوجل شيت (API)</h4>
                         <p class="text-xs text-slate-500 mb-4">للمزامنة التلقائية السريعة والآمنة</p>
-                        <input v-model="gsheetInput" type="text" placeholder="انسخ رابط Web App هنا..." class="w-full p-3 mb-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 outline-none focus:border-primary text-left" dir="ltr">
+                        <input v-model="gsheetInput" type="text" placeholder="انسخ رابط Web App هنا..." class="w-full p-3 mb-3 border border-slate-300 rounded-lg bg-white outline-none focus:border-primary text-left" dir="ltr">
                         <button @click="fetchFromGoogleSheet" class="w-full py-3 bg-primary text-white font-bold rounded-lg hover:bg-blue-700 transition-all flex justify-center items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -188,10 +171,10 @@
                     </div>
 
                     <!-- الخيار الثاني: رفع ملف إكسيل محلي -->
-                    <div class="p-6 border border-slate-200 dark:border-slate-600 rounded-xl bg-slate-50 dark:bg-slate-800/50">
-                        <h4 class="font-bold mb-2 text-slate-800 dark:text-white">رفع ملف إكسيل محلي</h4>
+                    <div class="p-6 border border-slate-200 rounded-xl bg-slate-50">
+                        <h4 class="font-bold mb-2 text-slate-800">رفع ملف إكسيل محلي</h4>
                         <p class="text-xs text-slate-500 mb-4">رفع ملف (.xlsx) من جهازك مباشرة</p>
-                        <input type="file" accept=".xlsx, .xls" @change="handleFileUpload" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 dark:file:bg-green-900/30 dark:file:text-green-400 cursor-pointer mb-3">
+                        <input type="file" accept=".xlsx, .xls" @change="handleFileUpload" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 cursor-pointer mb-3">
                     </div>
                 </div>
                 <div v-if="isLoading" class="mt-6 text-primary font-bold animate-pulse">جاري معالجة البيانات...</div>
@@ -199,12 +182,12 @@
 
             <!-- واجهة التطبيق -->
             <div v-if="hasData">
-                
-                <!-- القوائم المنسدلة والبحث -->
-                <div class="bg-white dark:bg-cardbg p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex flex-col md:flex-row gap-3">
-                    
+
+                <!-- القوائم المنسدلة والبحث (بدون زر مسح الفلاتر) -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-3">
+
                     <div class="relative flex-[2]">
-                        <input v-model="searchQuery" @input="debounceSearch" type="text" placeholder="ابحث باسم الجهة أو العنوان..." class="w-full p-3 pr-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 focus:border-gold outline-none text-sm transition-colors">
+                        <input v-model="searchQuery" @input="debounceSearch" type="text" placeholder="ابحث باسم الجهة أو العنوان..." class="w-full p-3 pr-10 rounded-lg border border-slate-300 bg-slate-50 focus:border-gold outline-none text-sm">
                         <svg class="w-4 h-4 absolute right-3 top-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
                         </svg>
@@ -212,19 +195,19 @@
 
                     <!-- المحافظات -->
                     <div class="relative flex-1">
-                        <div @click="govOpen = !govOpen; specOpen = false" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 cursor-pointer flex justify-between items-center text-sm hover:border-gold transition-colors">
+                        <div @click="govOpen = !govOpen; specOpen = false" class="w-full p-3 rounded-lg border border-slate-300 bg-slate-50 cursor-pointer flex justify-between items-center text-sm hover:border-gold">
                             <span class="font-bold truncate">{{ govHeaderText }}</span>
                             <svg class="w-4 h-4 text-slate-500 transition-transform" :class="govOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M6 9l6 6 6-6"/>
                             </svg>
                         </div>
                         <div v-if="govOpen" @click="govOpen = false" class="fixed inset-0 z-30"></div>
-                        <div v-if="govOpen" class="absolute top-full mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
-                            <div class="p-2 border-b border-slate-100 dark:border-slate-700">
-                                <input v-model="govSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-gold transition-colors">
+                        <div v-if="govOpen" class="absolute top-full mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
+                            <div class="p-2 border-b border-slate-100">
+                                <input v-model="govSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded outline-none focus:border-gold">
                             </div>
                             <div class="max-h-48 overflow-y-auto p-1">
-                                <label v-for="gov in filteredGovOptions" :key="gov" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer text-sm transition-colors">
+                                <label v-for="gov in filteredGovOptions" :key="gov" class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded cursor-pointer text-sm">
                                     <input type="checkbox" :value="gov" v-model="selectedGovs" @change="applyFilters" class="accent-gold w-4 h-4">
                                     {{ gov }}
                                 </label>
@@ -234,106 +217,88 @@
 
                     <!-- التخصصات -->
                     <div class="relative flex-1">
-                        <div @click="specOpen = !specOpen; govOpen = false" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 cursor-pointer flex justify-between items-center text-sm hover:border-gold transition-colors">
+                        <div @click="specOpen = !specOpen; govOpen = false" class="w-full p-3 rounded-lg border border-slate-300 bg-slate-50 cursor-pointer flex justify-between items-center text-sm hover:border-gold">
                             <span class="font-bold truncate">{{ specHeaderText }}</span>
                             <svg class="w-4 h-4 text-slate-500 transition-transform" :class="specOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M6 9l6 6 6-6"/>
                             </svg>
                         </div>
                         <div v-if="specOpen" @click="specOpen = false" class="fixed inset-0 z-30"></div>
-                        <div v-if="specOpen" class="absolute top-full mt-1 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
-                            <div class="p-2 border-b border-slate-100 dark:border-slate-700">
-                                <input v-model="specSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-gold transition-colors">
+                        <div v-if="specOpen" class="absolute top-full mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-xl z-40 flex flex-col dropdown-shadow">
+                            <div class="p-2 border-b border-slate-100">
+                                <input v-model="specSearch" type="text" placeholder="بحث..." class="w-full p-2 text-xs bg-slate-50 border border-slate-200 rounded outline-none focus:border-gold">
                             </div>
                             <div class="max-h-48 overflow-y-auto p-1">
-                                <label v-for="spec in filteredSpecOptions" :key="spec" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded cursor-pointer text-sm transition-colors">
+                                <label v-for="spec in filteredSpecOptions" :key="spec" class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded cursor-pointer text-sm">
                                     <input type="checkbox" :value="spec" v-model="selectedSpecs" @change="applyFilters" class="accent-gold w-4 h-4">
                                     {{ spec }}
                                 </label>
                             </div>
                         </div>
                     </div>
-
-                    <button @click="clearFilters" class="p-3 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-lg hover:bg-red-200 transition flex justify-center items-center" title="مسح الفلاتر">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                        </svg>
-                    </button>
                 </div>
 
                 <!-- شريط النتائج والترقيم -->
-                <div class="flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-slate-500 dark:text-slate-400 gap-3">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-slate-500 gap-3">
                     <p>تم العثور على <span class="font-bold text-gold">{{ filteredClinics.length }}</span> جهة طبية</p>
                     <div class="flex items-center gap-3">
                         <label class="flex items-center gap-2">
                             عرض:
-                            <select v-model="itemsPerPage" @change="currentPage = 1" class="p-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-800 outline-none">
-                                <option :value="12">12</option>
-                                <option :value="24">24</option>
-                                <option :value="48">48</option>
+                            <select v-model="itemsPerPage" @change="currentPage=1" class="p-1 border border-slate-300 rounded bg-white outline-none">
+                                <option :value="5">5</option>
+                                <option :value="10">10</option>
+                                <option :value="20">20</option>
+                                <option :value="50">50</option>
+                                <option :value="100">100</option>
+                                <option :value="1000000">الكل</option>
                             </select>
                         </label>
-                        <div v-if="isAdminMode" class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">وضع الإدارة</div>
+                        <div v-if="isAdminMode" class="text-xs bg-slate-200 px-2 py-1 rounded">وضع الإدارة</div>
                     </div>
                 </div>
 
                 <!-- شبكة الكروت -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div v-for="clinic in paginatedClinics" :key="clinic._id" 
-                         class="bg-white dark:bg-cardbg p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 card-hover transition-all flex flex-col justify-between relative group"
+                    <div v-for="clinic in paginatedClinics" :key="clinic._id"
+                         class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 card-hover transition-all flex flex-col justify-between relative"
                          :class="clinic['الحالة'] === 'معطل' ? 'opacity-60 border-red-400/30' : ''">
-                        
+
                         <div v-if="isAdminMode && clinic['الحالة'] === 'معطل'" class="absolute top-0 right-0 bg-red-500 text-white text-xs px-3 py-1 rounded-bl-xl z-10 font-bold shadow">معطل</div>
-                        
-                        <!-- ===== الهيدر الجديد مع الأيقونة الذكية والتأثير الحركي ===== -->
-                        <div class="flex items-start gap-3 mb-3 cursor-default">
-                            <!-- مربع الأيقونة مع تأثير Hover -->
-                            <div :class="['p-3 rounded-2xl flex-shrink-0 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3 group-hover:shadow-md card-icon', getSpecialtyConfig(clinic['التخصص']).bgClass, getSpecialtyConfig(clinic['التخصص']).iconColor]" v-html="getSpecialtyConfig(clinic['التخصص']).svg">
-                            </div>
-                            
-                            <!-- اسم الجهة والتخصص -->
-                            <div class="flex-1 pt-1">
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-gold leading-tight mb-1.5 transition-colors group-hover:text-primary dark:group-hover:text-yellow-500">{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
-                                <span :class="['text-xs px-2.5 py-1 rounded-full font-bold inline-block transition-all duration-300 group-hover:shadow-sm', getSpecialtyConfig(clinic['التخصص']).bgClass, getSpecialtyConfig(clinic['التخصص']).textClass]">
-                                    {{ clinic['التخصص'] || 'عام' }}
-                                </span>
-                            </div>
+
+                        <!-- الهيدر البسيط بدون أيقونات -->
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-bold text-slate-900">{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full">{{ clinic['التخصص'] || 'عام' }}</span>
                         </div>
-                        
-                        <!-- باقي المعلومات -->
+
                         <div>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">المحافظة:</span> {{ clinic['المحافظة'] || '' }}</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-1"><span class="font-semibold">الفرع:</span> {{ clinic['الفرع'] || 'الفرع الرئيسي' }}</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mb-3"><span class="font-semibold">العنوان:</span> {{ clinic['العنوان'] || 'غير متوفر' }}</p>
+                            <p class="text-sm text-slate-500 mb-1"><span class="font-semibold">المحافظة:</span> {{ clinic['المحافظة'] || '' }}</p>
+                            <p class="text-sm text-slate-500 mb-1"><span class="font-semibold">الفرع:</span> {{ clinic['الفرع'] || 'الفرع الرئيسي' }}</p>
+                            <p class="text-sm text-slate-500 mb-3"><span class="font-semibold">العنوان:</span> {{ clinic['العنوان'] || 'غير متوفر' }}</p>
                         </div>
-                        
-                        <!-- ===== الأزرار ===== -->
+
+                        <!-- الأزرار -->
                         <div class="grid grid-cols-3 gap-2 mt-2">
-                            <!-- زر الاتصال الأصلي الآمن -->
                             <a v-if="clinic['التليفون']" :href="'tel:' + clinic['التليفون']" class="p-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                                 </svg> اتصال
                             </a>
-                            
-                            <!-- زر الواتساب الذكي -->
                             <a v-if="getWaLink(clinic['التليفون'])" :href="getWaLink(clinic['التليفون'])" target="_blank" class="p-2 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                                 </svg> واتساب
                             </a>
-                            
-                            <!-- زر الخريطة -->
-                            <a :href="getMapLink(clinic)" target="_blank" class="p-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
+                            <a :href="getMapLink(clinic)" target="_blank" class="p-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                     <circle cx="12" cy="10" r="3"/>
                                 </svg> خريطة
                             </a>
                         </div>
-                        
+
                         <!-- أزرار الإدارة -->
-                        <div v-if="isAdminMode" class="flex gap-2 mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                        <div v-if="isAdminMode" class="flex gap-2 mt-3 pt-3 border-t border-slate-200">
                             <button @click="openEditModal(clinic)" class="flex-1 p-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition-all">تعديل</button>
                             <button @click="toggleClinicStatus(clinic)" class="flex-1 p-1.5 bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-bold rounded-lg transition-all">{{ clinic['الحالة'] === 'معطل' ? 'تفعيل' : 'تعطيل' }}</button>
                             <button @click="deleteClinic(clinic._id)" class="flex-1 p-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-all">حذف</button>
@@ -341,15 +306,13 @@
                     </div>
                 </div>
 
-                <!-- أزرار التنقل بين الصفحات -->
-                <div v-if="totalPages > 1" class="flex justify-center items-center gap-4 mt-8">
-                    <button @click="currentPage--" :disabled="currentPage === 1" class="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-                    </button>
-                    <span class="text-sm font-bold text-slate-600 dark:text-slate-400">صفحة {{ currentPage }} من {{ totalPages }}</span>
-                    <button @click="currentPage++" :disabled="currentPage === totalPages" class="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-50 hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
+                <!-- شريط الترقيم الجديد (الاستاندر) -->
+                <div v-if="totalPages > 1" class="flex justify-center items-center gap-2 mt-8" dir="ltr">
+                    <button @click="currentPage=1" :disabled="currentPage===1" class="px-3 py-1 rounded bg-slate-200 text-slate-700 disabled:opacity-50 hover:bg-slate-300">الأولى</button>
+                    <button @click="currentPage--" :disabled="currentPage===1" class="px-3 py-1 rounded bg-slate-200 text-slate-700 disabled:opacity-50 hover:bg-slate-300">السابق</button>
+                    <button v-for="p in visiblePages" :key="p" @click="currentPage=p" :class="['px-3 py-1 rounded', currentPage===p ? 'bg-primary text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300']">{{ p }}</button>
+                    <button @click="currentPage++" :disabled="currentPage===totalPages" class="px-3 py-1 rounded bg-slate-200 text-slate-700 disabled:opacity-50 hover:bg-slate-300">التالي</button>
+                    <button @click="currentPage=totalPages" :disabled="currentPage===totalPages" class="px-3 py-1 rounded bg-slate-200 text-slate-700 disabled:opacity-50 hover:bg-slate-300">الأخيرة</button>
                 </div>
             </div>
         </main>
@@ -371,29 +334,29 @@
         <!-- 5. نافذة الإعدادات -->
         <!-- ================================================================ -->
         <div v-if="showSettingsModal" @click.self="showSettingsModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
-            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
-                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">⚙️ إعدادات التطبيق</h3>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900">⚙️ إعدادات التطبيق</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold mb-1">عنوان التطبيق</label>
-                        <input v-model="tempSettings.title" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                        <input v-model="tempSettings.title" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-1">الوصف</label>
-                        <input v-model="tempSettings.desc" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                        <input v-model="tempSettings.desc" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-1">كود المرور</label>
-                        <input v-model="tempSettings.passcode" type="text" placeholder="2026" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors">
+                        <input v-model="tempSettings.passcode" type="text" placeholder="2026" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-1">رابط API (Web App URL)</label>
-                        <input v-model="tempSettings.gsheetUrl" type="text" placeholder="https://script.google.com/macros/s/..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold transition-colors text-left" dir="ltr">
+                        <input v-model="tempSettings.gsheetUrl" type="text" placeholder="https://script.google.com/macros/s/..." class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold text-left" dir="ltr">
                     </div>
                 </div>
                 <div class="flex gap-3 mt-6">
                     <button @click="saveSettings" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ</button>
-                    <button @click="showSettingsModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                    <button @click="showSettingsModal = false" class="flex-1 p-3 bg-slate-200 text-slate-800 font-bold rounded-lg hover:bg-slate-300 transition-all">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -402,36 +365,32 @@
         <!-- 6. نافذة الإحصائيات -->
         <!-- ================================================================ -->
         <div v-if="showAnalyticsModal" @click.self="showAnalyticsModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
-            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-4xl p-6 max-h-[90vh] overflow-y-auto">
-                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900 flex items-center gap-2">
                     <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M18 20V10M12 20V4M6 20v-6"/>
                     </svg>
                     لوحة الإحصائيات (Analytics)
                 </h3>
                 <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold text-white">
                         <p class="text-slate-400 text-sm">إجمالي الجهات</p>
                         <span class="text-3xl font-bold text-gold">{{ activeClinicsCount }}</span>
                     </div>
-                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold text-white">
                         <p class="text-slate-400 text-sm">المحافظات</p>
                         <span class="text-3xl font-bold text-gold">{{ uniqueGovs.length }}</span>
                     </div>
-                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold">
+                    <div class="bg-slate-800 p-4 rounded-xl text-center border-b-4 border-gold text-white">
                         <p class="text-slate-400 text-sm">التخصصات</p>
                         <span class="text-3xl font-bold text-gold">{{ uniqueSpecs.length }}</span>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
-                        <canvas id="govChart"></canvas>
-                    </div>
-                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl">
-                        <canvas id="specChart"></canvas>
-                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl"><canvas id="govChart"></canvas></div>
+                    <div class="bg-slate-50 p-4 rounded-xl"><canvas id="specChart"></canvas></div>
                 </div>
-                <button @click="showAnalyticsModal = false" class="w-full mt-6 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إغلاق</button>
+                <button @click="showAnalyticsModal = false" class="w-full mt-6 p-3 bg-slate-200 text-slate-800 font-bold rounded-lg hover:bg-slate-300 transition-all">إغلاق</button>
             </div>
         </div>
 
@@ -439,37 +398,19 @@
         <!-- 7. نافذة تعديل بيانات الفرع -->
         <!-- ================================================================ -->
         <div v-if="showEditModal" @click.self="showEditModal = false" class="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4">
-            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
-                <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">✏️ تعديل بيانات الفرع</h3>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-slate-900">✏️ تعديل بيانات الفرع</h3>
                 <div v-if="editingClinic" class="space-y-3">
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">اسم الجهة</label>
-                        <input v-model="editingClinic['اسم الجهة']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">التخصص</label>
-                        <input v-model="editingClinic['التخصص']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">المحافظة</label>
-                        <input v-model="editingClinic['المحافظة']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">الفرع</label>
-                        <input v-model="editingClinic['الفرع']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">العنوان</label>
-                        <input v-model="editingClinic['العنوان']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-1">التليفون</label>
-                        <input v-model="editingClinic['التليفون']" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-900 outline-none focus:border-gold">
-                    </div>
+                    <div><label class="block text-sm font-semibold mb-1">اسم الجهة</label><input v-model="editingClinic['اسم الجهة']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
+                    <div><label class="block text-sm font-semibold mb-1">التخصص</label><input v-model="editingClinic['التخصص']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
+                    <div><label class="block text-sm font-semibold mb-1">المحافظة</label><input v-model="editingClinic['المحافظة']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
+                    <div><label class="block text-sm font-semibold mb-1">الفرع</label><input v-model="editingClinic['الفرع']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
+                    <div><label class="block text-sm font-semibold mb-1">العنوان</label><input v-model="editingClinic['العنوان']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
+                    <div><label class="block text-sm font-semibold mb-1">التليفون</label><input v-model="editingClinic['التليفون']" class="w-full p-2 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-gold"></div>
                 </div>
                 <div class="flex gap-3 mt-6">
                     <button @click="saveEdit" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ</button>
-                    <button @click="showEditModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                    <button @click="showEditModal = false" class="flex-1 p-3 bg-slate-200 text-slate-800 font-bold rounded-lg hover:bg-slate-300 transition-all">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -478,24 +419,22 @@
         <!-- 8. نافذة اختيار الشيتات -->
         <!-- ================================================================ -->
         <div v-if="showSheetSelectionModal" class="fixed inset-0 z-[9999] bg-black/50 flex justify-center items-center p-4">
-            <div class="bg-white dark:bg-cardbg rounded-2xl shadow-2xl w-full max-w-md p-6">
-                <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">📄 اختيار الشيتات (المحافظات)</h3>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+                <h3 class="text-xl font-bold mb-2 text-slate-900">📄 اختيار الشيتات (المحافظات)</h3>
                 <p class="text-sm text-slate-500 mb-4">اختر الشيتات التي تريد استيرادها. سيتم حفظ اختيارك لتحديث البيانات تلقائياً في المرات القادمة.</p>
-                
-                <div class="max-h-60 overflow-y-auto mb-4 border border-slate-200 dark:border-slate-700 rounded-lg p-2">
-                    <label class="flex items-center gap-2 p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer border-b border-slate-200 dark:border-slate-700 mb-1">
+                <div class="max-h-60 overflow-y-auto mb-4 border border-slate-200 rounded-lg p-2">
+                    <label class="flex items-center gap-2 p-3 hover:bg-slate-100 rounded cursor-pointer border-b border-slate-200 mb-1">
                         <input type="checkbox" @change="toggleAllSheets" :checked="selectedSheetsToImport.length === availableSheets.length && availableSheets.length > 0" class="accent-gold w-4 h-4">
                         <span class="font-bold text-primary">تحديد الكل</span>
                     </label>
-                    <label v-for="sheet in availableSheets" :key="sheet" class="flex items-center gap-2 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer">
+                    <label v-for="sheet in availableSheets" :key="sheet" class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded cursor-pointer">
                         <input type="checkbox" :value="sheet" v-model="selectedSheetsToImport" class="accent-gold w-4 h-4">
                         {{ sheet }}
                     </label>
                 </div>
-                
                 <div class="flex gap-3">
                     <button @click="confirmSheetSelection" class="flex-1 p-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all">حفظ واستيراد</button>
-                    <button @click="showSheetSelectionModal = false" class="flex-1 p-3 bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">إلغاء</button>
+                    <button @click="showSheetSelectionModal = false" class="flex-1 p-3 bg-slate-200 text-slate-800 font-bold rounded-lg hover:bg-slate-300 transition-all">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -515,10 +454,7 @@
 
         const app = createApp({
             setup() {
-                // =================================================================
-                //  المتغيرات
-                // =================================================================
-                const isDark = ref(false);
+                // المتغيرات
                 const isLoggedIn = ref(false);
                 const isAdminMode = ref(false);
                 const isLoading = ref(false);
@@ -531,9 +467,8 @@
                 const showEditModal = ref(false);
                 const editingClinic = ref(null);
                 const currentPage = ref(1);
-                const itemsPerPage = ref(12);
+                const itemsPerPage = ref(5);
 
-                // متغيرات اختيار الشيتات
                 const showSheetSelectionModal = ref(false);
                 const availableSheets = ref([]);
                 const selectedSheetsToImport = ref([]);
@@ -558,29 +493,16 @@
                 const specSearch = ref('');
                 const clinics = ref([]);
 
-                // =================================================================
-                //  Computed
-                // =================================================================
+                // Computed
                 const hasData = computed(() => clinics.value && clinics.value.length > 0);
                 const activeClinicsCount = computed(() => clinics.value.filter(c => c['الحالة'] !== 'معطل').length);
-
-                const uniqueGovs = computed(() => {
-                    const govs = new Set();
-                    clinics.value.forEach(c => { if (c['المحافظة']) govs.add(c['المحافظة']); });
-                    return Array.from(govs).sort();
-                });
-
-                const uniqueSpecs = computed(() => {
-                    const specs = new Set();
-                    clinics.value.forEach(c => { if (c['التخصص']) specs.add(c['التخصص']); });
-                    return Array.from(specs).sort();
-                });
+                const uniqueGovs = computed(() => [...new Set(clinics.value.map(c => c['المحافظة']).filter(Boolean))].sort());
+                const uniqueSpecs = computed(() => [...new Set(clinics.value.map(c => c['التخصص']).filter(Boolean))].sort());
 
                 const filteredGovOptions = computed(() => {
                     if (!govSearch.value) return uniqueGovs.value;
                     return uniqueGovs.value.filter(g => g.includes(govSearch.value));
                 });
-
                 const filteredSpecOptions = computed(() => {
                     if (!specSearch.value) return uniqueSpecs.value;
                     return uniqueSpecs.value.filter(s => s.includes(specSearch.value));
@@ -591,38 +513,21 @@
                     if (selectedGovs.value.length === 1) return selectedGovs.value[0];
                     return `${selectedGovs.value.length} محافظات`;
                 });
-
                 const specHeaderText = computed(() => {
                     if (selectedSpecs.value.length === 0) return 'كل التخصصات';
                     if (selectedSpecs.value.length === 1) return selectedSpecs.value[0];
                     return `${selectedSpecs.value.length} تخصصات`;
                 });
 
-                // =================================================================
-                //  الفلترة والترقيم
-                // =================================================================
                 let searchTimeout = null;
-
                 const filteredClinics = computed(() => {
                     let result = [...clinics.value];
-                    if (!isAdminMode.value) {
-                        result = result.filter(c => c['الحالة'] !== 'معطل');
-                    }
-                    if (selectedGovs.value.length > 0) {
-                        result = result.filter(c => selectedGovs.value.includes(c['المحافظة']));
-                    }
-                    if (selectedSpecs.value.length > 0) {
-                        result = result.filter(c => selectedSpecs.value.includes(c['التخصص']));
-                    }
+                    if (!isAdminMode.value) result = result.filter(c => c['الحالة'] !== 'معطل');
+                    if (selectedGovs.value.length > 0) result = result.filter(c => selectedGovs.value.includes(c['المحافظة']));
+                    if (selectedSpecs.value.length > 0) result = result.filter(c => selectedSpecs.value.includes(c['التخصص']));
                     if (searchQuery.value.trim()) {
-                        const query = searchQuery.value.trim().toLowerCase();
-                        result = result.filter(c => {
-                            const searchText = [
-                                c['اسم الجهة'], c['التخصص'], c['المحافظة'], 
-                                c['الفرع'], c['العنوان'], c['التليفون']
-                            ].join(' ').toLowerCase();
-                            return searchText.includes(query);
-                        });
+                        const q = searchQuery.value.trim().toLowerCase();
+                        result = result.filter(c => [c['اسم الجهة'], c['التخصص'], c['المحافظة'], c['الفرع'], c['العنوان'], c['التليفون']].join(' ').toLowerCase().includes(q));
                     }
                     return result;
                 });
@@ -630,34 +535,29 @@
                 const totalPages = computed(() => Math.ceil(filteredClinics.value.length / itemsPerPage.value));
                 const paginatedClinics = computed(() => {
                     const start = (currentPage.value - 1) * itemsPerPage.value;
-                    const end = start + itemsPerPage.value;
-                    return filteredClinics.value.slice(start, end);
+                    return filteredClinics.value.slice(start, start + itemsPerPage.value);
                 });
 
-                watch([searchQuery, selectedGovs, selectedSpecs, itemsPerPage], () => {
-                    currentPage.value = 1;
+                // دالة الصفحات المرئية (5 صفحات)
+                const visiblePages = computed(() => {
+                    let pages = [];
+                    let start = Math.max(1, currentPage.value - 2);
+                    let end = Math.min(totalPages.value, start + 4);
+                    if (end - start < 4) start = Math.max(1, end - 4);
+                    for (let i = start; i <= end; i++) pages.push(i);
+                    return pages;
                 });
 
-                // =================================================================
-                //  دوال الفلاتر والحماية والإعدادات
-                // =================================================================
+                watch([searchQuery, selectedGovs, selectedSpecs, itemsPerPage], () => { currentPage.value = 1; });
+
+                // دوال الفلاتر
                 const applyFilters = () => {};
                 const debounceSearch = () => {
                     clearTimeout(searchTimeout);
                     searchTimeout = setTimeout(applyFilters, 300);
                 };
 
-                const clearFilters = () => {
-                    selectedGovs.value = [];
-                    selectedSpecs.value = [];
-                    searchQuery.value = '';
-                    govSearch.value = '';
-                    specSearch.value = '';
-                    govOpen.value = false;
-                    specOpen.value = false;
-                    currentPage.value = 1;
-                };
-
+                // دوال الحماية
                 const checkPasscode = () => {
                     if (loginInput.value === appSettings.value.passcode || !appSettings.value.passcode) {
                         isLoggedIn.value = true;
@@ -669,17 +569,8 @@
                     }
                 };
 
-                const toggleTheme = () => {
-                    isDark.value = !isDark.value;
-                    document.documentElement.classList.toggle('dark', isDark.value);
-                    localStorage.setItem('medicalDarkMode', isDark.value);
-                };
-
-                const openSettingsModal = () => {
-                    tempSettings.value = { ...appSettings.value };
-                    showSettingsModal.value = true;
-                };
-
+                // دوال الإعدادات
+                const openSettingsModal = () => { tempSettings.value = { ...appSettings.value }; showSettingsModal.value = true; };
                 const saveSettings = () => {
                     appSettings.value = { ...tempSettings.value };
                     localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
@@ -687,52 +578,36 @@
                     if (appSettings.value.gsheetUrl) silentSync();
                 };
 
-                // =================================================================
-                //  دوال اختيار الشيتات
-                // =================================================================
+                // دوال اختيار الشيتات
                 const toggleAllSheets = (e) => {
-                    if (e.target.checked) {
-                        selectedSheetsToImport.value = [...availableSheets.value];
-                    } else {
-                        selectedSheetsToImport.value = [];
-                    }
+                    if (e.target.checked) selectedSheetsToImport.value = [...availableSheets.value];
+                    else selectedSheetsToImport.value = [];
                 };
-
                 const promptSheetSelection = () => {
-                    if (appSettings.value.savedSheets && appSettings.value.savedSheets.length > 0) {
-                        selectedSheetsToImport.value = appSettings.value.savedSheets.filter(s => availableSheets.value.includes(s));
-                    } else {
-                        selectedSheetsToImport.value = [...availableSheets.value];
-                    }
+                    selectedSheetsToImport.value = (appSettings.value.savedSheets && appSettings.value.savedSheets.length > 0) ?
+                        appSettings.value.savedSheets.filter(s => availableSheets.value.includes(s)) :
+                        [...availableSheets.value];
                     showSheetSelectionModal.value = true;
                     isLoading.value = false;
                 };
-
                 const confirmSheetSelection = () => {
                     if (selectedSheetsToImport.value.length === 0) return alert('الرجاء اختيار شيت واحد على الأقل!');
-                    
                     clinics.value = tempFetchedData.value.filter(row => selectedSheetsToImport.value.includes(row['المحافظة']));
                     localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
-                    
                     appSettings.value.savedSheets = [...selectedSheetsToImport.value];
                     const now = new Date();
                     appSettings.value.lastUpdated = "آخر تحديث: " + now.toLocaleDateString('ar-EG') + ' ' + now.toLocaleTimeString('ar-EG');
                     localStorage.setItem('medicalAppSettings', JSON.stringify(appSettings.value));
-                    
                     showSheetSelectionModal.value = false;
                     alert('تم جلب البيانات بنجاح! 🚀');
                 };
 
-                // =================================================================
-                //  دوال جلب البيانات
-                // =================================================================
+                // دوال جلب البيانات
                 const processExcelData = (workbook) => {
-                    const data = [];
-                    const sheets = [];
+                    const data = [], sheets = [];
                     workbook.SheetNames.forEach(sheetName => {
                         sheets.push(sheetName);
-                        const worksheet = workbook.Sheets[sheetName];
-                        const json = XLSX.utils.sheet_to_json(worksheet, { range: 1 });
+                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { range: 1 });
                         json.forEach(row => {
                             const cleanRow = {
                                 _id: '_' + Math.random().toString(36).substr(2, 9),
@@ -760,10 +635,8 @@
                             const data = new Uint8Array(e.target.result);
                             const workbook = XLSX.read(data, { type: 'array' });
                             const processed = processExcelData(workbook);
-                            
                             tempFetchedData.value = processed.data;
                             availableSheets.value = processed.sheets;
-                            
                             promptSheetSelection();
                         } catch (error) {
                             alert('حدث خطأ أثناء قراءة الملف.');
@@ -777,25 +650,17 @@
                     const url = gsheetInput.value.trim();
                     if (!url) return alert('الرجاء إدخال رابط الـ API (Web App URL)!');
                     if (!url.includes('script.google.com')) return alert('رابط غير صحيح! يرجى إدخال رابط تطبيق الويب (Apps Script).');
-                    
                     isLoading.value = true;
                     try {
                         const response = await fetch(url);
                         if (!response.ok) throw new Error('فشل الاتصال');
-                        
                         const jsonData = await response.json();
-                        
                         if (jsonData && jsonData.length > 0) {
                             tempFetchedData.value = jsonData;
-                            
                             const sheetsSet = new Set();
-                            jsonData.forEach(row => {
-                                if (row['المحافظة']) sheetsSet.add(row['المحافظة']);
-                            });
+                            jsonData.forEach(row => { if (row['المحافظة']) sheetsSet.add(row['المحافظة']); });
                             availableSheets.value = Array.from(sheetsSet);
-                            
                             if (!appSettings.value.gsheetUrl) appSettings.value.gsheetUrl = url;
-                            
                             promptSheetSelection();
                         } else {
                             alert('لم يتم العثور على بيانات في الشيت.');
@@ -811,19 +676,15 @@
                 const silentSync = async () => {
                     const url = appSettings.value.gsheetUrl;
                     if (!url || !url.includes('script.google.com')) return;
-                    
                     try {
                         const response = await fetch(url);
                         if (!response.ok) throw new Error('فشل التحديث');
-                        
                         const jsonData = await response.json();
-                        
                         if (jsonData && jsonData.length > 0) {
                             let newData = jsonData;
                             if (appSettings.value.savedSheets && appSettings.value.savedSheets.length > 0) {
                                 newData = jsonData.filter(row => appSettings.value.savedSheets.includes(row['المحافظة']));
                             }
-                            
                             clinics.value = newData;
                             localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
                             const now = new Date();
@@ -835,14 +696,8 @@
                     }
                 };
 
-                // =================================================================
-                //  دوال الإدارة (CRUD)
-                // =================================================================
-                const openEditModal = (clinic) => {
-                    editingClinic.value = { ...clinic };
-                    showEditModal.value = true;
-                };
-
+                // دوال الإدارة (CRUD)
+                const openEditModal = (clinic) => { editingClinic.value = { ...clinic }; showEditModal.value = true; };
                 const saveEdit = () => {
                     if (!editingClinic.value) return;
                     const index = clinics.value.findIndex(c => c._id === editingClinic.value._id);
@@ -853,12 +708,10 @@
                     showEditModal.value = false;
                     editingClinic.value = null;
                 };
-
                 const toggleClinicStatus = (clinic) => {
                     clinic['الحالة'] = clinic['الحالة'] === 'معطل' ? '' : 'معطل';
                     localStorage.setItem('medicalDirectoryData', JSON.stringify(clinics.value));
                 };
-
                 const deleteClinic = (id) => {
                     if (confirm('هل أنت متأكد من حذف هذا الفرع نهائياً؟')) {
                         clinics.value = clinics.value.filter(c => c._id !== id);
@@ -866,90 +719,24 @@
                     }
                 };
 
-                // =================================================================
-                //  المحلل الذكي للتخصصات (أيقونات، ألوان، وتصنيفات)
-                // =================================================================
-                const getSpecialtyConfig = (spec) => {
-                    const s = (spec || '').toLowerCase();
-                    
-                    // التصميم الافتراضي (عام)
-                    let config = {
-                        bgClass: 'bg-slate-100 dark:bg-slate-800',
-                        textClass: 'text-slate-700 dark:text-slate-300',
-                        iconColor: 'text-slate-500 dark:text-slate-400',
-                        svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M10 9h4M12 7v4"/></svg>`
-                    };
-
-                    // تصنيف التخصصات
-                    if (s.includes('أسنان') || s.includes('اسنان')) {
-                        config = { bgClass: 'bg-cyan-100 dark:bg-cyan-900/30', textClass: 'text-cyan-700 dark:text-cyan-300', iconColor: 'text-cyan-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c-2.5 0-4.5-2-4.5-4.5V12c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5v5.5c0 2.5-2 4.5-4.5 4.5z"/><path d="M12 22v-4"/></svg>` };
-                    } else if (s.includes('قلب') || s.includes('اوعية') || s.includes('أوعية')) {
-                        config = { bgClass: 'bg-red-100 dark:bg-red-900/30', textClass: 'text-red-700 dark:text-red-300', iconColor: 'text-red-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>` };
-                    } else if (s.includes('عيون') || s.includes('رمد')) {
-                        config = { bgClass: 'bg-blue-100 dark:bg-blue-900/30', textClass: 'text-blue-700 dark:text-blue-300', iconColor: 'text-blue-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>` };
-                    } else if (s.includes('عظام') || s.includes('حروق')) {
-                        config = { bgClass: 'bg-stone-200 dark:bg-stone-800', textClass: 'text-stone-700 dark:text-stone-300', iconColor: 'text-stone-600 dark:text-stone-400', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 10c.7-.7 1.4-1.4 2.1-2.1a3 3 0 0 0-4.2-4.2L12.8 5.8a2 2 0 0 0-2.8 0L7.9 3.7a3 3 0 0 0-4.2 4.2L5.8 10a2 2 0 0 0 0 2.8l-2.1 2.1a3 3 0 0 0 4.2 4.2l2.1-2.1a2 2 0 0 0 2.8 0l2.1 2.1a3 3 0 0 0 4.2-4.2l-2.1-2.1a2 2 0 0 0 0-2.8z"/></svg>` };
-                    } else if (s.includes('هضمي') || s.includes('مناظير')) {
-                        config = { bgClass: 'bg-amber-100 dark:bg-amber-900/30', textClass: 'text-amber-700 dark:text-amber-300', iconColor: 'text-amber-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` };
-                    } else if (s.includes('مخ') || s.includes('اعصاب') || s.includes('أعصاب') || s.includes('فقري')) {
-                        config = { bgClass: 'bg-teal-100 dark:bg-teal-900/30', textClass: 'text-teal-700 dark:text-teal-300', iconColor: 'text-teal-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 2.5 2.5 0 0 1-.28-4.7 2.5 2.5 0 0 1 3.18-4.4A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 2.5 2.5 0 0 0 .28-4.7 2.5 2.5 0 0 0-3.18-4.4A2.5 2.5 0 0 0 14.5 2Z"/></svg>` };
-                    } else if (s.includes('علاج') || s.includes('كيماوي') || s.includes('اورام') || s.includes('أورام')) {
-                        config = { bgClass: 'bg-emerald-100 dark:bg-emerald-900/30', textClass: 'text-emerald-700 dark:text-emerald-300', iconColor: 'text-emerald-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.5 20.5 19 12a4.95 4.95 0 1 0-7-7L3.5 13.5a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>` };
-                    } else if (s.includes('اشعة') || s.includes('أشعة') || s.includes('تحاليل')) {
-                        config = { bgClass: 'bg-indigo-100 dark:bg-indigo-900/30', textClass: 'text-indigo-700 dark:text-indigo-300', iconColor: 'text-indigo-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>` };
-                    } else if (s.includes('كورونا') || s.includes('عزل')) {
-                        config = { bgClass: 'bg-red-200 dark:bg-red-900/50', textClass: 'text-red-800 dark:text-red-200', iconColor: 'text-red-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>` };
-                    } else if (s.includes('انف') || s.includes('أذن') || s.includes('اذن') || s.includes('حنجرة')) {
-                        config = { bgClass: 'bg-orange-100 dark:bg-orange-900/30', textClass: 'text-orange-700 dark:text-orange-300', iconColor: 'text-orange-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 21s-5-2-5-8V7a5 5 0 0 1 10 0v6c0 6-5 8-5 8z"/><path d="M11 14c-1.5 0-2.5-1-2.5-2.5V7"/></svg>` };
-                    } else if (s.includes('صدر')) {
-                        config = { bgClass: 'bg-sky-100 dark:bg-sky-900/30', textClass: 'text-sky-700 dark:text-sky-300', iconColor: 'text-sky-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z"/><path d="M12 14v6"/><path d="M8 20h8"/></svg>` };
-                    } else if (s.includes('باطن') || s.includes('سكر') || s.includes('غدد')) {
-                        config = { bgClass: 'bg-yellow-100 dark:bg-yellow-900/30', textClass: 'text-yellow-700 dark:text-yellow-300', iconColor: 'text-yellow-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` };
-                    } else if (s.includes('جلدية')) {
-                        config = { bgClass: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', textClass: 'text-fuchsia-700 dark:text-fuchsia-300', iconColor: 'text-fuchsia-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>` };
-                    } else if (s.includes('مسالك')) {
-                        config = { bgClass: 'bg-lime-100 dark:bg-lime-900/30', textClass: 'text-lime-700 dark:text-lime-300', iconColor: 'text-lime-600', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>` };
-                    } else if (s.includes('روماتيزم') || s.includes('مناعة')) {
-                        config = { bgClass: 'bg-rose-100 dark:bg-rose-900/30', textClass: 'text-rose-700 dark:text-rose-300', iconColor: 'text-rose-500', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.5c-4.5 0-8-3.5-8-8 0-3.5 2.5-6.5 6-7.5V2m4 3c3.5 1 6 4 6 7.5 0 4.5-3.5 8-8 8"/></svg>` };
-                    } else if (s.includes('جراحة')) {
-                        config = { bgClass: 'bg-slate-200 dark:bg-slate-700', textClass: 'text-slate-800 dark:text-slate-200', iconColor: 'text-slate-600 dark:text-slate-400', svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>` };
-                    }
-                    
-                    return config;
-                };
-
-                // =================================================================
-                //  دوال المساعدة (واتساب وخريطة)
-                // =================================================================
+                // دوال المساعدة
                 const getWaLink = (phone) => {
                     if (!phone) return null;
-                    
-                    let phoneStr = String(phone);
-                    let matches = phoneStr.match(/\d+/g);
+                    let matches = String(phone).match(/\d+/g);
                     if (!matches) return null;
-                    
                     for (let num of matches) {
-                        if (/^(10|11|12|15)\d{8}$/.test(num)) {
-                            num = '0' + num;
-                        }
-                        if (/^(010|011|012|015)\d{8}$/.test(num)) {
-                            return `https://wa.me/20${num.substring(1)}`;
-                        }
+                        if (/^(10|11|12|15)\d{8}$/.test(num)) num = '0' + num;
+                        if (/^(010|011|012|015)\d{8}$/.test(num)) return `https://wa.me/20${num.substring(1)}`;
                     }
                     return null;
                 };
-
                 const getMapLink = (clinic) => {
                     const query = encodeURIComponent([clinic['اسم الجهة'], clinic['المحافظة'], clinic['العنوان']].join(' '));
                     return `https://www.google.com/maps/search/?api=1&query=${query}`;
                 };
 
-                // =================================================================
-                //  دوال الإحصائيات (Chart.js)
-                // =================================================================
-                let govChartInstance = null;
-                let specChartInstance = null;
-
+                // دوال الإحصائيات
+                let govChartInstance = null, specChartInstance = null;
                 const generateAnalytics = () => {
                     setTimeout(() => {
                         const govCtx = document.getElementById('govChart');
@@ -959,15 +746,14 @@
                         if (specChartInstance) { specChartInstance.destroy(); specChartInstance = null; }
 
                         const activeData = clinics.value.filter(c => c['الحالة'] !== 'معطل');
-                        const govCounts = {};
-                        const specCounts = {};
+                        const govCounts = {}, specCounts = {};
                         activeData.forEach(c => {
                             if (c['المحافظة']) govCounts[c['المحافظة']] = (govCounts[c['المحافظة']] || 0) + 1;
                             if (c['التخصص']) specCounts[c['التخصص']] = (specCounts[c['التخصص']] || 0) + 1;
                         });
 
-                        const textColor = isDark.value ? '#e2e8f0' : '#475569';
-                        const gridColor = isDark.value ? '#334155' : '#e2e8f0';
+                        const textColor = '#475569';
+                        const gridColor = '#e2e8f0';
 
                         govChartInstance = new Chart(govCtx, {
                             type: 'bar',
@@ -988,7 +774,7 @@
                             type: 'doughnut',
                             data: {
                                 labels: sortedSpecs.map(s => s[0]),
-                                datasets: [{ data: sortedSpecs.map(s => s[1]), backgroundColor: colors.slice(0, sortedSpecs.length), borderColor: isDark.value ? '#0F172A' : '#fff', borderWidth: isDark.value ? 2 : 0 }]
+                                datasets: [{ data: sortedSpecs.map(s => s[1]), backgroundColor: colors.slice(0, sortedSpecs.length) }]
                             },
                             options: {
                                 responsive: true,
@@ -998,9 +784,7 @@
                     }, 100);
                 };
 
-                // =================================================================
-                //  تصدير PDF
-                // =================================================================
+                // تصدير PDF
                 const exportToPDF = () => {
                     if (filteredClinics.value.length === 0) return alert("لا توجد بيانات لتصديرها.");
                     const container = document.getElementById('pdf-export-container');
@@ -1045,9 +829,7 @@
                     html2pdf().set(opt).from(container).save().then(() => { container.style.display = 'none'; container.innerHTML = ''; });
                 };
 
-                // =================================================================
-                //  تصدير Excel
-                // =================================================================
+                // تصدير Excel
                 const exportToExcel = () => {
                     if (filteredClinics.value.length === 0) return alert("لا توجد بيانات لتصديرها.");
                     const excelData = filteredClinics.value.map((c, i) => ({
@@ -1065,9 +847,7 @@
                     XLSX.writeFile(wb, "الدليل_الطبي_المفلتر.xlsx");
                 };
 
-                // =================================================================
-                //  إعداد Pusher
-                // =================================================================
+                // إعداد Pusher
                 const setupPusher = () => {
                     try {
                         const PUSHER_KEY = '{{PUSHER_KEY}}';
@@ -1080,46 +860,27 @@
                     } catch (e) { console.log("⚠️ Pusher not configured"); }
                 };
 
-                // =================================================================
-                //  دورة الحياة
-                // =================================================================
                 onMounted(() => {
-                    const savedTheme = localStorage.getItem('medicalDarkMode');
-                    if (savedTheme === 'true') { isDark.value = true; document.documentElement.classList.add('dark'); }
                     const savedSettings = localStorage.getItem('medicalAppSettings');
                     if (savedSettings) { try { appSettings.value = { ...appSettings.value, ...JSON.parse(savedSettings) }; } catch(e) {} }
                     if (sessionStorage.getItem('isLoggedIn') === 'true' || !appSettings.value.passcode) { isLoggedIn.value = true; }
                     const savedData = localStorage.getItem('medicalDirectoryData');
-                    if (savedData) { 
-                        try { 
-                            clinics.value = JSON.parse(savedData); 
-                            setupPusher();
-                            console.log('📊 تم تحميل البيانات من Local Storage');
-                        } catch(e) { console.error('خطأ في قراءة البيانات'); }
-                    }
+                    if (savedData) { try { clinics.value = JSON.parse(savedData); setupPusher(); } catch(e) {} }
                 });
 
-                // =================================================================
-                //  إرجاع المتغيرات والدوال
-                // =================================================================
                 return {
-                    isDark, isLoggedIn, isAdminMode, isLoading, loginInput, loginError, gsheetInput,
+                    isLoggedIn, isAdminMode, isLoading, loginInput, loginError, gsheetInput,
                     clinics, appSettings, tempSettings, searchQuery, selectedGovs, selectedSpecs,
                     govOpen, specOpen, govSearch, specSearch, showSettingsModal, showAnalyticsModal,
-                    showEditModal, editingClinic, currentPage, itemsPerPage, totalPages, paginatedClinics,
-                    
+                    showEditModal, editingClinic, currentPage, itemsPerPage, totalPages, paginatedClinics, visiblePages,
                     showSheetSelectionModal, availableSheets, selectedSheetsToImport,
                     toggleAllSheets, confirmSheetSelection,
-                    
                     hasData, activeClinicsCount, uniqueGovs, uniqueSpecs,
                     filteredGovOptions, filteredSpecOptions, govHeaderText, specHeaderText, filteredClinics,
-                    checkPasscode, toggleTheme, debounceSearch, applyFilters, clearFilters,
+                    checkPasscode, debounceSearch, applyFilters,
                     openSettingsModal, saveSettings, handleFileUpload, fetchFromGoogleSheet, silentSync,
                     openEditModal, saveEdit, toggleClinicStatus, deleteClinic,
-                    
-                    // دوال التخصصات والمساعدة
-                    getSpecialtyConfig, getWaLink, getMapLink, 
-                    generateAnalytics, exportToPDF, exportToExcel
+                    getWaLink, getMapLink, generateAnalytics, exportToPDF, exportToExcel
                 };
             }
         });
