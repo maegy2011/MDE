@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medical-app-v3.2';
+const CACHE_NAME = 'medical-app-v3.3';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -38,7 +38,11 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    if (event.request.url.includes('docs.google.com/spreadsheets')) return;
+    // تجاهل طلبات الـ API من الكاش (لأنها تتغير دائماً)
+    if (event.request.url.includes('script.google.com')) return;
+    if (event.request.url.includes('pusher.com')) return;
+    if (event.request.url.includes('google-analytics.com')) return;
+    
     event.respondWith(
         caches.match(event.request).then(cachedResponse => {
             return cachedResponse || fetch(event.request);
