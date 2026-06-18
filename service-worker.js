@@ -1,5 +1,4 @@
-const CACHE_NAME = 'medical-app-v3-pro';
-
+const CACHE_NAME = 'medical-app-v3.1';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -17,7 +16,7 @@ self.addEventListener('install', event => {
     self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
-            console.log('📦 جاري تحميل الملفات الأساسية للـ PWA...');
+            console.log('📦 تحميل ملفات PWA...');
             return cache.addAll(ASSETS_TO_CACHE);
         })
     );
@@ -29,7 +28,7 @@ self.addEventListener('activate', event => {
             return Promise.all(
                 cacheNames.map(cache => {
                     if (cache !== CACHE_NAME) {
-                        console.log('🗑️ تم مسح الكاش القديم:', cache);
+                        console.log('🗑️ مسح الكاش القديم:', cache);
                         return caches.delete(cache);
                     }
                 })
@@ -39,11 +38,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    // تجاهل طلبات جوجل شيت من الكاش
-    if (event.request.url.includes('docs.google.com/spreadsheets')) {
-        return;
-    }
-
+    if (event.request.url.includes('docs.google.com/spreadsheets')) return;
     event.respondWith(
         caches.match(event.request).then(cachedResponse => {
             return cachedResponse || fetch(event.request);
