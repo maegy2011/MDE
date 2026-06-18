@@ -58,6 +58,17 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .pulse-red { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
+        
+        /* ===== حركة إشعار التثبيت ===== */
+        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .animate-bounce-subtle { animation: bounce-subtle 3s infinite ease-in-out; }
+        
+        /* ===== حركة ظهور الإشعار من الأسفل ===== */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
 <body class="bg-[#FDFBF7] text-slate-800 transition-colors duration-300 flex flex-col min-h-screen relative" style="background-image: radial-gradient(#C5A880 0.5px, transparent 0.5px); background-size: 20px 20px;">
@@ -274,6 +285,32 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ============================================================ -->
+            <!-- إشعار تثبيت التطبيق الذكي (PWA Install Banner) -->
+            <!-- ============================================================ -->
+            <div v-if="showInstallBtn" class="fixed bottom-20 left-4 right-4 z-[100] bg-slate-900 border-2 border-gold p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4 animate-bounce-subtle animate-slide-up">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gold p-2 rounded-xl text-slate-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">ثبت التطبيق على هاتفك</p>
+                        <p class="text-slate-400 text-[10px]">للوصول السريع والعمل بدون إنترنت</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button @click="installPWA" class="bg-gold text-slate-900 px-4 py-2 rounded-lg font-black text-xs hover:bg-yellow-500 transition-all">تثبيت الآن</button>
+                    <button @click="showInstallBtn=false" class="text-slate-500 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
         </main>
 
         <!-- ================================================================ -->
@@ -499,6 +536,20 @@
                             'governorate': clinic['المحافظة'] || ''
                         });
                     }
+                };
+
+                // =================================================================
+                //  PWA - إشعار تثبيت التطبيق الذكي
+                // =================================================================
+                const deferredPrompt = ref(null);
+                const showInstallBtn = ref(false);
+
+                const installPWA = async () => {
+                    if (!deferredPrompt.value) return;
+                    deferredPrompt.value.prompt();
+                    const { outcome } = await deferredPrompt.value.userChoice;
+                    if (outcome === 'accepted') showInstallBtn.value = false;
+                    deferredPrompt.value = null;
                 };
 
                 // =================================================================
@@ -878,6 +929,18 @@
                     if (savedSettings) { try { appSettings.value = { ...appSettings.value, ...JSON.parse(savedSettings) }; } catch(e) {} }
                     const savedData = localStorage.getItem('medicalDirectoryData');
                     if (savedData) { try { clinics.value = JSON.parse(savedData); setupPusher(); } catch(e) {} }
+
+                    // ===== مستمعي PWA للتثبيت =====
+                    window.addEventListener('beforeinstallprompt', (e) => {
+                        e.preventDefault();
+                        deferredPrompt.value = e;
+                        showInstallBtn.value = true;
+                    });
+
+                    window.addEventListener('appinstalled', () => {
+                        showInstallBtn.value = false;
+                        deferredPrompt.value = null;
+                    });
                 });
 
                 // =================================================================
@@ -898,7 +961,8 @@
                     openEditModal, saveEdit, toggleClinicStatus, deleteClinic,
                     getWaLink, getMapLink, trackContact, generateAnalytics, exportToPDF, exportToExcel,
                     isListening, speechSupported, toggleSpeechRecognition,
-                    isHomeState, searchHistory, goHome, goBack
+                    isHomeState, searchHistory, goHome, goBack,
+                    showInstallBtn, installPWA
                 };
             }
         });
