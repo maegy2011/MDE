@@ -1,21 +1,52 @@
-const CACHE_NAME = 'medical-app-v2';
-const urlsToCache = [
-  './',
-  './index.html',
-  './site.webmanifest',
-  'https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap'
+const CACHE_NAME = 'medical-app-v3-pro';
+
+const ASSETS_TO_CACHE = [
+    './',
+    './index.html',
+    './manifest.json',
+    'https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap',
+    'https://cdn.tailwindcss.com/',
+    'https://unpkg.com/vue@3/dist/vue.global.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+    'https://js.pusher.com/8.2.0/pusher.min.js',
+    'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-  );
+    self.skipWaiting();
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
+            console.log('📦 جاري تحميل الملفات الأساسية للـ PWA...');
+            return cache.addAll(ASSETS_TO_CACHE);
+        })
+    );
+});
+
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('🗑️ تم مسح الكاش القديم:', cache);
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        })
+    );
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
+    // تجاهل طلبات جوجل شيت من الكاش
+    if (event.request.url.includes('docs.google.com/spreadsheets')) {
+        return;
+    }
+
+    event.respondWith(
+        caches.match(event.request).then(cachedResponse => {
+            return cachedResponse || fetch(event.request);
+        })
+    );
 });
