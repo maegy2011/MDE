@@ -221,14 +221,14 @@
                             </div>
                         </div>
 
-                        <!-- ===== شريط الترقيم (صف واحد) ===== -->
+                        <!-- ===== شريط الترقيم (مع التسميات النصية وتوسيط) ===== -->
                         <div v-if="totalPages>1" class="pagination-wrapper">
                             <div class="pagination">
-                                <button @click="currentPage=1" :disabled="currentPage===1" title="الصفحة الأولى"><i class="fa-solid fa-angles-right"></i></button>
-                                <button @click="currentPage--" :disabled="currentPage===1" title="السابق"><i class="fa-solid fa-chevron-right"></i></button>
+                                <button @click="currentPage=1" :disabled="currentPage===1">الأولى</button>
+                                <button @click="currentPage--" :disabled="currentPage===1">السابق</button>
                                 <button v-for="p in visiblePages" :key="p" @click="currentPage=p" :class="['page-btn', currentPage===p ? 'active' : '']">{{ p }}</button>
-                                <button @click="currentPage++" :disabled="currentPage===totalPages" title="التالي"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button @click="currentPage=totalPages" :disabled="currentPage===totalPages" title="الصفحة الأخيرة"><i class="fa-solid fa-angles-left"></i></button>
+                                <button @click="currentPage++" :disabled="currentPage===totalPages">التالي</button>
+                                <button @click="currentPage=totalPages" :disabled="currentPage===totalPages">الأخيرة</button>
                             </div>
                         </div>
                     </div>
