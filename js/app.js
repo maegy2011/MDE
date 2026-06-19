@@ -155,74 +155,49 @@ const app = createApp({
         };
 
         // ============================================================
-        //  3. البحث الصوتي (تم الإصلاح الكامل)
+        //  3. البحث الصوتي (تم الإصلاح)
         // ============================================================
         const isListening = ref(false);
         const speechSupported = ref(isSpeechSupported());
         let recognition = null;
 
-        // إنشاء كائن التعرف الصوتي
-        function initSpeechRecognition() {
-            if (!speechSupported.value) return null;
+        if (speechSupported.value) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return null;
-            
-            const rec = new SpeechRecognition();
-            rec.lang = 'ar-EG';
-            rec.continuous = false;
-            rec.interimResults = false;
-            rec.maxAlternatives = 1;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-EG';
+            recognition.continuous = false;
+            recognition.interimResults = false;
 
-            rec.onstart = () => {
+            recognition.onstart = () => {
                 isListening.value = true;
-                console.log('🎤 جارٍ الاستماع...');
             };
 
-            rec.onresult = (event) => {
+            recognition.onresult = (event) => {
                 if (event.results && event.results.length > 0) {
-                    const transcript = event.results[0][0].transcript.trim();
-                    console.log('📝 تم التعرف على النص:', transcript);
+                    const transcript = event.results[0][0].transcript;
                     searchQuery.value = transcript;
-                    // تنفيذ البحث بعد التعرف
                     debounceSearch();
                 }
             };
 
-            rec.onerror = (event) => {
-                console.error('❌ خطأ في التعرف الصوتي:', event.error);
+            recognition.onerror = (event) => {
+                console.log('خطأ في التعرف الصوتي:', event.error);
                 isListening.value = false;
                 if (event.error === 'not-allowed') {
                     alert('الرجاء السماح للتطبيق باستخدام الميكروفون.');
-                } else if (event.error === 'no-speech') {
-                    // المستخدم لم يتحدث، نعيد المحاولة تلقائياً
-                    console.log('لم يتم اكتشاف كلام، حاول مرة أخرى.');
                 }
             };
 
-            rec.onend = () => {
+            recognition.onend = () => {
                 isListening.value = false;
-                console.log('🔇 توقف الاستماع.');
             };
-
-            return rec;
         }
 
-        // دالة تبديل حالة الميكروفون
         const toggleSpeechRecognition = () => {
-            if (!speechSupported.value) {
-                alert('المتصفح لا يدعم البحث الصوتي. يرجى استخدام متصفح حديث (Chrome, Edge, Safari).');
+            if (!recognition) {
+                alert('المتصفح لا يدعم البحث الصوتي.');
                 return;
             }
-
-            // إذا لم يتم إنشاء الكائن بعد، نقوم بإنشائه
-            if (!recognition) {
-                recognition = initSpeechRecognition();
-                if (!recognition) {
-                    alert('فشل تهيئة الميكروفون. تأكد من أن المتصفح يدعم خاصية التعرف الصوتي.');
-                    return;
-                }
-            }
-
             try {
                 if (isListening.value) {
                     recognition.stop();
@@ -230,9 +205,8 @@ const app = createApp({
                     recognition.start();
                 }
             } catch (error) {
-                console.error('خطأ في تشغيل الميكروفون:', error);
+                console.log('خطأ في تشغيل الميكروفون:', error);
                 isListening.value = false;
-                alert('حدث خطأ أثناء تشغيل الميكروفون. حاول مرة أخرى.');
             }
         };
 
@@ -734,9 +708,7 @@ const app = createApp({
             govHeaderText, specHeaderText,
             filteredClinics, totalPages, paginatedClinics, visiblePages,
 
-            getWaLink,
-            getMapLink,
-            trackContact,
+            getWaLink, getMapLink, trackContact,
 
             debounceSearch, applyFilters,
             openSettingsModal, saveSettings, handleLogoUpload,
