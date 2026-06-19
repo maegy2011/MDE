@@ -1,5 +1,5 @@
 /* ================================================================
-   styles.css - الأنماط الرئيسية للتطبيق (نسخة محدثة)
+   styles.css - الأنماط الرئيسية للتطبيق (النسخة النهائية)
    ================================================================ */
 
 /* ===== الأساسيات ===== */
@@ -51,7 +51,7 @@ body {
 }
 
 /* ================================================================ */
-/*  الهيدر الفاخر (مع أزرار بحجم مناسب) */
+/*  الهيدر الفاخر */
 /* ================================================================ */
 .app-header {
     position: sticky;
@@ -522,7 +522,7 @@ body {
 }
 
 /* ================================================================ */
-/*  شبكة الكروت (مع منع التمدد وأزرار بحجم مناسب في صف واحد) */
+/*  شبكة الكروت (مع منع التمدد) */
 /* ================================================================ */
 .clinics-grid {
     display: grid;
@@ -615,16 +615,18 @@ body {
 }
 .clinic-card .info p:last-child { margin-bottom: 0; }
 
-/* ===== أزرار الكرت (صف واحد، بدون wrap) ===== */
+/* ===== أزرار الكرت (صف واحد، مرونة كاملة) ===== */
 .clinic-card .card-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
     gap: 8px;
     margin-top: 12px;
     width: 100%;
+    min-height: 44px;
 }
 .clinic-card .card-actions a {
-    padding: 10px 4px;
+    flex: 1;
+    padding: 10px 6px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 700;
@@ -639,6 +641,11 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     min-height: 44px;
+    min-width: 0;
+}
+.clinic-card .card-actions a:only-child {
+    flex: 0 1 auto;
+    padding: 10px 24px;
 }
 .clinic-card .card-actions .btn-call { background: #2563EB; color: white; }
 .clinic-card .card-actions .btn-call:hover { background: #1D4ED8; }
@@ -851,6 +858,8 @@ body {
 /* ================================================================ */
 /*  توافق الشاشات الصغيرة (Responsive) */
 /* ================================================================ */
+
+/* ===== أزرار الكارت في الشاشات الصغيرة ===== */
 @media (max-width: 768px) {
     .app-header .brand .title { font-size: 15px; }
     .app-header .brand .subtitle { display: none; }
@@ -870,7 +879,12 @@ body {
     .clinic-card { padding: 14px 16px; }
     .clinic-card .header h3 { font-size: 16px; max-width: 65%; }
     .clinic-card .info p { font-size: 13px; }
+    
+    /* أزرار الكارت في الشاشات المتوسطة */
+    .clinic-card .card-actions { min-height: 40px; gap: 6px; }
     .clinic-card .card-actions a { font-size: 13px; padding: 8px 4px; min-height: 40px; }
+    .clinic-card .card-actions a:only-child { padding: 8px 18px; }
+    
     .clinic-card .admin-controls button { font-size: 12px; min-height: 36px; }
     
     .stats-grid { grid-template-columns: 1fr; }
@@ -894,8 +908,12 @@ body {
     .clinic-card .header h3 { font-size: 15px; max-width: 60%; }
     .clinic-card .header .spec-tag { font-size: 10px; padding: 2px 8px; max-width: 35%; }
     .clinic-card .info p { font-size: 12px; }
-    .clinic-card .card-actions { grid-template-columns: 1fr 1fr; }
-    .clinic-card .card-actions a { font-size: 12px; padding: 6px 2px; min-height: 36px; }
+    
+    /* أزرار الكارت في الشاشات الصغيرة (صف واحد) */
+    .clinic-card .card-actions { min-height: 38px; gap: 6px; flex-wrap: nowrap; }
+    .clinic-card .card-actions a { font-size: 12px; padding: 8px 4px; min-height: 38px; }
+    .clinic-card .card-actions a:only-child { padding: 8px 16px; }
+    
     .clinic-card .admin-controls button { font-size: 10px; padding: 4px 2px; min-height: 32px; }
     
     .home-hero .hero-logo h2 { font-size: 20px; }
@@ -904,6 +922,27 @@ body {
     
     .pagination button { font-size: 12px; padding: 4px 10px; min-height: 34px; }
     .modal-overlay .modal .modal-btns button { font-size: 14px; min-height: 40px; }
+}
+
+@media (max-width: 360px) {
+    /* في الشاشات الصغيرة جداً، نسمح للأزرار بالالتفاف إذا لزم الأمر */
+    .clinic-card .card-actions {
+        flex-wrap: wrap;
+        gap: 4px;
+        min-height: 34px;
+    }
+    .clinic-card .card-actions a {
+        flex: 1 1 calc(50% - 4px);
+        font-size: 11px;
+        padding: 6px 4px;
+        min-height: 34px;
+    }
+    .clinic-card .card-actions a:only-child {
+        flex: 0 1 auto;
+        padding: 6px 16px;
+        min-width: 80px;
+    }
+    .clinic-card .header h3 { font-size: 14px; max-width: 55%; }
 }
 
 @media (min-width: 1400px) {
