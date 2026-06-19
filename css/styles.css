@@ -752,3 +752,42 @@ body {
     .install-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 60px; }
     .install-banner .btn-install { width: 100%; }
 }
+/* ===== منع تمديد الكروت ===== */
+.clinic-card {
+    overflow: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.clinic-card .header h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+.clinic-card .info p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
+.clinic-card .info p strong {
+    display: inline-block;
+}
+
+/* ضبط حجم الكروت في الشاشات الصغيرة */
+@media (max-width: 640px) {
+    .clinic-card .header h3 {
+        font-size: 15px;
+        max-width: 70%;
+    }
+    .clinic-card .info p {
+        font-size: 13px;
+    }
+    .card-actions a {
+        font-size: 10px;
+        padding: 6px;
+    }
+}
