@@ -1,5 +1,5 @@
 /* ================================================================
-   styles.css - الأنماط الرئيسية للتطبيق
+   styles.css - الأنماط الرئيسية للتطبيق (نسخة محدثة)
    ================================================================ */
 
 /* ===== الأساسيات ===== */
@@ -51,7 +51,7 @@ body {
 }
 
 /* ================================================================ */
-/*  الهيدر الفاخر (Luxury Header) */
+/*  الهيدر الفاخر (مع أزرار بحجم مناسب) */
 /* ================================================================ */
 .app-header {
     position: sticky;
@@ -93,7 +93,7 @@ body {
 
 .app-header .actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     overflow-x: auto;
     padding-bottom: 4px;
     flex: 1 1 auto;
@@ -102,9 +102,9 @@ body {
 .app-header .actions .btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 5px 14px;
-    font-size: 11px;
+    gap: 6px;
+    padding: 8px 18px;
+    font-size: 14px;
     font-weight: 700;
     border-radius: 8px;
     background: rgba(255,255,255,0.08);
@@ -114,9 +114,11 @@ body {
     transition: all 0.3s;
     white-space: nowrap;
     flex-shrink: 0;
+    min-height: 42px;
 }
-.app-header .actions .btn:hover { background: rgba(255,255,255,0.15); }
-.app-header .actions .btn-gold { color: #C5A880; }
+.app-header .actions .btn:hover { background: rgba(255,255,255,0.2); }
+.app-header .actions .btn-gold { color: #C5A880; border-color: #C5A880; }
+.app-header .actions .btn-gold:hover { background: #C5A880; color: #0F172A; }
 .app-header .actions .btn-pdf { background: #DC2626; border-color: #DC2626; }
 .app-header .actions .btn-pdf:hover { background: #B91C1C; }
 .app-header .actions .btn-excel { background: #059669; border-color: #059669; }
@@ -153,7 +155,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    font-size: 13px;
+    font-size: 14px;
     margin-top: auto;
     box-shadow: 0 -10px 15px -3px rgba(0,0,0,0.1);
 }
@@ -194,14 +196,15 @@ body {
 .install-banner .btn-install {
     background: #C5A880;
     color: #0F172A;
-    padding: 8px 18px;
+    padding: 10px 24px;
     border-radius: 8px;
     font-weight: 900;
-    font-size: 12px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     transition: all 0.3s;
     white-space: nowrap;
+    min-height: 44px;
 }
 .install-banner .btn-install:hover { background: #b8966a; }
 .install-banner .btn-close {
@@ -209,7 +212,7 @@ body {
     border: none;
     color: #64748B;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 24px;
     padding: 4px;
 }
 .install-banner .btn-close:hover { color: white; }
@@ -220,12 +223,11 @@ body {
 .data-upload {
     background: white;
     padding: 32px;
-    rounded: 16px;
+    border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     text-align: center;
     margin-top: 40px;
     border: 1px solid #E2E8F0;
-    border-radius: 16px;
 }
 .data-upload h3 {
     font-size: 20px;
@@ -270,7 +272,7 @@ body {
 .data-upload .card-option input[type="text"]:focus { border-color: #C5A880; }
 .data-upload .card-option .btn-primary {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: #0284C7;
     color: white;
     font-weight: 700;
@@ -282,7 +284,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 15px;
+    font-size: 16px;
+    min-height: 48px;
 }
 .data-upload .card-option .btn-primary:hover { background: #0369A1; }
 .data-upload .loading-text {
@@ -319,36 +322,42 @@ body {
 }
 .search-bar .search-input-wrap input {
     width: 100%;
-    padding: 10px 36px 10px 40px;
+    padding: 12px 44px 12px 48px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: #F8FAFC;
     outline: none;
-    font-size: 14px;
+    font-size: 16px;
     font-family: 'Cairo', sans-serif;
+    min-height: 48px;
 }
 .search-bar .search-input-wrap input:focus { border-color: #C5A880; }
 .search-bar .search-input-wrap .search-icon {
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
     color: #94A3B8;
-    font-size: 14px;
+    font-size: 18px;
 }
 .search-bar .search-input-wrap .mic-btn {
     position: absolute;
-    left: 8px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    padding: 6px;
+    padding: 8px;
     border-radius: 9999px;
     border: none;
     background: transparent;
     color: #94A3B8;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 16px;
+    font-size: 20px;
+    min-height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .search-bar .search-input-wrap .mic-btn:hover { background: #F1F5F9; color: #0284C7; }
 .search-bar .search-input-wrap .mic-btn.active { background: #FEE2E2; color: #DC2626; animation: pulse 1.5s infinite; }
@@ -362,14 +371,19 @@ body {
     .search-bar .nav-btns { order: -1; }
 }
 .search-bar .nav-btns button {
-    padding: 10px 12px;
+    padding: 12px 14px;
     border-radius: 8px;
     border: none;
     background: #F1F5F9;
     color: #475569;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 16px;
+    font-size: 18px;
+    min-height: 48px;
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .search-bar .nav-btns button:hover { background: #E2E8F0; }
 .search-bar .nav-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -381,7 +395,7 @@ body {
 }
 .search-bar .filter-wrap .filter-btn {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: #F8FAFC;
@@ -389,12 +403,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     transition: border-color 0.3s;
     font-family: 'Cairo', sans-serif;
     white-space: nowrap;
     overflow: hidden;
+    min-height: 48px;
 }
 .search-bar .filter-wrap .filter-btn:hover { border-color: #C5A880; }
 .search-bar .filter-wrap .filter-btn .truncate {
@@ -426,10 +441,10 @@ body {
 }
 .search-bar .filter-wrap .dropdown .search-input input {
     width: 100%;
-    padding: 6px 10px;
+    padding: 8px 10px;
     border: 1px solid #E2E8F0;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 13px;
     outline: none;
     font-family: 'Cairo', sans-serif;
 }
@@ -443,10 +458,10 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 10px;
+    padding: 8px 10px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'Cairo', sans-serif;
     transition: background 0.2s;
     overflow: hidden;
@@ -507,7 +522,7 @@ body {
 }
 
 /* ================================================================ */
-/*  شبكة الكروت (مع منع التمدد) */
+/*  شبكة الكروت (مع منع التمدد وأزرار بحجم مناسب في صف واحد) */
 /* ================================================================ */
 .clinics-grid {
     display: grid;
@@ -517,7 +532,6 @@ body {
 @media (min-width: 768px) { .clinics-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1024px) { .clinics-grid { grid-template-columns: 1fr 1fr 1fr; } }
 
-/* ===== بطاقة العيادة (مع word-wrap) ===== */
 .clinic-card {
     background: white;
     padding: 18px 20px;
@@ -543,8 +557,8 @@ body {
     right: 0;
     background: #EF4444;
     color: white;
-    font-size: 10px;
-    padding: 3px 12px;
+    font-size: 11px;
+    padding: 4px 14px;
     border-bottom-left-radius: 12px;
     font-weight: 700;
     display: flex;
@@ -561,7 +575,7 @@ body {
     width: 100%;
 }
 .clinic-card .header h3 {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: #0F172A;
     word-wrap: break-word;
@@ -574,8 +588,8 @@ body {
 .clinic-card .header .spec-tag {
     background: #F1F5F9;
     color: #475569;
-    font-size: 11px;
-    padding: 3px 10px;
+    font-size: 12px;
+    padding: 4px 12px;
     border-radius: 9999px;
     flex-shrink: 0;
     white-space: nowrap;
@@ -588,9 +602,9 @@ body {
     overflow: hidden;
 }
 .clinic-card .info p {
-    font-size: 13px;
+    font-size: 14px;
     color: #64748B;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     line-height: 1.5;
@@ -601,29 +615,30 @@ body {
 }
 .clinic-card .info p:last-child { margin-bottom: 0; }
 
-/* ===== أزرار الكرت ===== */
+/* ===== أزرار الكرت (صف واحد، بدون wrap) ===== */
 .clinic-card .card-actions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 12px;
     width: 100%;
 }
 .clinic-card .card-actions a {
-    padding: 7px 4px;
+    padding: 10px 4px;
     border-radius: 8px;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
     transition: all 0.3s;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    min-height: 44px;
 }
 .clinic-card .card-actions .btn-call { background: #2563EB; color: white; }
 .clinic-card .card-actions .btn-call:hover { background: #1D4ED8; }
@@ -635,19 +650,19 @@ body {
 /* ===== أزرار الإدارة ===== */
 .clinic-card .admin-controls {
     display: flex;
-    gap: 6px;
-    margin-top: 10px;
-    padding-top: 10px;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid #E2E8F0;
     flex-wrap: wrap;
 }
 .clinic-card .admin-controls button {
     flex: 1;
-    min-width: 50px;
-    padding: 5px 4px;
+    min-width: 60px;
+    padding: 8px 6px;
     border: none;
-    border-radius: 6px;
-    font-size: 10px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 700;
     color: white;
     cursor: pointer;
@@ -655,6 +670,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-height: 40px;
 }
 .clinic-card .admin-controls .btn-edit { background: #0F172A; }
 .clinic-card .admin-controls .btn-edit:hover { background: #1E293B; }
@@ -670,21 +686,23 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     margin-top: 28px;
     flex-wrap: wrap;
 }
 .pagination button {
-    padding: 6px 12px;
+    padding: 8px 16px;
     border: none;
     border-radius: 8px;
     background: #F1F5F9;
     color: #475569;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 13px;
+    font-size: 15px;
     font-family: 'Cairo', sans-serif;
+    min-height: 44px;
+    min-width: 44px;
 }
 .pagination button:hover { background: #E2E8F0; }
 .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -719,7 +737,7 @@ body {
 }
 .modal-overlay .modal-wide { max-width: 896px; }
 .modal-overlay .modal h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: #0F172A;
     margin-bottom: 16px;
@@ -727,10 +745,10 @@ body {
     align-items: center;
     gap: 8px;
 }
-.modal-overlay .modal .form-group { margin-bottom: 14px; }
+.modal-overlay .modal .form-group { margin-bottom: 16px; }
 .modal-overlay .modal .form-group label {
     display: block;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
     color: #334155;
@@ -738,31 +756,33 @@ body {
 .modal-overlay .modal .form-group input,
 .modal-overlay .modal .form-group select {
     width: 100%;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: #F8FAFC;
     outline: none;
     font-family: 'Cairo', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
+    min-height: 44px;
 }
 .modal-overlay .modal .form-group input:focus { border-color: #C5A880; }
-.modal-overlay .modal .form-group input[type="file"] { padding: 4px; background: transparent; }
+.modal-overlay .modal .form-group input[type="file"] { padding: 6px; background: transparent; }
 .modal-overlay .modal .modal-btns {
     display: flex;
     gap: 12px;
-    margin-top: 18px;
+    margin-top: 20px;
 }
 .modal-overlay .modal .modal-btns button {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border: none;
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
     font-family: 'Cairo', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
+    min-height: 48px;
 }
 .modal-overlay .modal .modal-btns .btn-save { background: #16A34A; color: white; }
 .modal-overlay .modal .modal-btns .btn-save:hover { background: #15803D; }
@@ -835,52 +855,57 @@ body {
     .app-header .brand .title { font-size: 15px; }
     .app-header .brand .subtitle { display: none; }
     .app-header .actions .btn span { display: none; }
-    .app-header .actions .btn { padding: 4px 10px; font-size: 12px; }
+    .app-header .actions .btn { padding: 6px 12px; font-size: 13px; min-height: 38px; }
     
     .home-hero .hero-logo h2 { font-size: 24px; }
     .home-hero .hero-logo p { font-size: 14px; }
     .home-hero .hero-logo img { height: 90px; }
     
     .search-bar { padding: 10px 12px; }
-    .search-bar .search-input-wrap input { font-size: 13px; padding: 8px 32px 8px 36px; }
+    .search-bar .search-input-wrap input { font-size: 14px; padding: 10px 36px 10px 40px; min-height: 44px; }
+    .search-bar .search-input-wrap .mic-btn { font-size: 18px; min-height: 36px; min-width: 36px; }
+    .search-bar .filter-wrap .filter-btn { font-size: 14px; padding: 10px 12px; min-height: 44px; }
+    .search-bar .nav-btns button { font-size: 16px; padding: 10px 12px; min-height: 44px; min-width: 44px; }
     
     .clinic-card { padding: 14px 16px; }
-    .clinic-card .header h3 { font-size: 15px; max-width: 65%; }
-    .clinic-card .info p { font-size: 12px; }
-    .clinic-card .card-actions a { font-size: 10px; padding: 5px 4px; }
-    .clinic-card .admin-controls button { font-size: 9px; min-width: 40px; }
+    .clinic-card .header h3 { font-size: 16px; max-width: 65%; }
+    .clinic-card .info p { font-size: 13px; }
+    .clinic-card .card-actions a { font-size: 13px; padding: 8px 4px; min-height: 40px; }
+    .clinic-card .admin-controls button { font-size: 12px; min-height: 36px; }
     
     .stats-grid { grid-template-columns: 1fr; }
     .modal-overlay .modal { padding: 16px; margin: 8px; }
     
     .install-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 60px; padding: 12px 16px; }
     .install-banner .btn-install { width: 100%; }
+    
+    .pagination button { font-size: 14px; padding: 6px 14px; min-height: 40px; }
 }
 
 @media (max-width: 480px) {
     .app-header .brand .title { font-size: 13px; }
-    .app-header .actions .btn { font-size: 10px; padding: 3px 8px; }
+    .app-header .actions .btn { font-size: 11px; padding: 4px 8px; min-height: 32px; }
+    .app-header .actions .btn span { display: none; }
     
-    .search-bar .search-input-wrap input { font-size: 12px; padding: 6px 28px 6px 32px; }
-    .search-bar .filter-wrap .filter-btn { font-size: 11px; padding: 6px 8px; }
+    .search-bar .search-input-wrap input { font-size: 13px; padding: 8px 32px 8px 36px; min-height: 40px; }
+    .search-bar .filter-wrap .filter-btn { font-size: 12px; padding: 8px 10px; min-height: 40px; }
+    .search-bar .nav-btns button { font-size: 14px; padding: 8px 10px; min-height: 40px; min-width: 40px; }
     
-    .clinic-card .header h3 { font-size: 14px; max-width: 60%; }
-    .clinic-card .header .spec-tag { font-size: 9px; padding: 2px 8px; max-width: 35%; }
-    .clinic-card .info p { font-size: 11px; }
+    .clinic-card .header h3 { font-size: 15px; max-width: 60%; }
+    .clinic-card .header .spec-tag { font-size: 10px; padding: 2px 8px; max-width: 35%; }
+    .clinic-card .info p { font-size: 12px; }
     .clinic-card .card-actions { grid-template-columns: 1fr 1fr; }
-    .clinic-card .card-actions a { font-size: 9px; padding: 4px 2px; white-space: normal; }
-    .clinic-card .admin-controls button { font-size: 8px; padding: 3px 2px; }
+    .clinic-card .card-actions a { font-size: 12px; padding: 6px 2px; min-height: 36px; }
+    .clinic-card .admin-controls button { font-size: 10px; padding: 4px 2px; min-height: 32px; }
     
     .home-hero .hero-logo h2 { font-size: 20px; }
     .home-hero .hero-logo p { font-size: 12px; }
     .home-hero .hero-logo img { height: 70px; }
     
-    .pagination button { font-size: 11px; padding: 4px 8px; }
+    .pagination button { font-size: 12px; padding: 4px 10px; min-height: 34px; }
+    .modal-overlay .modal .modal-btns button { font-size: 14px; min-height: 40px; }
 }
 
-/* ================================================================ */
-/*  وضع الشاشات الكبيرة (Large Screens) */
-/* ================================================================ */
 @media (min-width: 1400px) {
     .main-content { max-width: 1400px; }
     .clinics-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
