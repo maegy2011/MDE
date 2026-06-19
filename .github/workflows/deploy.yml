@@ -23,28 +23,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Inject Secrets
         run: |
-          sed -i 's/{{PUSHER_KEY}}/${{ secrets.PUSHER_KEY }}/g' index.html
-          sed -i 's/{{PUSHER_CLUSTER}}/${{ secrets.PUSHER_CLUSTER }}/g' index.html
+          sed -i 's/{{PUSHER_KEY}}/${{ secrets.PUSHER_KEY }}/g' js/config.js
+          sed -i 's/{{PUSHER_CLUSTER}}/${{ secrets.PUSHER_CLUSTER }}/g' js/config.js
           sed -i 's/{{GA_MEASUREMENT_ID}}/${{ secrets.GA_MEASUREMENT_ID }}/g' index.html
 
       - name: Update SW Cache
         run: |
-          sed -i "s/medical-app-v3-pro/medical-app-${{ github.sha }}/g" service-worker.js
-      
+          sed -i "s/medical-app-v3-pro/medical-app-${{ github.sha }}/g" sw.js
+
       - name: Prepare dist
         run: |
-          mkdir dist
-          cp index.html manifest.json service-worker.js *.png *.ico dist/ 2>/dev/null || true
-      
-      - name: Deploy
+          mkdir -p dist/icons
+          cp index.html manifest.json sw.js dist/
+          cp -r css js dist/
+          cp icons/*.png dist/icons/ 2>/dev/null || true
+
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
-      - name: Upload
+
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist'
-      - name: Deploy
+
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
