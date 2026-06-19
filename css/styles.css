@@ -687,37 +687,55 @@ body {
 .clinic-card .admin-controls .btn-delete:hover { background: #B91C1C; }
 
 /* ================================================================ */
-/*  شريط الترقيم (Pagination) */
+/*  شريط الترقيم (صف واحد) */
 /* ================================================================ */
-.pagination {
+.pagination-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 8px;
     margin-top: 28px;
-    flex-wrap: wrap;
+    padding: 0 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.pagination-wrapper::-webkit-scrollbar { display: none; }
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 .pagination button {
-    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
     border: none;
     border-radius: 8px;
     background: #F1F5F9;
     color: #475569;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s;
-    font-size: 15px;
+    transition: all 0.2s;
+    font-size: 14px;
     font-family: 'Cairo', sans-serif;
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 38px;
+    min-width: 38px;
 }
 .pagination button:hover { background: #E2E8F0; }
-.pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
-.pagination button.active {
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+.pagination button.page-btn {
+    background: transparent;
+    min-width: 32px;
+    padding: 4px 8px;
+}
+.pagination button.page-btn.active {
     background: #0284C7;
     color: white;
+    border-radius: 8px;
 }
-.pagination button.active:hover { background: #0369A1; }
+.pagination button.page-btn.active:hover { background: #0369A1; }
 
 /* ================================================================ */
 /*  النوافذ المنبثقة (Modals) */
@@ -858,8 +876,6 @@ body {
 /* ================================================================ */
 /*  توافق الشاشات الصغيرة (Responsive) */
 /* ================================================================ */
-
-/* ===== أزرار الكارت في الشاشات الصغيرة ===== */
 @media (max-width: 768px) {
     .app-header .brand .title { font-size: 15px; }
     .app-header .brand .subtitle { display: none; }
@@ -879,12 +895,9 @@ body {
     .clinic-card { padding: 14px 16px; }
     .clinic-card .header h3 { font-size: 16px; max-width: 65%; }
     .clinic-card .info p { font-size: 13px; }
-    
-    /* أزرار الكارت في الشاشات المتوسطة */
     .clinic-card .card-actions { min-height: 40px; gap: 6px; }
     .clinic-card .card-actions a { font-size: 13px; padding: 8px 4px; min-height: 40px; }
     .clinic-card .card-actions a:only-child { padding: 8px 18px; }
-    
     .clinic-card .admin-controls button { font-size: 12px; min-height: 36px; }
     
     .stats-grid { grid-template-columns: 1fr; }
@@ -893,7 +906,11 @@ body {
     .install-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 60px; padding: 12px 16px; }
     .install-banner .btn-install { width: 100%; }
     
-    .pagination button { font-size: 14px; padding: 6px 14px; min-height: 40px; }
+    /* شريط الترقيم على الموبايل */
+    .pagination-wrapper { margin-top: 20px; justify-content: flex-start; padding: 0 4px; }
+    .pagination { gap: 4px; }
+    .pagination button { font-size: 13px; padding: 4px 10px; min-height: 34px; min-width: 34px; }
+    .pagination button.page-btn { min-width: 28px; padding: 4px 6px; }
 }
 
 @media (max-width: 480px) {
@@ -908,24 +925,23 @@ body {
     .clinic-card .header h3 { font-size: 15px; max-width: 60%; }
     .clinic-card .header .spec-tag { font-size: 10px; padding: 2px 8px; max-width: 35%; }
     .clinic-card .info p { font-size: 12px; }
-    
-    /* أزرار الكارت في الشاشات الصغيرة (صف واحد) */
-    .clinic-card .card-actions { min-height: 38px; gap: 6px; flex-wrap: nowrap; }
+    .clinic-card .card-actions { min-height: 38px; gap: 6px; }
     .clinic-card .card-actions a { font-size: 12px; padding: 8px 4px; min-height: 38px; }
     .clinic-card .card-actions a:only-child { padding: 8px 16px; }
-    
     .clinic-card .admin-controls button { font-size: 10px; padding: 4px 2px; min-height: 32px; }
     
     .home-hero .hero-logo h2 { font-size: 20px; }
     .home-hero .hero-logo p { font-size: 12px; }
     .home-hero .hero-logo img { height: 70px; }
     
-    .pagination button { font-size: 12px; padding: 4px 10px; min-height: 34px; }
+    .pagination-wrapper { margin-top: 16px; }
+    .pagination button { font-size: 11px; padding: 3px 6px; min-height: 28px; min-width: 28px; }
+    .pagination button.page-btn { min-width: 24px; padding: 3px 4px; }
+    
     .modal-overlay .modal .modal-btns button { font-size: 14px; min-height: 40px; }
 }
 
 @media (max-width: 360px) {
-    /* في الشاشات الصغيرة جداً، نسمح للأزرار بالالتفاف إذا لزم الأمر */
     .clinic-card .card-actions {
         flex-wrap: wrap;
         gap: 4px;
@@ -943,6 +959,9 @@ body {
         min-width: 80px;
     }
     .clinic-card .header h3 { font-size: 14px; max-width: 55%; }
+    
+    .pagination button { font-size: 10px; padding: 2px 4px; min-height: 24px; min-width: 24px; }
+    .pagination button.page-btn { min-width: 20px; padding: 2px 3px; }
 }
 
 @media (min-width: 1400px) {
