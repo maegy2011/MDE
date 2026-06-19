@@ -2,7 +2,7 @@
 // sw.js - Service Worker للتخزين المؤقت والعمل بدون إنترنت
 // ================================================================
 
-const CACHE_NAME = 'medical-app-v3-pro';
+const CACHE_NAME = 'medical-app-v4';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
