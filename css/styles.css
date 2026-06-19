@@ -6,7 +6,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', 'sans-serif';
     background-color: #FDFBF7;
     color: #0F172A;
     min-height: 100vh;
@@ -32,36 +32,6 @@ body {
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ===== تأثيرات الكروت ===== */
-.card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.dropdown-shadow {
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-}
-
-/* ===== نبضات الميكروفون ===== */
-.pulse-red { animation: pulse 1.5s infinite; }
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-}
-
-/* ===== حركة إشعار التثبيت ===== */
-@keyframes bounce-subtle {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-.animate-bounce-subtle { animation: bounce-subtle 3s infinite ease-in-out; }
-
-@keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-
 /* ===== العلامة المائية ===== */
 .watermark {
     position: fixed;
@@ -80,7 +50,9 @@ body {
     filter: grayscale(100%);
 }
 
-/* ===== الهيدر ===== */
+/* ================================================================ */
+/*  الهيدر الفاخر (Luxury Header) */
+/* ================================================================ */
 .app-header {
     position: sticky;
     top: 0;
@@ -88,28 +60,30 @@ body {
     background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
     border-bottom: 4px solid #C5A880;
     color: white;
-    padding: 12px 24px;
+    padding: 10px 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .app-header .brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+    flex-shrink: 0;
 }
-.app-header .brand img { height: 40px; border-radius: 8px; }
-.app-header .brand .brand-icon { font-size: 28px; color: #C5A880; }
+.app-header .brand img { height: 38px; border-radius: 8px; }
+.app-header .brand .brand-icon { font-size: 26px; color: #C5A880; }
 .app-header .brand .title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 900;
     background: linear-gradient(to left, #C5A880, #f5e6b8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    line-height: 1.2;
 }
 .app-header .brand .subtitle {
     font-size: 10px;
@@ -119,7 +93,7 @@ body {
 
 .app-header .actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     overflow-x: auto;
     padding-bottom: 4px;
     flex: 1 1 auto;
@@ -129,7 +103,7 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 6px 16px;
+    padding: 5px 14px;
     font-size: 11px;
     font-weight: 700;
     border-radius: 8px;
@@ -139,6 +113,7 @@ body {
     cursor: pointer;
     transition: all 0.3s;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 .app-header .actions .btn:hover { background: rgba(255,255,255,0.15); }
 .app-header .actions .btn-gold { color: #C5A880; }
@@ -152,7 +127,9 @@ body {
 .app-header .actions .btn-blue { background: #2563EB; border-color: #2563EB; }
 .app-header .actions .btn-blue:hover { background: #1D4ED8; }
 
-/* ===== المحتوى الرئيسي ===== */
+/* ================================================================ */
+/*  المحتوى الرئيسي */
+/* ================================================================ */
 .main-content {
     flex: 1;
     max-width: 1280px;
@@ -163,17 +140,19 @@ body {
     z-index: 10;
 }
 
-/* ===== الفوتر ===== */
+/* ================================================================ */
+/*  الفوتر الفاخر */
+/* ================================================================ */
 .app-footer {
     background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
     border-top: 4px solid #C5A880;
     color: #94A3B8;
-    padding: 16px 24px;
+    padding: 12px 24px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-size: 13px;
     margin-top: auto;
     box-shadow: 0 -10px 15px -3px rgba(0,0,0,0.1);
@@ -182,7 +161,9 @@ body {
 .app-footer .footer-brand i { color: #C5A880; font-size: 18px; }
 .app-footer .footer-date { font-weight: 600; color: #C5A880; }
 
-/* ===== إشعار التثبيت ===== */
+/* ================================================================ */
+/*  إشعار تثبيت التطبيق */
+/* ================================================================ */
 .install-banner {
     position: fixed;
     bottom: 80px;
@@ -191,33 +172,36 @@ body {
     z-index: 100;
     background: #0F172A;
     border: 2px solid #C5A880;
-    padding: 16px;
+    padding: 14px 18px;
     border-radius: 16px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 .install-banner .icon-box {
     background: #C5A880;
     padding: 8px;
     border-radius: 12px;
     color: #0F172A;
+    flex-shrink: 0;
 }
-.install-banner .icon-box svg { width: 24px; height: 24px; }
+.install-banner .icon-box svg { width: 22px; height: 22px; }
 .install-banner .text h4 { color: white; font-weight: 700; font-size: 14px; margin: 0; }
 .install-banner .text p { color: #94A3B8; font-size: 10px; margin: 0; }
 .install-banner .btn-install {
     background: #C5A880;
     color: #0F172A;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 8px;
     font-weight: 900;
     font-size: 12px;
     border: none;
     cursor: pointer;
     transition: all 0.3s;
+    white-space: nowrap;
 }
 .install-banner .btn-install:hover { background: #b8966a; }
 .install-banner .btn-close {
@@ -225,18 +209,23 @@ body {
     border: none;
     color: #64748B;
     cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
 }
 .install-banner .btn-close:hover { color: white; }
 
-/* ===== صفحة جلب البيانات ===== */
+/* ================================================================ */
+/*  صفحة جلب البيانات */
+/* ================================================================ */
 .data-upload {
     background: white;
     padding: 32px;
-    border-radius: 16px;
+    rounded: 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     text-align: center;
     margin-top: 40px;
     border: 1px solid #E2E8F0;
+    border-radius: 16px;
 }
 .data-upload h3 {
     font-size: 20px;
@@ -251,7 +240,7 @@ body {
 .data-upload .grid-2 {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
     max-width: 1024px;
     margin: 0 auto;
 }
@@ -259,26 +248,29 @@ body {
     .data-upload .grid-2 { grid-template-columns: 1fr 1fr; }
 }
 .data-upload .card-option {
-    padding: 24px;
+    padding: 20px;
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     background: #F8FAFC;
+    text-align: right;
 }
-.data-upload .card-option h4 { font-weight: 700; margin-bottom: 8px; color: #0F172A; }
-.data-upload .card-option p { font-size: 12px; color: #64748B; margin-bottom: 16px; }
+.data-upload .card-option h4 { font-weight: 700; margin-bottom: 6px; color: #0F172A; }
+.data-upload .card-option p { font-size: 12px; color: #64748B; margin-bottom: 14px; }
 .data-upload .card-option input[type="text"],
 .data-upload .card-option input[type="file"] {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: white;
     outline: none;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 .data-upload .card-option input[type="text"]:focus { border-color: #C5A880; }
 .data-upload .card-option .btn-primary {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     background: #0284C7;
     color: white;
     font-weight: 700;
@@ -290,45 +282,50 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-size: 15px;
 }
 .data-upload .card-option .btn-primary:hover { background: #0369A1; }
 .data-upload .loading-text {
-    margin-top: 24px;
+    margin-top: 20px;
     color: #0284C7;
     font-weight: 700;
     animation: pulse 1.5s infinite;
 }
 
-/* ===== شريط البحث والفلترة ===== */
+/* ================================================================ */
+/*  شريط البحث والفلترة (Google-like) */
+/* ================================================================ */
 .search-bar {
     background: white;
-    padding: 16px;
+    padding: 14px 16px;
     border-radius: 16px;
     border: 1px solid #E2E8F0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     transition: all 0.5s;
     width: 100%;
     z-index: 20;
 }
-.search-bar.home { box-shadow: 0 20px 40px rgba(0,0,0,0.08); transform: scale(1.05); }
-.search-bar.results { box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin-bottom: 24px; }
+.search-bar.home { box-shadow: 0 20px 40px rgba(0,0,0,0.08); transform: scale(1.04); }
+.search-bar.results { box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin-bottom: 20px; }
 @media (min-width: 768px) {
-    .search-bar { flex-direction: row; }
+    .search-bar { flex-direction: row; align-items: center; }
 }
 .search-bar .search-input-wrap {
     position: relative;
     flex: 2;
+    min-width: 0;
 }
 .search-bar .search-input-wrap input {
     width: 100%;
-    padding: 12px 40px 12px 40px;
+    padding: 10px 36px 10px 40px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: #F8FAFC;
     outline: none;
     font-size: 14px;
+    font-family: 'Cairo', sans-serif;
 }
 .search-bar .search-input-wrap input:focus { border-color: #C5A880; }
 .search-bar .search-input-wrap .search-icon {
@@ -337,6 +334,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: #94A3B8;
+    font-size: 14px;
 }
 .search-bar .search-input-wrap .mic-btn {
     position: absolute;
@@ -350,26 +348,28 @@ body {
     color: #94A3B8;
     cursor: pointer;
     transition: all 0.3s;
+    font-size: 16px;
 }
 .search-bar .search-input-wrap .mic-btn:hover { background: #F1F5F9; color: #0284C7; }
 .search-bar .search-input-wrap .mic-btn.active { background: #FEE2E2; color: #DC2626; animation: pulse 1.5s infinite; }
 
 .search-bar .nav-btns {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     order: 2;
 }
 @media (min-width: 768px) {
     .search-bar .nav-btns { order: -1; }
 }
 .search-bar .nav-btns button {
-    padding: 12px;
+    padding: 10px 12px;
     border-radius: 8px;
     border: none;
     background: #F1F5F9;
     color: #475569;
     cursor: pointer;
     transition: all 0.3s;
+    font-size: 16px;
 }
 .search-bar .nav-btns button:hover { background: #E2E8F0; }
 .search-bar .nav-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -377,10 +377,11 @@ body {
 .search-bar .filter-wrap {
     position: relative;
     flex: 1;
+    min-width: 0;
 }
 .search-bar .filter-wrap .filter-btn {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     background: #F8FAFC;
@@ -388,12 +389,21 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     transition: border-color 0.3s;
+    font-family: 'Cairo', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .search-bar .filter-wrap .filter-btn:hover { border-color: #C5A880; }
-.search-bar .filter-wrap .filter-btn .arrow { transition: transform 0.3s; }
+.search-bar .filter-wrap .filter-btn .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+.search-bar .filter-wrap .filter-btn .arrow { transition: transform 0.3s; margin-right: 6px; flex-shrink: 0; }
 .search-bar .filter-wrap .filter-btn .arrow.open { transform: rotate(180deg); }
 
 .search-bar .filter-wrap .dropdown {
@@ -421,6 +431,7 @@ body {
     border-radius: 4px;
     font-size: 12px;
     outline: none;
+    font-family: 'Cairo', sans-serif;
 }
 .search-bar .filter-wrap .dropdown .search-input input:focus { border-color: #C5A880; }
 .search-bar .filter-wrap .dropdown .options {
@@ -432,17 +443,20 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
+    padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    font-family: 'Cairo', sans-serif;
     transition: background 0.2s;
+    overflow: hidden;
 }
 .search-bar .filter-wrap .dropdown .options label:hover { background: #F1F5F9; }
 .search-bar .filter-wrap .dropdown .options label input[type="checkbox"] {
     accent-color: #C5A880;
     width: 16px;
     height: 16px;
+    flex-shrink: 0;
 }
 .dropdown-overlay {
     position: fixed;
@@ -450,7 +464,9 @@ body {
     z-index: 30;
 }
 
-/* ===== الصفحة الرئيسية (Google-like) ===== */
+/* ================================================================ */
+/*  الصفحة الرئيسية (Google-like Hero) */
+/* ================================================================ */
 .home-hero {
     display: flex;
     flex-direction: column;
@@ -464,31 +480,35 @@ body {
 }
 .home-hero .hero-logo {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 .home-hero .hero-logo img {
-    height: 128px;
-    margin: 0 auto 24px;
+    height: 120px;
+    margin: 0 auto 20px;
     border-radius: 16px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 .home-hero .hero-logo .hero-icon {
-    font-size: 64px;
+    font-size: 56px;
     color: #C5A880;
     display: block;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .home-hero .hero-logo h2 {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 900;
     color: #0F172A;
+    margin: 0;
 }
 .home-hero .hero-logo p {
-    font-size: 18px;
+    font-size: 16px;
     color: #64748B;
+    margin: 4px 0 0;
 }
 
-/* ===== الكروت ===== */
+/* ================================================================ */
+/*  شبكة الكروت (مع منع التمدد) */
+/* ================================================================ */
 .clinics-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -497,9 +517,10 @@ body {
 @media (min-width: 768px) { .clinics-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1024px) { .clinics-grid { grid-template-columns: 1fr 1fr 1fr; } }
 
+/* ===== بطاقة العيادة (مع word-wrap) ===== */
 .clinic-card {
     background: white;
-    padding: 20px;
+    padding: 18px 20px;
     border-radius: 12px;
     border: 1px solid #E2E8F0;
     transition: all 0.3s;
@@ -507,8 +528,15 @@ body {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    overflow: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    min-height: 180px;
+    width: 100%;
+    box-sizing: border-box;
 }
-.clinic-card.disabled { opacity: 0.6; border-color: #FCA5A5; }
+.clinic-card.disabled { opacity: 0.6; border-color: #FCA5A5; background: #FEF2F2; }
 .clinic-card .status-badge {
     position: absolute;
     top: 0;
@@ -516,50 +544,73 @@ body {
     background: #EF4444;
     color: white;
     font-size: 10px;
-    padding: 4px 12px;
+    padding: 3px 12px;
     border-bottom-left-radius: 12px;
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 4px;
+    white-space: nowrap;
 }
 .clinic-card .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 8px;
     margin-bottom: 8px;
+    width: 100%;
 }
 .clinic-card .header h3 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #0F172A;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 72%;
+    line-height: 1.4;
+    flex-shrink: 1;
+    margin: 0;
 }
 .clinic-card .header .spec-tag {
     background: #F1F5F9;
     color: #475569;
     font-size: 11px;
-    padding: 4px 10px;
+    padding: 3px 10px;
     border-radius: 9999px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    max-width: 28%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .clinic-card .info {
     flex: 1;
+    overflow: hidden;
 }
 .clinic-card .info p {
-    font-size: 14px;
+    font-size: 13px;
     color: #64748B;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
 }
-.clinic-card .info p strong { color: #334155; }
+.clinic-card .info p strong {
+    color: #334155;
+    display: inline-block;
+}
+.clinic-card .info p:last-child { margin-bottom: 0; }
 
 /* ===== أزرار الكرت ===== */
-.card-actions {
+.clinic-card .card-actions {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 10px;
+    width: 100%;
 }
-.card-actions a {
-    padding: 8px;
+.clinic-card .card-actions a {
+    padding: 7px 4px;
     border-radius: 8px;
     font-size: 11px;
     font-weight: 700;
@@ -570,50 +621,61 @@ body {
     justify-content: center;
     gap: 4px;
     transition: all 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.card-actions .btn-call { background: #2563EB; color: white; }
-.card-actions .btn-call:hover { background: #1D4ED8; }
-.card-actions .btn-wa { background: #25D366; color: white; }
-.card-actions .btn-wa:hover { background: #1DA851; }
-.card-actions .btn-map { background: #F1F5F9; color: #334155; }
-.card-actions .btn-map:hover { background: #E2E8F0; }
+.clinic-card .card-actions .btn-call { background: #2563EB; color: white; }
+.clinic-card .card-actions .btn-call:hover { background: #1D4ED8; }
+.clinic-card .card-actions .btn-wa { background: #25D366; color: white; }
+.clinic-card .card-actions .btn-wa:hover { background: #1DA851; }
+.clinic-card .card-actions .btn-map { background: #F1F5F9; color: #334155; }
+.clinic-card .card-actions .btn-map:hover { background: #E2E8F0; }
 
 /* ===== أزرار الإدارة ===== */
-.admin-controls {
+.clinic-card .admin-controls {
     display: flex;
-    gap: 8px;
-    margin-top: 12px;
-    padding-top: 12px;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid #E2E8F0;
+    flex-wrap: wrap;
 }
-.admin-controls button {
+.clinic-card .admin-controls button {
     flex: 1;
-    padding: 6px;
+    min-width: 50px;
+    padding: 5px 4px;
     border: none;
-    border-radius: 8px;
-    font-size: 11px;
+    border-radius: 6px;
+    font-size: 10px;
     font-weight: 700;
     color: white;
     cursor: pointer;
     transition: all 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.admin-controls .btn-edit { background: #0F172A; }
-.admin-controls .btn-edit:hover { background: #1E293B; }
-.admin-controls .btn-toggle { background: #CA8A04; }
-.admin-controls .btn-toggle:hover { background: #A16207; }
-.admin-controls .btn-delete { background: #DC2626; }
-.admin-controls .btn-delete:hover { background: #B91C1C; }
+.clinic-card .admin-controls .btn-edit { background: #0F172A; }
+.clinic-card .admin-controls .btn-edit:hover { background: #1E293B; }
+.clinic-card .admin-controls .btn-toggle { background: #CA8A04; }
+.clinic-card .admin-controls .btn-toggle:hover { background: #A16207; }
+.clinic-card .admin-controls .btn-delete { background: #DC2626; }
+.clinic-card .admin-controls .btn-delete:hover { background: #B91C1C; }
 
-/* ===== شريط الترقيم ===== */
+/* ================================================================ */
+/*  شريط الترقيم (Pagination) */
+/* ================================================================ */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-top: 32px;
+    gap: 6px;
+    margin-top: 28px;
+    flex-wrap: wrap;
 }
 .pagination button {
-    padding: 8px 12px;
+    padding: 6px 12px;
     border: none;
     border-radius: 8px;
     background: #F1F5F9;
@@ -621,6 +683,8 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    font-size: 13px;
+    font-family: 'Cairo', sans-serif;
 }
 .pagination button:hover { background: #E2E8F0; }
 .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -629,9 +693,10 @@ body {
     color: white;
 }
 .pagination button.active:hover { background: #0369A1; }
-.pagination .pagination-text { font-size: 14px; color: #64748B; font-weight: 600; }
 
-/* ===== النوافذ المنبثقة ===== */
+/* ================================================================ */
+/*  النوافذ المنبثقة (Modals) */
+/* ================================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -662,12 +727,13 @@ body {
     align-items: center;
     gap: 8px;
 }
-.modal-overlay .modal .form-group { margin-bottom: 16px; }
+.modal-overlay .modal .form-group { margin-bottom: 14px; }
 .modal-overlay .modal .form-group label {
     display: block;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     margin-bottom: 4px;
+    color: #334155;
 }
 .modal-overlay .modal .form-group input,
 .modal-overlay .modal .form-group select {
@@ -677,47 +743,53 @@ body {
     border-radius: 8px;
     background: #F8FAFC;
     outline: none;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
 }
 .modal-overlay .modal .form-group input:focus { border-color: #C5A880; }
 .modal-overlay .modal .form-group input[type="file"] { padding: 4px; background: transparent; }
 .modal-overlay .modal .modal-btns {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 18px;
 }
 .modal-overlay .modal .modal-btns button {
     flex: 1;
-    padding: 12px;
+    padding: 10px;
     border: none;
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
 }
 .modal-overlay .modal .modal-btns .btn-save { background: #16A34A; color: white; }
 .modal-overlay .modal .modal-btns .btn-save:hover { background: #15803D; }
 .modal-overlay .modal .modal-btns .btn-cancel { background: #F1F5F9; color: #334155; }
 .modal-overlay .modal .modal-btns .btn-cancel:hover { background: #E2E8F0; }
 
-/* ===== الإحصائيات ===== */
+/* ================================================================ */
+/*  الإحصائيات (Analytics) */
+/* ================================================================ */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 14px;
+    margin-bottom: 20px;
 }
 .stats-grid .stat-card {
     background: #0F172A;
-    padding: 16px;
+    padding: 14px 10px;
     border-radius: 12px;
     text-align: center;
     border-bottom: 4px solid #C5A880;
     color: white;
 }
-.stats-grid .stat-card p { color: #94A3B8; font-size: 14px; margin: 0; }
+.stats-grid .stat-card p { color: #94A3B8; font-size: 13px; margin: 0; }
 .stats-grid .stat-card span {
     display: block;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 900;
     color: #C5A880;
 }
@@ -729,65 +801,87 @@ body {
 @media (min-width: 768px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
 .charts-grid .chart-box {
     background: #F8FAFC;
-    padding: 16px;
+    padding: 14px;
     border-radius: 12px;
 }
 
-/* ===== حاوية PDF ===== */
+/* ================================================================ */
+/*  حاوية PDF */
+/* ================================================================ */
 #pdf-export-container { display: none; }
 
-/* ===== توافق مع الموبايل ===== */
+/* ================================================================ */
+/*  الحركات (Animations) */
+/* ================================================================ */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+}
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+.animate-bounce-subtle { animation: bounce-subtle 3s infinite ease-in-out; }
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* ================================================================ */
+/*  توافق الشاشات الصغيرة (Responsive) */
+/* ================================================================ */
 @media (max-width: 768px) {
     .app-header .brand .title { font-size: 15px; }
     .app-header .brand .subtitle { display: none; }
     .app-header .actions .btn span { display: none; }
-    .app-header .actions .btn { padding: 6px 10px; font-size: 12px; }
+    .app-header .actions .btn { padding: 4px 10px; font-size: 12px; }
+    
     .home-hero .hero-logo h2 { font-size: 24px; }
     .home-hero .hero-logo p { font-size: 14px; }
-    .search-bar { padding: 12px; }
-    .search-bar .search-input-wrap input { font-size: 13px; padding: 10px 36px; }
-    .clinic-card .header h3 { font-size: 16px; }
+    .home-hero .hero-logo img { height: 90px; }
+    
+    .search-bar { padding: 10px 12px; }
+    .search-bar .search-input-wrap input { font-size: 13px; padding: 8px 32px 8px 36px; }
+    
+    .clinic-card { padding: 14px 16px; }
+    .clinic-card .header h3 { font-size: 15px; max-width: 65%; }
+    .clinic-card .info p { font-size: 12px; }
+    .clinic-card .card-actions a { font-size: 10px; padding: 5px 4px; }
+    .clinic-card .admin-controls button { font-size: 9px; min-width: 40px; }
+    
     .stats-grid { grid-template-columns: 1fr; }
     .modal-overlay .modal { padding: 16px; margin: 8px; }
-    .install-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 60px; }
+    
+    .install-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 60px; padding: 12px 16px; }
     .install-banner .btn-install { width: 100%; }
 }
-/* ===== منع تمديد الكروت ===== */
-.clinic-card {
-    overflow: hidden;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
+
+@media (max-width: 480px) {
+    .app-header .brand .title { font-size: 13px; }
+    .app-header .actions .btn { font-size: 10px; padding: 3px 8px; }
+    
+    .search-bar .search-input-wrap input { font-size: 12px; padding: 6px 28px 6px 32px; }
+    .search-bar .filter-wrap .filter-btn { font-size: 11px; padding: 6px 8px; }
+    
+    .clinic-card .header h3 { font-size: 14px; max-width: 60%; }
+    .clinic-card .header .spec-tag { font-size: 9px; padding: 2px 8px; max-width: 35%; }
+    .clinic-card .info p { font-size: 11px; }
+    .clinic-card .card-actions { grid-template-columns: 1fr 1fr; }
+    .clinic-card .card-actions a { font-size: 9px; padding: 4px 2px; white-space: normal; }
+    .clinic-card .admin-controls button { font-size: 8px; padding: 3px 2px; }
+    
+    .home-hero .hero-logo h2 { font-size: 20px; }
+    .home-hero .hero-logo p { font-size: 12px; }
+    .home-hero .hero-logo img { height: 70px; }
+    
+    .pagination button { font-size: 11px; padding: 4px 8px; }
 }
 
-.clinic-card .header h3 {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    max-width: 80%;
-    line-height: 1.4;
-}
-
-.clinic-card .info p {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.5;
-}
-
-.clinic-card .info p strong {
-    display: inline-block;
-}
-
-/* ضبط حجم الكروت في الشاشات الصغيرة */
-@media (max-width: 640px) {
-    .clinic-card .header h3 {
-        font-size: 15px;
-        max-width: 70%;
-    }
-    .clinic-card .info p {
-        font-size: 13px;
-    }
-    .card-actions a {
-        font-size: 10px;
-        padding: 6px;
-    }
+/* ================================================================ */
+/*  وضع الشاشات الكبيرة (Large Screens) */
+/* ================================================================ */
+@media (min-width: 1400px) {
+    .main-content { max-width: 1400px; }
+    .clinics-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
 }
