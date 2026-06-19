@@ -5,7 +5,7 @@
 const { createApp, ref, computed, watch, onMounted, nextTick } = Vue;
 
 // ================================================================
-//  دوال مساعدة مدمجة (لتجنب مشاكل التصدير)
+//  دوال مساعدة مدمجة
 // ================================================================
 
 function generateId() {
@@ -71,20 +71,6 @@ function processExcelData(workbook) {
 
 function isSpeechSupported() {
     return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
-}
-
-function createSpeechRecognition(onResult, onStart, onEnd, onError) {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return null;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'ar-EG';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    if (onStart) recognition.onstart = onStart;
-    if (onEnd) recognition.onend = onEnd;
-    if (onError) recognition.onerror = onError;
-    if (onResult) recognition.onresult = onResult;
-    return recognition;
 }
 
 // ================================================================
@@ -169,28 +155,61 @@ const app = createApp({
         };
 
         // ============================================================
-        //  3. البحث الصوتي
+        //  3. البحث الصوتي (تم الإصلاح)
         // ============================================================
         const isListening = ref(false);
         const speechSupported = ref(isSpeechSupported());
         let recognition = null;
 
         if (speechSupported.value) {
-            recognition = createSpeechRecognition(
-                (e) => {
-                    searchQuery.value = e.results[0][0].transcript;
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-EG';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isListening.value = true;
+            };
+
+            recognition.onresult = (event) => {
+                if (event.results && event.results.length > 0) {
+                    const transcript = event.results[0][0].transcript;
+                    searchQuery.value = transcript;
+                    // تطبيق الفلترة بعد الكتابة
                     debounceSearch();
-                },
-                () => { isListening.value = true; },
-                () => { isListening.value = false; },
-                () => { isListening.value = false; }
-            );
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.log('خطأ في التعرف الصوتي:', event.error);
+                isListening.value = false;
+                if (event.error === 'not-allowed') {
+                    alert('الرجاء السماح للتطبيق باستخدام الميكروفون.');
+                }
+            };
+
+            recognition.onend = () => {
+                isListening.value = false;
+            };
         }
 
         const toggleSpeechRecognition = () => {
-            if (!recognition) return;
-            if (isListening.value) recognition.stop();
-            else recognition.start();
+            if (!recognition) {
+                alert('المتصفح لا يدعم البحث الصوتي.');
+                return;
+            }
+            
+            try {
+                if (isListening.value) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            } catch (error) {
+                console.log('خطأ في تشغيل الميكروفون:', error);
+                isListening.value = false;
+            }
         };
 
         // ============================================================
@@ -670,10 +689,9 @@ const app = createApp({
         });
 
         // ============================================================
-        //  17. الإرجاع (مع جميع الدوال المطلوبة)
+        //  17. الإرجاع
         // ============================================================
         return {
-            // State
             isAdminMode, isLoading, gsheetInput, searchQuery,
             showSettingsModal, showAnalyticsModal, showEditModal, showSheetSelectionModal,
             editingClinic, availableSheets, selectedSheetsToImport,
@@ -681,27 +699,22 @@ const app = createApp({
             selectedGovs, selectedSpecs, govOpen, specOpen, govSearch, specSearch,
             clinics, currentPage, itemsPerPage,
 
-            // PWA
             showInstallBtn, installPWA,
 
-            // Home & Navigation
             isHomeState, searchHistory, goHome, goBack,
 
-            // Speech
             isListening, speechSupported, toggleSpeechRecognition,
 
-            // Computed
             hasData, activeClinicsCount, uniqueGovs, uniqueSpecs,
             filteredGovOptions, filteredSpecOptions,
             govHeaderText, specHeaderText,
             filteredClinics, totalPages, paginatedClinics, visiblePages,
 
-            // ==== 🔴 دوال مهمة جداً كانت مفقودة ====
+            // دوال مهمة
             getWaLink,
             getMapLink,
             trackContact,
 
-            // Methods
             debounceSearch, applyFilters,
             openSettingsModal, saveSettings, handleLogoUpload,
             toggleAllSheets, confirmSheetSelection,
@@ -712,5 +725,4 @@ const app = createApp({
     }
 });
 
-// ===== تشغيل التطبيق =====
 app.mount('#app');
