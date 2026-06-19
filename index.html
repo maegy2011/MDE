@@ -17,7 +17,7 @@
     <!-- ===== FontAwesome ===== -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- ===== الأنماط الخاصة بالتطبيق ===== -->
+    <!-- ===== الأنماط الخاصة ===== -->
     <link rel="stylesheet" href="./css/styles.css">
 
     <!-- ===== المكتبات الخارجية ===== -->
@@ -50,9 +50,297 @@
     </script>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app">
 
-    <!-- ===== ملفات الجافاسكريبت الخاصة بالتطبيق ===== -->
+        <!-- ===== العلامة المائية ===== -->
+        <div v-if="appSettings.logo" class="watermark">
+            <img :src="appSettings.logo" alt="شعار الوزارة">
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- 1. الهيدر الفاخر -->
+        <!-- ============================================================ -->
+        <header class="app-header">
+            <div class="brand">
+                <img v-if="appSettings.logo" :src="appSettings.logo" alt="شعار الوزارة">
+                <i v-else class="fa-solid fa-scale-balanced brand-icon"></i>
+                <div>
+                    <div class="title">{{ appSettings.title }}</div>
+                    <div class="subtitle">{{ appSettings.desc }}</div>
+                </div>
+            </div>
+            <div class="actions">
+                <template v-if="hasData">
+                    <button @click="silentSync" class="btn btn-gold"><i class="fa-solid fa-rotate"></i> <span>تحديث</span></button>
+                    <button @click="isAdminMode=!isAdminMode" :class="['btn', isAdminMode ? 'btn-admin-active' : '']"><i class="fa-solid fa-screwdriver-wrench"></i> <span>الإدارة</span></button>
+                    <button @click="exportToPDF" class="btn btn-pdf"><i class="fa-solid fa-file-pdf"></i> <span>PDF</span></button>
+                    <button @click="exportToExcel" class="btn btn-excel"><i class="fa-solid fa-file-excel"></i> <span>Excel</span></button>
+                    <template v-if="isAdminMode">
+                        <button @click="showAnalyticsModal=true;generateAnalytics()" class="btn btn-purple"><i class="fa-solid fa-chart-simple"></i> <span>إحصائيات</span></button>
+                        <button @click="openSettingsModal" class="btn btn-blue"><i class="fa-solid fa-gear"></i> <span>إعدادات</span></button>
+                    </template>
+                </template>
+            </div>
+        </header>
+
+        <!-- ============================================================ -->
+        <!-- 2. المحتوى الرئيسي -->
+        <!-- ============================================================ -->
+        <main class="main-content">
+
+            <!-- شاشة جلب البيانات -->
+            <div v-if="!hasData" class="data-upload">
+                <h3><i class="fa-solid fa-cloud-upload-alt"></i> إضافة قاعدة البيانات</h3>
+                <div class="grid-2">
+                    <div class="card-option">
+                        <h4><i class="fa-regular fa-file-spreadsheet text-primary"></i> الربط مع جوجل شيت (API)</h4>
+                        <p>للمزامنة التلقائية السريعة والآمنة</p>
+                        <input v-model="gsheetInput" type="text" placeholder="انسخ رابط Web App هنا..." dir="ltr">
+                        <button @click="fetchFromGoogleSheet" class="btn-primary"><i class="fa-solid fa-download"></i> جلب</button>
+                    </div>
+                    <div class="card-option">
+                        <h4><i class="fa-regular fa-file-excel text-emerald-600"></i> رفع ملف إكسيل محلي</h4>
+                        <p>رفع ملف (.xlsx) من جهازك مباشرة</p>
+                        <input type="file" accept=".xlsx, .xls" @change="handleFileUpload">
+                    </div>
+                </div>
+                <div v-if="isLoading" class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> جاري معالجة البيانات...</div>
+            </div>
+
+            <!-- ===== واجهة التطبيق (Google-like) ===== -->
+            <div v-if="hasData" class="w-full">
+                <div :class="['home-hero', isHomeState ? '' : 'w-full']">
+
+                    <!-- الشعار والصفحة الرئيسية -->
+                    <div v-if="isHomeState" class="hero-logo">
+                        <img v-if="appSettings.logo" :src="appSettings.logo" alt="شعار الوزارة">
+                        <i v-else class="fa-solid fa-scale-balanced hero-icon"></i>
+                        <h2>{{ appSettings.title }}</h2>
+                        <p>{{ appSettings.desc }}</p>
+                    </div>
+
+                    <!-- شريط البحث والفلترة -->
+                    <div :class="['search-bar', isHomeState ? 'home' : 'results']">
+
+                        <!-- أزرار التنقل -->
+                        <div v-if="!isHomeState" class="nav-btns">
+                            <button @click="goHome" title="الرئيسية"><i class="fa-solid fa-house"></i></button>
+                            <button @click="goBack" :disabled="searchHistory.length===0" title="رجوع"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+
+                        <!-- مربع البحث -->
+                        <div class="search-input-wrap">
+                            <input v-model="searchQuery" @input="debounceSearch" type="text" placeholder="ابحث باسم الجهة أو العنوان...">
+                            <i class="fa-solid fa-search search-icon"></i>
+                            <button v-if="speechSupported" @click="toggleSpeechRecognition" :class="['mic-btn', isListening ? 'active' : '']" title="بحث صوتي">
+                                <i class="fa-solid fa-microphone"></i>
+                            </button>
+                        </div>
+
+                        <!-- فلتر المحافظات -->
+                        <div class="filter-wrap">
+                            <div @click="govOpen=!govOpen;specOpen=false" class="filter-btn">
+                                <span class="truncate">{{ govHeaderText }}</span>
+                                <i class="fa-solid fa-chevron-down arrow" :class="govOpen ? 'open' : ''"></i>
+                            </div>
+                            <div v-if="govOpen" @click="govOpen=false" class="dropdown-overlay"></div>
+                            <div v-if="govOpen" class="dropdown">
+                                <div class="search-input">
+                                    <input v-model="govSearch" type="text" placeholder="بحث...">
+                                </div>
+                                <div class="options">
+                                    <label v-for="gov in filteredGovOptions" :key="gov">
+                                        <input type="checkbox" :value="gov" v-model="selectedGovs" @change="applyFilters"> {{ gov }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- فلتر التخصصات -->
+                        <div class="filter-wrap">
+                            <div @click="specOpen=!specOpen;govOpen=false" class="filter-btn">
+                                <span class="truncate">{{ specHeaderText }}</span>
+                                <i class="fa-solid fa-chevron-down arrow" :class="specOpen ? 'open' : ''"></i>
+                            </div>
+                            <div v-if="specOpen" @click="specOpen=false" class="dropdown-overlay"></div>
+                            <div v-if="specOpen" class="dropdown">
+                                <div class="search-input">
+                                    <input v-model="specSearch" type="text" placeholder="بحث...">
+                                </div>
+                                <div class="options">
+                                    <label v-for="spec in filteredSpecOptions" :key="spec">
+                                        <input type="checkbox" :value="spec" v-model="selectedSpecs" @change="applyFilters"> {{ spec }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- عرض النتائج -->
+                    <div v-if="!isHomeState">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-4 text-sm text-slate-500 gap-3">
+                            <p>تم العثور على <span class="font-bold text-gold">{{ filteredClinics.length }}</span> جهة طبية</p>
+                            <div class="flex items-center gap-3">
+                                <label class="flex items-center gap-2">عرض:
+                                    <select v-model="itemsPerPage" @change="currentPage=1" class="p-1 border border-slate-300 rounded bg-white outline-none">
+                                        <option :value="5">5</option>
+                                        <option :value="10">10</option>
+                                        <option :value="20">20</option>
+                                        <option :value="50">50</option>
+                                        <option :value="100">100</option>
+                                        <option :value="1000000">الكل</option>
+                                    </select>
+                                </label>
+                                <div v-if="isAdminMode" class="text-xs bg-slate-200 px-2 py-1 rounded"><i class="fa-regular fa-pen-to-square"></i> إدارة</div>
+                            </div>
+                        </div>
+
+                        <!-- شبكة الكروت -->
+                        <div class="clinics-grid">
+                            <div v-for="clinic in paginatedClinics" :key="clinic._id" class="clinic-card" :class="clinic['الحالة']==='معطل' ? 'disabled' : ''">
+                                <div v-if="isAdminMode && clinic['الحالة']==='معطل'" class="status-badge"><i class="fa-regular fa-circle-check"></i> معطل</div>
+                                <div class="header">
+                                    <h3>{{ clinic['اسم الجهة'] || 'غير محدد' }}</h3>
+                                    <span class="spec-tag">{{ clinic['التخصص'] || 'عام' }}</span>
+                                </div>
+                                <div class="info">
+                                    <p><strong>المحافظة:</strong> {{ clinic['المحافظة'] || '' }}</p>
+                                    <p><strong>الفرع:</strong> {{ clinic['الفرع'] || 'الفرع الرئيسي' }}</p>
+                                    <p><strong>العنوان:</strong> {{ clinic['العنوان'] || 'غير متوفر' }}</p>
+                                </div>
+                                <div class="card-actions">
+                                    <a v-if="clinic['التليفون']" :href="'tel:'+clinic['التليفون']" @click="trackContact('call',clinic)" class="btn-call"><i class="fa-solid fa-phone"></i> اتصال</a>
+                                    <a v-if="getWaLink(clinic['التليفون'])" :href="getWaLink(clinic['التليفون'])" target="_blank" @click="trackContact('whatsapp',clinic)" class="btn-wa"><i class="fa-brands fa-whatsapp"></i> واتساب</a>
+                                    <a :href="getMapLink(clinic)" target="_blank" @click="trackContact('map',clinic)" class="btn-map"><i class="fa-solid fa-location-dot"></i> خريطة</a>
+                                </div>
+                                <div v-if="isAdminMode" class="admin-controls">
+                                    <button @click="openEditModal(clinic)" class="btn-edit"><i class="fa-regular fa-pen-to-square"></i> تعديل</button>
+                                    <button @click="toggleClinicStatus(clinic)" class="btn-toggle">{{ clinic['الحالة']==='معطل' ? 'تفعيل' : 'تعطيل' }}</button>
+                                    <button @click="deleteClinic(clinic._id)" class="btn-delete"><i class="fa-regular fa-trash-can"></i> حذف</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- الترقيم -->
+                        <div v-if="totalPages>1" class="pagination">
+                            <button @click="currentPage=1" :disabled="currentPage===1">الأولى</button>
+                            <button @click="currentPage--" :disabled="currentPage===1">السابق</button>
+                            <button v-for="p in visiblePages" :key="p" @click="currentPage=p" :class="['page-btn', currentPage===p ? 'active' : '']">{{ p }}</button>
+                            <button @click="currentPage++" :disabled="currentPage===totalPages">التالي</button>
+                            <button @click="currentPage=totalPages" :disabled="currentPage===totalPages">الأخيرة</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== إشعار التثبيت ===== -->
+            <div v-if="showInstallBtn" class="install-banner animate-bounce-subtle animate-slide-up">
+                <div class="flex items-center gap-3">
+                    <div class="icon-box"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"/></svg></div>
+                    <div class="text"><h4>ثبت التطبيق على هاتفك</h4><p>للوصول السريع والعمل بدون إنترنت</p></div>
+                </div>
+                <div class="flex gap-2">
+                    <button @click="installPWA" class="btn-install">تثبيت الآن</button>
+                    <button @click="showInstallBtn=false" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- ============================================================ -->
+        <!-- 3. الفوتر الفاخر -->
+        <!-- ============================================================ -->
+        <footer class="app-footer">
+            <div class="footer-brand"><i class="fa-solid fa-scale-balanced"></i> <span>وثيقة داخلية مؤمنة</span></div>
+            <div class="footer-date">{{ appSettings.lastUpdated || 'نسخة محدثة' }}</div>
+        </footer>
+
+        <!-- ============================================================ -->
+        <!-- 4. نوافذ منبثقة (Modals) -->
+        <!-- ============================================================ -->
+
+        <!-- إعدادات التطبيق -->
+        <div v-if="showSettingsModal" @click.self="showSettingsModal=false" class="modal-overlay">
+            <div class="modal">
+                <h3><i class="fa-solid fa-gear text-gold"></i> إعدادات التطبيق</h3>
+                <div class="form-group"><label>عنوان التطبيق</label><input v-model="tempSettings.title"></div>
+                <div class="form-group"><label>الوصف</label><input v-model="tempSettings.desc"></div>
+                <div class="form-group">
+                    <label>لوجو التطبيق (رابط أو رفع)</label>
+                    <input v-model="tempSettings.logo" type="text" placeholder="رابط الصورة..." dir="ltr">
+                    <input type="file" accept="image/*" @change="handleLogoUpload" style="margin-top:8px;">
+                </div>
+                <div class="form-group"><label>رابط API (Web App URL)</label><input v-model="tempSettings.gsheetUrl" type="text" placeholder="https://script.google.com/macros/s/..." dir="ltr"></div>
+                <div class="modal-btns">
+                    <button @click="saveSettings" class="btn-save">حفظ</button>
+                    <button @click="showSettingsModal=false" class="btn-cancel">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div v-if="showAnalyticsModal" @click.self="showAnalyticsModal=false" class="modal-overlay">
+            <div class="modal modal-wide">
+                <h3><i class="fa-solid fa-chart-simple text-gold"></i> لوحة الإحصائيات (Analytics)</h3>
+                <div class="stats-grid">
+                    <div class="stat-card"><p>إجمالي الجهات</p><span>{{ activeClinicsCount }}</span></div>
+                    <div class="stat-card"><p>المحافظات</p><span>{{ uniqueGovs.length }}</span></div>
+                    <div class="stat-card"><p>التخصصات</p><span>{{ uniqueSpecs.length }}</span></div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-box"><canvas id="govChart"></canvas></div>
+                    <div class="chart-box"><canvas id="specChart"></canvas></div>
+                </div>
+                <div class="modal-btns"><button @click="showAnalyticsModal=false" class="btn-cancel" style="width:100%;">إغلاق</button></div>
+            </div>
+        </div>
+
+        <!-- تعديل بيانات الفرع -->
+        <div v-if="showEditModal" @click.self="showEditModal=false" class="modal-overlay">
+            <div class="modal">
+                <h3><i class="fa-regular fa-pen-to-square"></i> تعديل بيانات الفرع</h3>
+                <div v-if="editingClinic">
+                    <div class="form-group"><label>اسم الجهة</label><input v-model="editingClinic['اسم الجهة']"></div>
+                    <div class="form-group"><label>التخصص</label><input v-model="editingClinic['التخصص']"></div>
+                    <div class="form-group"><label>المحافظة</label><input v-model="editingClinic['المحافظة']"></div>
+                    <div class="form-group"><label>الفرع</label><input v-model="editingClinic['الفرع']"></div>
+                    <div class="form-group"><label>العنوان</label><input v-model="editingClinic['العنوان']"></div>
+                    <div class="form-group"><label>التليفون</label><input v-model="editingClinic['التليفون']"></div>
+                </div>
+                <div class="modal-btns">
+                    <button @click="saveEdit" class="btn-save">حفظ</button>
+                    <button @click="showEditModal=false" class="btn-cancel">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- اختيار الشيتات -->
+        <div v-if="showSheetSelectionModal" @click.self="showSheetSelectionModal=false" class="modal-overlay">
+            <div class="modal">
+                <h3><i class="fa-regular fa-file-excel"></i> اختيار الشيتات (المحافظات)</h3>
+                <p class="text-sm text-slate-500 mb-4">اختر الشيتات التي تريد استيرادها. سيتم حفظ اختيارك لتحديث البيانات تلقائياً في المرات القادمة.</p>
+                <div class="max-h-60 overflow-y-auto mb-4 border border-slate-200 rounded-lg p-2">
+                    <label class="flex items-center gap-2 p-3 hover:bg-slate-100 rounded cursor-pointer border-b border-slate-200 mb-1">
+                        <input type="checkbox" @change="toggleAllSheets" :checked="selectedSheetsToImport.length === availableSheets.length && availableSheets.length > 0" class="accent-gold w-4 h-4">
+                        <span class="font-bold text-primary"><i class="fa-regular fa-square-check"></i> تحديد الكل</span>
+                    </label>
+                    <label v-for="sheet in availableSheets" :key="sheet" class="flex items-center gap-2 p-2 hover:bg-slate-100 rounded cursor-pointer">
+                        <input type="checkbox" :value="sheet" v-model="selectedSheetsToImport" class="accent-gold w-4 h-4"> {{ sheet }}
+                    </label>
+                </div>
+                <div class="modal-btns">
+                    <button @click="confirmSheetSelection" class="btn-save">حفظ واستيراد</button>
+                    <button @click="showSheetSelectionModal=false" class="btn-cancel">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- حاوية PDF -->
+        <div id="pdf-export-container"></div>
+
+    </div><!-- نهاية #app -->
+
+    <!-- ===== ملفات الجافاسكريبت ===== -->
     <script src="./js/config.js"></script>
     <script src="./js/utils.js"></script>
     <script src="./js/app.js"></script>
