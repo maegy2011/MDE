@@ -687,7 +687,7 @@ body {
 .clinic-card .admin-controls .btn-delete:hover { background: #B91C1C; }
 
 /* ================================================================ */
-/*  شريط الترقيم (صف واحد) */
+/*  شريط الترقيم (مع التسميات النصية وتوسيط) */
 /* ================================================================ */
 .pagination-wrapper {
     display: flex;
@@ -703,8 +703,10 @@ body {
 .pagination {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     white-space: nowrap;
+    flex-wrap: nowrap;
 }
 .pagination button {
     display: flex;
@@ -907,7 +909,7 @@ body {
     .install-banner .btn-install { width: 100%; }
     
     /* شريط الترقيم على الموبايل */
-    .pagination-wrapper { margin-top: 20px; justify-content: flex-start; padding: 0 4px; }
+    .pagination-wrapper { margin-top: 20px; justify-content: center; }
     .pagination { gap: 4px; }
     .pagination button { font-size: 13px; padding: 4px 10px; min-height: 34px; min-width: 34px; }
     .pagination button.page-btn { min-width: 28px; padding: 4px 6px; }
@@ -934,7 +936,7 @@ body {
     .home-hero .hero-logo p { font-size: 12px; }
     .home-hero .hero-logo img { height: 70px; }
     
-    .pagination-wrapper { margin-top: 16px; }
+    .pagination-wrapper { margin-top: 16px; justify-content: center; }
     .pagination button { font-size: 11px; padding: 3px 6px; min-height: 28px; min-width: 28px; }
     .pagination button.page-btn { min-width: 24px; padding: 3px 4px; }
     
