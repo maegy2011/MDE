@@ -1,4 +1,3 @@
-``markdown
 # ⚖️ الدليل الطبي الذكي (Medical Directory App)
 
 ![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
